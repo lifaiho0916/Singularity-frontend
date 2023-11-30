@@ -8,6 +8,7 @@ import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
 import ProjectTemplate from 'src/assets/components/app/ProjectTemplate';
 import { notify } from 'src/store/slices/toastSlice';
+import { PROJECT_POSITIONS } from 'src/constants';
 import "src/assets/styles/pages/app/dashboard.scss";
 
 interface IMember {
@@ -136,7 +137,7 @@ const Dashboard = () => {
                                 updatedMembers[index].position = e.value;
                                 setMembers(updatedMembers);
                             }}
-                            options={["Designer", "Developer", "DevOps", "Manager"]}
+                            options={PROJECT_POSITIONS}
                             optionGroupChildren={[]}
                             placeholder="Position"
                         />
