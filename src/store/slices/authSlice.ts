@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
+import { AUTH_ACCESS_TOKEN } from "src/constants";
 
 import type { PayloadAction } from "@reduxjs/toolkit"
 
@@ -9,8 +10,8 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
-    accessToken: null,
-    isLogged: false,
+    accessToken: localStorage.getItem(AUTH_ACCESS_TOKEN) || null,
+    isLogged: localStorage.getItem(AUTH_ACCESS_TOKEN) ? true : false,
     refreshToken: ""
 }
 
@@ -20,13 +21,12 @@ export const authSlice = createSlice({
     reducers: {
         login: (state, action: PayloadAction<string>) => {
             state.accessToken = action.payload
-            localStorage.setItem("access_token", action.payload)
+            localStorage.setItem(AUTH_ACCESS_TOKEN, action.payload)
             state.isLogged = true
         },
         logout: (state) => {
             state.accessToken = null
-            localStorage.removeItem("access_token")
-            localStorage.removeItem("refresh_token")
+            localStorage.removeItem(AUTH_ACCESS_TOKEN)
             state.isLogged = false
         }
     }
