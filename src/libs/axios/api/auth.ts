@@ -1,9 +1,9 @@
 import API from "src/libs/axios/api";
 
-export const SocialLogin = async (provider: string): Promise<string | undefined> => {
+export const getCurrentUser = async (): Promise<object | undefined> => {
     try {
-        await API.get(`/v1/auth/${provider}`)
-        return "Register successful"
+        const res = await API.get('/v1/user/me');
+        return res;
     } catch (error) {
         console.warn(error)
         //   handleError(error)

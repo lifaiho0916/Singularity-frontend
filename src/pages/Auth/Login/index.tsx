@@ -4,7 +4,7 @@ import 'src/assets/styles/pages/login.scss';
 
 const Login = () => {
 
-    const LoginBtnClick = async () => {
+    const LoginBtnClick = () => {
         window.location.href = GOOGLE_AUTH_URL;
     }
 

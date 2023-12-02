@@ -33,7 +33,7 @@ api.interceptors.request.use(onRequest)
 
 api.interceptors.response.use(
     (response) => {
-        return response
+        return response.data
     },
 
     async (error: any) => {

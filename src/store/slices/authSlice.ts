@@ -1,15 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { AUTH_ACCESS_TOKEN } from "src/constants";
 
+import type { ICurrentUser } from "src/libs/types";
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface AuthState {
+    currentUser: ICurrentUser | null;
     accessToken: string | null;
     isLogged: boolean;
     refreshToken: string;
 }
 
 const initialState: AuthState = {
+    currentUser: null,
     accessToken: localStorage.getItem(AUTH_ACCESS_TOKEN) || null,
     isLogged: localStorage.getItem(AUTH_ACCESS_TOKEN) ? true : false,
     refreshToken: ""
@@ -28,10 +31,14 @@ export const authSlice = createSlice({
             state.accessToken = null
             localStorage.removeItem(AUTH_ACCESS_TOKEN)
             state.isLogged = false
+            state.currentUser = null
+        },
+        setCurrentUser: (state, action: PayloadAction<ICurrentUser>) => {
+            state.currentUser = action.payload
         }
     }
 })
 
-export const { login, logout } = authSlice.actions
+export const { login, logout, setCurrentUser } = authSlice.actions
 
 export default authSlice.reducer
