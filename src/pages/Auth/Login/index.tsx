@@ -1,20 +1,11 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
-import { login } from 'src/store/slices/authSlice';
-import { notify } from 'src/store/slices/toastSlice';
-import { AUTHENTICATED_ENTRY } from 'src/constants';
+import { GOOGLE_AUTH_URL } from 'src/constants';
 import 'src/assets/styles/pages/login.scss';
 
 const Login = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
 
-    const LoginBtnClick = () => {
-        dispatch(login("access_token"));
-        dispatch(notify({ type: 'success', content: 'User logged in successfuly', title: '' }));
-        navigate(AUTHENTICATED_ENTRY);
+    const LoginBtnClick = async () => {
+        window.location.href = GOOGLE_AUTH_URL;
     }
 
     return (
