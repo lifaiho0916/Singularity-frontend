@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -8,21 +8,23 @@ import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
 import ProjectTemplate from 'src/assets/components/app/ProjectTemplate';
 import { notify } from 'src/store/slices/toastSlice';
+import { setProject, setProjects } from 'src/store/slices/projectSlice';
 import { PROJECT_POSITIONS } from 'src/constants';
+import type { RootState } from 'src/store';
+import type { IMember, IProject } from 'src/libs/types';
+import { createProject, getProjectsByCreator } from 'src/libs/axios/api/project';
 import "src/assets/styles/pages/app/dashboard.scss";
-
-interface IMember {
-    email: string;
-    position: string;
-}
 
 const Dashboard = () => {
     const dispatch = useDispatch();
+    const { currentUser } = useSelector((state: RootState) => state.auth);
+    const { projects } = useSelector((state: RootState) => state.project);
     const [isOpenProjectModal, setIsOpenProjectModal] = React.useState(false);
     const [isOpenInviteModal, setIsOpenInviteModal] = React.useState(false);
     const [isOpenInvitationModal, setIsOpenInvitationModal] = React.useState(false);
-    const [projetName, setProjectName] = React.useState('');
-    const [members, setMembers] = React.useState<IMember[]>([])
+    const [members, setMembers] = React.useState<IMember[]>([]);
+    const [isLoading, setIsLoading] = React.useState(false);
+
     const templates = [
         {
             title: 'New document'
@@ -38,15 +40,25 @@ const Dashboard = () => {
         },
     ]
 
-    const CreateNewProject = (event: React.FormEvent) => {
+    const CreateNewProject = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setIsOpenProjectModal(false);
-        const initialMembers: IMember[] = [];
-        initialMembers.push({ email: '', position: '' })
-        initialMembers.push({ email: '', position: '' })
-        initialMembers.push({ email: '', position: '' })
-        setMembers(initialMembers);
-        setIsOpenInviteModal(true);
+        setIsLoading(true);
+        const projectData = {
+            name: event.currentTarget["projectName"].value,
+            creator_id: currentUser?.id
+        }
+        const res = await createProject(projectData);
+        if (res) {
+            dispatch(setProject(res));
+            setIsOpenProjectModal(false);
+            const initialMembers: IMember[] = [];
+            initialMembers.push({ email: '', position: '' })
+            initialMembers.push({ email: '', position: '' })
+            initialMembers.push({ email: '', position: '' })
+            setMembers(initialMembers);
+            setIsOpenInviteModal(true);
+        }
+        setIsLoading(false);
     }
 
     const InviteMembers = () => {
@@ -66,6 +78,19 @@ const Dashboard = () => {
         setMembers(updatedMembers);
     }
 
+    const GetProjectsByCreator = async () => {
+        const res = await getProjectsByCreator(currentUser?.id as number);
+        if (res) {
+            dispatch(setProjects(res as Array<IProject>));
+        }
+    }
+
+    React.useEffect(() => {
+        if (currentUser) {
+            GetProjectsByCreator()
+        }
+    }, [currentUser])
+
     return (
         <div>
             <div className="new-project">
@@ -80,14 +105,47 @@ const Dashboard = () => {
                 </div>
             </div>
             <div className="project-list">
-                <div className="first-project">
-                    <i className="pi pi-align-justify"></i>
-                    <h2>Welcome create your first project!</h2>
-                    <Button severity="info" onClick={() => {
-                        setProjectName('');
-                        setIsOpenProjectModal(true);
-                    }}>Create first project</Button>
-                </div>
+                {projects.length > 0 ?
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>TODAY</th>
+                                <th>LAST TIME OPENED</th>
+                                <th>OWNED BY</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {projects.map((project: IProject, index) => (
+                                <tr key={index}>
+                                    <td style={{ display: 'flex', alignItems: 'center' }}>
+                                        <div className="template"></div>
+                                        <span className='project-name'>{project.name}</span>
+                                    </td>
+                                    <td>{project.openedAt ? project.openedAt : ''}</td>
+                                    <td>
+                                        <div style={{ display: 'flex', alignItems: 'center' }}>
+                                            <AvatarGroup>
+                                                <Avatar
+                                                    shape="circle"
+                                                    image={project.creator.avatar}
+                                                />
+                                            </AvatarGroup>
+                                            <Button icon="pi pi-ellipsis-v" rounded text severity="secondary" aria-label="Cancel" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                    :
+                    <div className="first-project">
+                        <i className="pi pi-align-justify"></i>
+                        <h2>Welcome create your first project!</h2>
+                        <Button severity="info" onClick={() => {
+                            setIsOpenProjectModal(true);
+                        }}>Create first project</Button>
+                    </div>
+                }
             </div>
             <Dialog
                 header="Create new project"
@@ -98,13 +156,12 @@ const Dashboard = () => {
             >
                 <form onSubmit={CreateNewProject}>
                     <InputText
-                        value={projetName}
-                        onChange={(e) => setProjectName(e.target.value)}
+                        name="projectName"
                         placeholder="Project Name"
                         style={{ width: '100%', marginBottom: 20 }}
                         required
                     />
-                    <Button severity="info" style={{ width: '100%' }}>
+                    <Button severity="info" style={{ width: '100%' }} loading={isLoading}>
                         <span style={{ textAlign: 'center', width: '100%' }}>Create new project</span>
                     </Button>
                 </form>

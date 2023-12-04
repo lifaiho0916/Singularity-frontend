@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import { AUTH_ACCESS_TOKEN } from "src/constants";
 
-import type { ICurrentUser } from "src/libs/types";
+import type { IUser } from "src/libs/types";
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface AuthState {
-    currentUser: ICurrentUser | null;
+    currentUser: IUser | null;
     accessToken: string | null;
     isLogged: boolean;
     refreshToken: string;
@@ -33,7 +33,7 @@ export const authSlice = createSlice({
             state.isLogged = false
             state.currentUser = null
         },
-        setCurrentUser: (state, action: PayloadAction<ICurrentUser>) => {
+        setCurrentUser: (state, action: PayloadAction<IUser>) => {
             state.currentUser = action.payload
         }
     }

@@ -1,4 +1,3 @@
-import React from "react";
 import "src/assets/styles/components/projectTemplate.scss";
 interface templateProps {
     title: string

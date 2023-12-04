@@ -9,3 +9,10 @@ h6 {
     margin: 0px;
     padding: 0px;
 }
+
+table,
+tr,
+th,
+td {
+    border-collapse: collapse;
+}

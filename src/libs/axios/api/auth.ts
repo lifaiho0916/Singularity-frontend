@@ -6,7 +6,6 @@ export const getCurrentUser = async (): Promise<object | undefined> => {
         return res;
     } catch (error) {
         console.warn(error)
-        //   handleError(error)
     }
     return undefined
 }

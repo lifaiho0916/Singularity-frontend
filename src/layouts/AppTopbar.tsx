@@ -6,11 +6,11 @@ import { Menu } from "primereact/menu";
 import { logout } from "src/store/slices/authSlice";
 import { notify } from "src/store/slices/toastSlice";
 import { AUTH_LOGIN_PATH } from "src/constants";
-import type { RootState } from "src/store";
 import { getCurrentUser } from "src/libs/axios/api/auth";
 import { setCurrentUser } from "src/store/slices/authSlice";
+import type { RootState } from "src/store";
+import type { IUser } from "src/libs/types";
 import "src/assets/styles/layouts/topbar.scss";
-import { ICurrentUser } from "src/libs/types";
 
 const AppTopbar = () => {
     const { isLogged, currentUser } = useSelector((state: RootState) => state.auth);
@@ -50,7 +50,7 @@ const AppTopbar = () => {
     const GetCurrentUser = async () => {
         const res = await getCurrentUser();
         if (res) {
-            dispatch(setCurrentUser(res as ICurrentUser));
+            dispatch(setCurrentUser(res as IUser));
         }
     }
 
@@ -67,10 +67,9 @@ const AppTopbar = () => {
             </div>
             <div className="profile">
                 <Avatar
-                    icon="pi pi-user"
                     shape="circle"
                     image={currentUser?.avatar}
-                    style={{ backgroundColor: '#2196F3', color: '#ffffff', cursor: 'pointer' }}
+                    style={{ cursor: 'pointer' }}
                     onClick={(event) => menuRight.current && menuRight.current.toggle(event)}
                 />
                 <Menu model={items} popup ref={menuRight} id="popup_menu_right" popupAlignment="right" />

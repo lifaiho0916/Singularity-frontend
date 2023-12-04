@@ -1,5 +1,6 @@
 .project-template {
     margin: 5px 20px;
+    cursor: pointer;
 
     .template {
         width: 250px;
@@ -17,6 +18,14 @@
 
         h6 {
             font-size: 12px;
+        }
+    }
+
+    &:hover {
+        scale: 1.02;
+
+        .template {
+            border: 2px solid #AAAAAA;
         }
     }
 }

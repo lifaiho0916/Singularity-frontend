@@ -16,6 +16,45 @@
 }
 
 .project-list {
+    padding: 20px 10%;
+
+    table {
+        width: 100%;
+
+        thead {
+            tr {
+                text-align: left;
+                border-bottom: 3px solid #E7E7E7;
+
+                th {
+                    padding: 0px 0px 15px 0px;
+                    color: #999999;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+
+                td {
+                    padding: 10px 0px;
+
+                    .template {
+                        width: 100px;
+                        height: 70px;
+                        border-radius: 5px;
+                        border: 5px solid #E7E7E7;
+                        margin-right: 10px;
+                    }
+
+                    .project-name {
+                        font-weight: 600;
+                    }
+                }
+            }
+        }
+    }
+
     .first-project {
         margin-top: 7%;
         display: flex;
