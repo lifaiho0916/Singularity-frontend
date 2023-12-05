@@ -1,11 +1,12 @@
 import "src/assets/styles/components/projectTemplate.scss";
 interface templateProps {
-    title: string
+    title: string,
+    createProject: () => void
 }
 
-const ProjectTemplate = ({ title }: templateProps) => {
+const ProjectTemplate = ({ title, createProject }: templateProps) => {
     return (
-        <div className="project-template">
+        <div className="project-template" onClick={createProject}>
             <div className="template"></div>
             <div className="description">
                 <h6>{title}</h6>

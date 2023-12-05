@@ -19,3 +19,13 @@ export const getProjectsByCreator = async (creatorId: number): Promise<object | 
     }
     return undefined
 }
+
+export const deleteProject = async (projectId: number): Promise<object | undefined> => {
+    try {
+        const res = await API.delete(`/v1/project/${projectId}`)
+        return res
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}

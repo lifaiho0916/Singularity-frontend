@@ -11,6 +11,7 @@ export interface IMember {
 }
 
 export interface IProject {
+    id: number,
     name: string,
     description: string,
     creator: IUser,

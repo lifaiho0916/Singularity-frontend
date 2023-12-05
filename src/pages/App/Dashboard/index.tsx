@@ -6,14 +6,66 @@ import { InputText } from 'primereact/inputtext';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
+import { Menu } from 'primereact/menu';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import ProjectTemplate from 'src/assets/components/app/ProjectTemplate';
 import { notify } from 'src/store/slices/toastSlice';
 import { setProject, setProjects } from 'src/store/slices/projectSlice';
 import { PROJECT_POSITIONS } from 'src/constants';
 import type { RootState } from 'src/store';
 import type { IMember, IProject } from 'src/libs/types';
-import { createProject, getProjectsByCreator } from 'src/libs/axios/api/project';
+import { createProject, getProjectsByCreator, deleteProject } from 'src/libs/axios/api/project';
 import "src/assets/styles/pages/app/dashboard.scss";
+
+interface ProjectRowProps {
+    project: IProject,
+    deleteProject: (id: number) => void
+}
+
+const ProjectRow = ({ project, deleteProject }: ProjectRowProps) => {
+    const { id, openedAt, name, creator } = project;
+    const menu = React.useRef<Menu | null>(null);
+    const items = [
+        {
+            label: 'Invite members',
+            command: () => {
+
+            }
+        },
+        {
+            label: 'Delete project',
+            command: () => deleteProject(id)
+        }
+    ];
+
+    return (
+        <tr>
+            <td style={{ display: 'flex', alignItems: 'center' }}>
+                <div className="template"></div>
+                <span className='project-name'>{name}</span>
+            </td>
+            <td>{openedAt ? openedAt : ''}</td>
+            <td>
+                <AvatarGroup>
+                    <Avatar
+                        shape="circle"
+                        image={creator.avatar}
+                    />
+                </AvatarGroup>
+            </td>
+            <td>
+                <Button
+                    onClick={(event) => menu.current && menu.current.toggle(event)}
+                    icon="pi pi-ellipsis-v"
+                    rounded text
+                    severity="secondary"
+                    aria-label="Cancel"
+                />
+                <Menu model={items} popup ref={menu} popupAlignment="right" />
+            </td>
+        </tr>
+    )
+}
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -45,7 +97,7 @@ const Dashboard = () => {
         setIsLoading(true);
         const projectData = {
             name: event.currentTarget["projectName"].value,
-            creator_id: currentUser?.id
+            creator: currentUser
         }
         const res = await createProject(projectData);
         if (res) {
@@ -85,6 +137,24 @@ const Dashboard = () => {
         }
     }
 
+    const deleteProjectConfirm = (projectId: number) => {
+        confirmDialog({
+            message: 'Are you sure you want to delete?',
+            header: 'Confirmation',
+            icon: 'pi pi-exclamation-triangle',
+            accept() { DeleteProject(projectId) }
+        });
+    }
+
+    const DeleteProject = async (projectId: number) => {
+        const res = await deleteProject(projectId);
+        if (res) {
+            const updatedProjects = projects.filter(project => project.id !== projectId);
+            dispatch(setProjects(updatedProjects));
+            dispatch(notify({ type: 'success', title: '', content: 'The project has been successfully deleted.' }))
+        }
+    }
+
     React.useEffect(() => {
         if (currentUser) {
             GetProjectsByCreator()
@@ -100,7 +170,7 @@ const Dashboard = () => {
                 </div>
                 <div className="tempates">
                     {templates.map((template, index) => (
-                        <ProjectTemplate title={template.title} key={index} />
+                        <ProjectTemplate title={template.title} key={index} createProject={() => { setIsOpenProjectModal(true) }} />
                     ))}
                 </div>
             </div>
@@ -112,28 +182,12 @@ const Dashboard = () => {
                                 <th>TODAY</th>
                                 <th>LAST TIME OPENED</th>
                                 <th>OWNED BY</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
                             {projects.map((project: IProject, index) => (
-                                <tr key={index}>
-                                    <td style={{ display: 'flex', alignItems: 'center' }}>
-                                        <div className="template"></div>
-                                        <span className='project-name'>{project.name}</span>
-                                    </td>
-                                    <td>{project.openedAt ? project.openedAt : ''}</td>
-                                    <td>
-                                        <div style={{ display: 'flex', alignItems: 'center' }}>
-                                            <AvatarGroup>
-                                                <Avatar
-                                                    shape="circle"
-                                                    image={project.creator.avatar}
-                                                />
-                                            </AvatarGroup>
-                                            <Button icon="pi pi-ellipsis-v" rounded text severity="secondary" aria-label="Cancel" />
-                                        </div>
-                                    </td>
-                                </tr>
+                                <ProjectRow key={index} project={project} deleteProject={deleteProjectConfirm} />
                             ))}
                         </tbody>
                     </table>
@@ -147,6 +201,7 @@ const Dashboard = () => {
                     </div>
                 }
             </div>
+            <ConfirmDialog />
             <Dialog
                 header="Create new project"
                 visible={isOpenProjectModal}
