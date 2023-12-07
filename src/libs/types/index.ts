@@ -10,10 +10,16 @@ export interface IMember {
     position: string;
 }
 
+export interface IProjectMember {
+    user: IUser;
+    position: string;
+}
+
 export interface IProject {
     id: number,
     name: string,
     description: string,
     creator: IUser,
-    openedAt: string
+    openedAt: string,
+    members: Array<IProjectMember>
 }

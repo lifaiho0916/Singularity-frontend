@@ -13,24 +13,23 @@ import { notify } from 'src/store/slices/toastSlice';
 import { setProject, setProjects } from 'src/store/slices/projectSlice';
 import { PROJECT_POSITIONS } from 'src/constants';
 import type { RootState } from 'src/store';
-import type { IMember, IProject } from 'src/libs/types';
-import { createProject, getProjectsByCreator, deleteProject } from 'src/libs/axios/api/project';
+import type { IMember, IProject, IProjectMember } from 'src/libs/types';
+import { createProject, getProjectsByCreator, deleteProject, InviteMembersByProject } from 'src/libs/axios/api/project';
 import "src/assets/styles/pages/app/dashboard.scss";
 
 interface ProjectRowProps {
     project: IProject,
-    deleteProject: (id: number) => void
+    deleteProject: (id: number) => void,
+    inviteMembers: (id: number) => void
 }
 
-const ProjectRow = ({ project, deleteProject }: ProjectRowProps) => {
+const ProjectRow = ({ project, deleteProject, inviteMembers }: ProjectRowProps) => {
     const { id, openedAt, name, creator } = project;
     const menu = React.useRef<Menu | null>(null);
     const items = [
         {
             label: 'Invite members',
-            command: () => {
-
-            }
+            command: () => inviteMembers(id)
         },
         {
             label: 'Delete project',
@@ -51,6 +50,13 @@ const ProjectRow = ({ project, deleteProject }: ProjectRowProps) => {
                         shape="circle"
                         image={creator.avatar}
                     />
+                    {project.members.map((member: IProjectMember, index) => (
+                        <Avatar
+                            key={index}
+                            shape="circle"
+                            image={member.user.avatar}
+                        />
+                    ))}
                 </AvatarGroup>
             </td>
             <td>
@@ -70,7 +76,7 @@ const ProjectRow = ({ project, deleteProject }: ProjectRowProps) => {
 const Dashboard = () => {
     const dispatch = useDispatch();
     const { currentUser } = useSelector((state: RootState) => state.auth);
-    const { projects } = useSelector((state: RootState) => state.project);
+    const { projects, project } = useSelector((state: RootState) => state.project);
     const [isOpenProjectModal, setIsOpenProjectModal] = React.useState(false);
     const [isOpenInviteModal, setIsOpenInviteModal] = React.useState(false);
     const [isOpenInvitationModal, setIsOpenInvitationModal] = React.useState(false);
@@ -101,27 +107,38 @@ const Dashboard = () => {
         }
         const res = await createProject(projectData);
         if (res) {
-            dispatch(setProject(res));
+            dispatch(setProject(res as IProject));
             setIsOpenProjectModal(false);
-            const initialMembers: IMember[] = [];
-            initialMembers.push({ email: '', position: '' })
-            initialMembers.push({ email: '', position: '' })
-            initialMembers.push({ email: '', position: '' })
-            setMembers(initialMembers);
+            InitialMembers();
             setIsOpenInviteModal(true);
         }
         setIsLoading(false);
     }
 
-    const InviteMembers = () => {
+    const InitialMembers = () => {
+        const initialMembers: IMember[] = [];
+        initialMembers.push({ email: '', position: '' })
+        initialMembers.push({ email: '', position: '' })
+        initialMembers.push({ email: '', position: '' })
+        setMembers(initialMembers);
+    }
+
+    const InviteMembers = async () => {
+        setIsLoading(true);
         const updatesMembes = members.filter(member => member.email !== '' && member.position !== '');
         if (updatesMembes.length === 0) {
             dispatch(notify({ type: 'error', title: '', content: 'Please provide the email addresses and positions of your teammates' }))
             return
         }
-        setIsOpenInviteModal(false);
-        setMembers(updatesMembes);
-        setIsOpenInvitationModal(true);
+
+        const res = await InviteMembersByProject(project?.id as number, updatesMembes)
+        if (res) {
+            dispatch(notify({ type: 'success', title: '', content: 'The invitation emails have been successfully delivered' }))
+            setIsOpenInviteModal(false);
+            setMembers(updatesMembes);
+            setIsOpenInvitationModal(true);
+        }
+        setIsLoading(false);
     }
 
     const addNewMember = () => {
@@ -187,7 +204,16 @@ const Dashboard = () => {
                         </thead>
                         <tbody>
                             {projects.map((project: IProject, index) => (
-                                <ProjectRow key={index} project={project} deleteProject={deleteProjectConfirm} />
+                                <ProjectRow
+                                    key={index}
+                                    project={project}
+                                    deleteProject={deleteProjectConfirm}
+                                    inviteMembers={(id: number) => {
+                                        dispatch(setProject(projects.filter(project => project.id === id)[0]));
+                                        InitialMembers();
+                                        setIsOpenInviteModal(true);
+                                    }}
+                                />
                             ))}
                         </tbody>
                     </table>
@@ -256,7 +282,12 @@ const Dashboard = () => {
                     </div>
                 ))}
                 <span onClick={addNewMember} style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer' }}>+ Add New</span>
-                <Button severity="info" style={{ width: '100%', margin: '10px 0px' }} onClick={InviteMembers}>
+                <Button
+                    severity="info"
+                    style={{ width: '100%', margin: '10px 0px' }}
+                    onClick={InviteMembers}
+                    loading={isLoading}
+                >
                     <span style={{ textAlign: 'center', width: '100%' }}>Send</span>
                 </Button>
                 <div style={{ textAlign: 'center' }}>

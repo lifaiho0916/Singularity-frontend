@@ -3,7 +3,7 @@ import type { IProject } from "src/libs/types";
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface projectState {
-    project: object | null;
+    project: IProject | null;
     projects: Array<IProject>
 }
 
@@ -16,7 +16,7 @@ export const projectSlice = createSlice({
     name: "project",
     initialState,
     reducers: {
-        setProject: (state, action: PayloadAction<object>) => {
+        setProject: (state, action: PayloadAction<IProject>) => {
             state.project = action.payload
         },
         setProjects: (state, action: PayloadAction<Array<IProject>>) => {

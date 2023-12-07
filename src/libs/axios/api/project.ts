@@ -1,4 +1,5 @@
 import API from "src/libs/axios/api";
+import { IMember } from "src/libs/types";
 
 export const createProject = async (data: object): Promise<object | undefined> => {
     try {
@@ -23,6 +24,26 @@ export const getProjectsByCreator = async (creatorId: number): Promise<object | 
 export const deleteProject = async (projectId: number): Promise<object | undefined> => {
     try {
         const res = await API.delete(`/v1/project/${projectId}`)
+        return res
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}
+
+export const InviteMembersByProject = async (projectId: number, members: Array<IMember>): Promise<object | undefined> => {
+    try {
+        const res = await API.post(`/v1/project/${projectId}/invite`, { members: members })
+        return res
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}
+
+export const AcceptMemberInvitation = async (token: string): Promise<object | undefined> => {
+    try {
+        const res = await API.post('/v1/project/accept-invitation', { token: token })
         return res
     } catch (error) {
         console.warn(error)
