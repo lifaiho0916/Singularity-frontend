@@ -50,6 +50,10 @@ const ProjectRow = ({ project, deleteProject, inviteMembers }: ProjectRowProps) 
                         shape="circle"
                         image={creator.avatar}
                     />
+                </AvatarGroup>
+            </td>
+            <td>
+                <AvatarGroup>
                     {project.members.map((member: IProjectMember, index) => (
                         <Avatar
                             key={index}
@@ -88,14 +92,8 @@ const Dashboard = () => {
             title: 'New document'
         },
         {
-            title: 'App template'
-        },
-        {
-            title: 'Login template'
-        },
-        {
-            title: 'Eshop template'
-        },
+            title: 'Health app template'
+        }
     ]
 
     const CreateNewProject = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -196,9 +194,10 @@ const Dashboard = () => {
                     <table>
                         <thead>
                             <tr>
-                                <th>TODAY</th>
+                                <th>PROJECT</th>
                                 <th>LAST TIME OPENED</th>
                                 <th>OWNED BY</th>
+                                <th>MEMBERS</th>
                                 <th></th>
                             </tr>
                         </thead>
