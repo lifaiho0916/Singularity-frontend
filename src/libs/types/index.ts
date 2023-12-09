@@ -22,4 +22,12 @@ export interface IProject {
     creator: IUser,
     openedAt: string,
     members: Array<IProjectMember>
+    data: string
+}
+
+export interface ITemplate {
+    id: number,
+    name: string,
+    description: string,
+    data: string
 }

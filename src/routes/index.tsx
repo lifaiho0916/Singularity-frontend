@@ -38,6 +38,7 @@ const AppRouter = () => {
                     )
 
                 })}
+                <Route path="*" element={<Navigate replace to={AUTH_LOGIN_PATH} />} />
             </Routes>
         </BrowserRouter>
     )

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
@@ -7,38 +8,50 @@ import { CascadeSelect } from 'primereact/cascadeselect';
 import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
 import { Menu } from 'primereact/menu';
+import type { MenuItemCommandEvent } from 'primereact/menuitem';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import ProjectTemplate from 'src/assets/components/app/ProjectTemplate';
 import { notify } from 'src/store/slices/toastSlice';
 import { setProject, setProjects } from 'src/store/slices/projectSlice';
+import { setTemplates, setTemplate } from 'src/store/slices/templateSlice';
 import { PROJECT_POSITIONS } from 'src/constants';
 import type { RootState } from 'src/store';
-import type { IMember, IProject, IProjectMember } from 'src/libs/types';
+import type { IMember, IProject, IProjectMember, ITemplate } from 'src/libs/types';
 import { createProject, getProjectsByCreator, deleteProject, InviteMembersByProject } from 'src/libs/axios/api/project';
+import { getAllTemplates } from 'src/libs/axios/api/template';
 import "src/assets/styles/pages/app/dashboard.scss";
 
 interface ProjectRowProps {
     project: IProject,
     deleteProject: (id: number) => void,
-    inviteMembers: (id: number) => void
+    inviteMembers: (id: number) => void,
+    NavigateWorkspace: (id: number) => void
 }
 
-const ProjectRow = ({ project, deleteProject, inviteMembers }: ProjectRowProps) => {
+const ProjectRow = ({ project, deleteProject, inviteMembers, NavigateWorkspace }: ProjectRowProps) => {
     const { id, openedAt, name, creator } = project;
     const menu = React.useRef<Menu | null>(null);
     const items = [
         {
             label: 'Invite members',
-            command: () => inviteMembers(id)
+            command: (event: MenuItemCommandEvent) => {
+                event.originalEvent.stopPropagation();
+                inviteMembers(id)
+            }
         },
         {
             label: 'Delete project',
-            command: () => deleteProject(id)
+            command: (event: MenuItemCommandEvent) => {
+                event.originalEvent.stopPropagation();
+                deleteProject(id)
+            }
         }
     ];
 
     return (
-        <tr>
+        <tr onClick={() => {
+            NavigateWorkspace(id)
+        }}>
             <td style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="template"></div>
                 <span className='project-name'>{name}</span>
@@ -65,7 +78,10 @@ const ProjectRow = ({ project, deleteProject, inviteMembers }: ProjectRowProps) 
             </td>
             <td>
                 <Button
-                    onClick={(event) => menu.current && menu.current.toggle(event)}
+                    onClick={(event) => {
+                        event.stopPropagation();
+                        menu.current && menu.current.toggle(event)
+                    }}
                     icon="pi pi-ellipsis-v"
                     rounded text
                     severity="secondary"
@@ -79,29 +95,23 @@ const ProjectRow = ({ project, deleteProject, inviteMembers }: ProjectRowProps) 
 
 const Dashboard = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { currentUser } = useSelector((state: RootState) => state.auth);
     const { projects, project } = useSelector((state: RootState) => state.project);
+    const { templates, template } = useSelector((state: RootState) => state.template);
     const [isOpenProjectModal, setIsOpenProjectModal] = React.useState(false);
     const [isOpenInviteModal, setIsOpenInviteModal] = React.useState(false);
     const [isOpenInvitationModal, setIsOpenInvitationModal] = React.useState(false);
     const [members, setMembers] = React.useState<IMember[]>([]);
     const [isLoading, setIsLoading] = React.useState(false);
 
-    const templates = [
-        {
-            title: 'New document'
-        },
-        {
-            title: 'Health app template'
-        }
-    ]
-
     const CreateNewProject = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         setIsLoading(true);
         const projectData = {
             name: event.currentTarget["projectName"].value,
-            creator: currentUser
+            creator: currentUser,
+            template: template?.data
         }
         const res = await createProject(projectData);
         if (res) {
@@ -170,9 +180,18 @@ const Dashboard = () => {
         }
     }
 
+    const GetAllTemplates = async () => {
+        const res = await getAllTemplates();
+        if (res) {
+            const resTemplates = res as Array<ITemplate>
+            dispatch(setTemplates([...resTemplates.sort((a, b) => a.id - b.id)]));
+        }
+    }
+
     React.useEffect(() => {
         if (currentUser) {
-            GetProjectsByCreator()
+            GetProjectsByCreator();
+            GetAllTemplates();
         }
     }, [currentUser])
 
@@ -185,7 +204,10 @@ const Dashboard = () => {
                 </div>
                 <div className="tempates">
                     {templates.map((template, index) => (
-                        <ProjectTemplate title={template.title} key={index} createProject={() => { setIsOpenProjectModal(true) }} />
+                        <ProjectTemplate template={template} key={index} createProject={() => {
+                            dispatch(setTemplate(template));
+                            setIsOpenProjectModal(true)
+                        }} />
                     ))}
                 </div>
             </div>
@@ -212,6 +234,9 @@ const Dashboard = () => {
                                         InitialMembers();
                                         setIsOpenInviteModal(true);
                                     }}
+                                    NavigateWorkspace={(id: number) => {
+                                        navigate('/app/project');
+                                    }}
                                 />
                             ))}
                         </tbody>
@@ -221,6 +246,7 @@ const Dashboard = () => {
                         <i className="pi pi-align-justify"></i>
                         <h2>Welcome create your first project!</h2>
                         <Button severity="info" onClick={() => {
+                            setTemplate(templates[0]);
                             setIsOpenProjectModal(true);
                         }}>Create first project</Button>
                     </div>
@@ -290,7 +316,10 @@ const Dashboard = () => {
                     <span style={{ textAlign: 'center', width: '100%' }}>Send</span>
                 </Button>
                 <div style={{ textAlign: 'center' }}>
-                    <span onClick={() => setIsOpenInviteModal(false)} style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer' }}>I don't want to invite members</span>
+                    <span onClick={() => {
+                        setIsOpenInviteModal(false)
+                        navigate('/app/project')
+                    }} style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer' }}>I don't want to invite members</span>
                 </div>
             </Dialog>
             <Dialog
@@ -314,7 +343,10 @@ const Dashboard = () => {
                         ))}
                     </AvatarGroup>
                 </div>
-                <Button severity="info" style={{ width: '100%' }} onClick={() => setIsOpenInvitationModal(false)}>
+                <Button severity="info" style={{ width: '100%' }} onClick={() => {
+                    setIsOpenInvitationModal(false)
+                    navigate('/app/project')
+                }}>
                     <span style={{ textAlign: 'center', width: '100%' }}>Let's start</span>
                 </Button>
             </Dialog>

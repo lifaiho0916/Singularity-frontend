@@ -6,6 +6,7 @@ import InviteHandler from "src/pages/Invite";
 
 // Private Pages
 import Dashboard from 'src/pages/App/Dashboard';
+import Workspace from "src/pages/App/Workspace";
 
 export const publicRoutes = [
     {
@@ -33,7 +34,12 @@ export const publicRoutes = [
 export const privateRoutes = [
     {
         key: 'dashboard',
-        path: '/app',
+        path: '/app/dashboard',
         component: Dashboard
+    },
+    {
+        key: 'project',
+        path: '/app/project',
+        component: Workspace
     }
 ];

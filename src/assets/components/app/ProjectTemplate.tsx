@@ -1,15 +1,16 @@
 import "src/assets/styles/components/projectTemplate.scss";
+import type { ITemplate } from "src/libs/types";
 interface templateProps {
-    title: string,
+    template: ITemplate,
     createProject: () => void
 }
 
-const ProjectTemplate = ({ title, createProject }: templateProps) => {
+const ProjectTemplate = ({ template, createProject }: templateProps) => {
     return (
         <div className="project-template" onClick={createProject}>
             <div className="template"></div>
             <div className="description">
-                <h6>{title}</h6>
+                <h6>{template.name}</h6>
                 <i className="pi pi-ellipsis-h" style={{ cursor: 'pointer', fontSize: 12 }}></i>
             </div>
         </div>
