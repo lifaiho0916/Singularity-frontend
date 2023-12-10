@@ -111,7 +111,7 @@ const Dashboard = () => {
         const projectData = {
             name: event.currentTarget["projectName"].value,
             creator: currentUser,
-            template: template?.data
+            templateId: template?.id
         }
         const res = await createProject(projectData);
         if (res) {

@@ -28,6 +28,5 @@ export interface IProject {
 export interface ITemplate {
     id: number,
     name: string,
-    description: string,
-    data: string
+    description: string
 }
