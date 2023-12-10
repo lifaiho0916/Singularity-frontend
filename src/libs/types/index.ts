@@ -28,5 +28,6 @@ export interface IProject {
 export interface ITemplate {
     id: number,
     name: string,
-    description: string
+    description: string,
+    defaultTemplate: boolean
 }

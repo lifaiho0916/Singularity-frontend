@@ -246,7 +246,7 @@ const Dashboard = () => {
                         <i className="pi pi-align-justify"></i>
                         <h2>Welcome create your first project!</h2>
                         <Button severity="info" onClick={() => {
-                            setTemplate(templates[0]);
+                            dispatch(setTemplate(templates.filter((template: ITemplate) => template.defaultTemplate)[0]));
                             setIsOpenProjectModal(true);
                         }}>Create first project</Button>
                     </div>
