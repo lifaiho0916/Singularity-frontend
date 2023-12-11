@@ -62,7 +62,7 @@ const AppTopbar = () => {
 
     return (
         <div className="app-header">
-            <div className="logo">
+            <div className="logo" onClick={() => navigate('/app')}>
                 <h1>SINGULARITY</h1>
             </div>
             <div className="profile">

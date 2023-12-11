@@ -39,7 +39,7 @@ export const privateRoutes = [
     },
     {
         key: 'project',
-        path: '/app/project',
+        path: '/app/project/:projectId/*',
         component: Project
     }
 ];

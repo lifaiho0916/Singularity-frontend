@@ -50,3 +50,22 @@ export const AcceptMemberInvitation = async (token: string): Promise<object | un
     }
     return undefined
 }
+
+export const getProjectById = async (projectId: number): Promise<object | undefined> => {
+    try {
+        const res = await API.get(`/v1/project/${projectId}`);
+        return res
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}
+
+export const setOpenAtById = async (projectId: number): Promise<object | undefined> => {
+    try {
+        await API.get(`/v1/project/${projectId}/open`);
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}

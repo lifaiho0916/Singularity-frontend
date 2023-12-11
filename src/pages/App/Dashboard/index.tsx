@@ -48,6 +48,11 @@ const ProjectRow = ({ project, deleteProject, inviteMembers, NavigateWorkspace }
         }
     ];
 
+    const options: Intl.DateTimeFormatOptions = {
+        hour: 'numeric',
+        minute: 'numeric'
+    }
+
     return (
         <tr onClick={() => {
             NavigateWorkspace(id)
@@ -56,7 +61,7 @@ const ProjectRow = ({ project, deleteProject, inviteMembers, NavigateWorkspace }
                 <div className="template"></div>
                 <span className='project-name'>{name}</span>
             </td>
-            <td>{openedAt ? openedAt : ''}</td>
+            <td>{openedAt ? new Date(openedAt).toLocaleDateString(undefined, options) : ''}</td>
             <td>
                 <AvatarGroup>
                     <Avatar
@@ -113,12 +118,10 @@ const Dashboard = () => {
             creator: currentUser,
             templateId: template?.id
         }
-        const res = await createProject(projectData);
+        const res = await createProject(projectData) as IProject;
         if (res) {
-            dispatch(setProject(res as IProject));
             setIsOpenProjectModal(false);
-            InitialMembers();
-            setIsOpenInviteModal(true);
+            navigate(`/app/project/${res.id}`)
         }
         setIsLoading(false);
     }
@@ -235,7 +238,7 @@ const Dashboard = () => {
                                         setIsOpenInviteModal(true);
                                     }}
                                     NavigateWorkspace={(id: number) => {
-                                        navigate('/app/project');
+                                        navigate(`/app/project/${id}`);
                                     }}
                                 />
                             ))}
@@ -343,12 +346,6 @@ const Dashboard = () => {
                         ))}
                     </AvatarGroup>
                 </div>
-                <Button severity="info" style={{ width: '100%' }} onClick={() => {
-                    setIsOpenInvitationModal(false)
-                    navigate('/app/project')
-                }}>
-                    <span style={{ textAlign: 'center', width: '100%' }}>Let's start</span>
-                </Button>
             </Dialog>
         </div>
     );
