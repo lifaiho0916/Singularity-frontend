@@ -28,8 +28,8 @@ const InviteHandler = () => {
         const res = await AcceptMemberInvitation(invitationToken as string)
         if (res) {
             console.log(res);
+            navigate(AUTHENTICATED_ENTRY);
         }
-        navigate(AUTHENTICATED_ENTRY);
     }
 
     return <></>

@@ -108,13 +108,13 @@ const Project = () => {
     }, [projectId]);
 
     React.useEffect(() => {
-        if (project) {
+        if (project && project.id === Number(projectId)) {
             dispatch(setStructure(JSON.parse(project.data)));
             if (project.openedAt === null) {
                 setIsOpenInviteModal(true);
             }
         }
-    }, [project]);
+    }, [project, projectId]);
 
     React.useEffect(() => {
         if (projectId) {
