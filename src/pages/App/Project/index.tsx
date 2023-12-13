@@ -17,7 +17,7 @@ import type { RootState } from 'src/store';
 
 import DesignWorkspace from 'src/pages/App/Project/Design';
 import BackendWorkspace from 'src/pages/App/Project/Backend';
-import ArchitectureWorkspace from 'src/pages/App/Project/Architecture';
+// import ArchitectureWorkspace from 'src/pages/App/Project/Architecture';
 
 import 'src/assets/styles/pages/app/project.scss';
 
@@ -26,7 +26,7 @@ const WorkspaceContent = () => {
         <Routes>
             <Route path="design-workspace" element={<DesignWorkspace />} />
             <Route path="backend-workspace" element={<BackendWorkspace />} />
-            <Route path="architecture-workspace" element={<ArchitectureWorkspace />} />
+            {/* <Route path="architecture-workspace" element={<ArchitectureWorkspace />} /> */}
             <Route path="*" element={<Navigate to="design-workspace" replace />} />
         </Routes>
     )
@@ -91,9 +91,9 @@ const Project = () => {
             case 1:
                 navigate(`/app/project/${projectId}/backend-workspace`);
                 break;
-            case 2:
-                navigate(`/app/project/${projectId}/architecture-workspace`);
-                break;
+            // case 2:
+            //     navigate(`/app/project/${projectId}/architecture-workspace`);
+            //     break;
             default:
                 break;
         }
@@ -125,9 +125,9 @@ const Project = () => {
                 case `/app/project/${projectId}/backend-workspace`:
                     setActiveTab(1)
                     break;
-                case `/app/project/${projectId}/architecture-workspace`:
-                    setActiveTab(2)
-                    break;
+                // case `/app/project/${projectId}/architecture-workspace`:
+                //     setActiveTab(2)
+                //     break;
                 default:
                     break;
             }
@@ -135,12 +135,12 @@ const Project = () => {
     }, [location, projectId])
 
     return (
-        <div>
+        <div className="project-board">
             <div style={{ margin: 5 }}>
                 <TabView activeIndex={activeTab} onTabChange={(e) => NavigateWorkspace(e.index)}>
                     <TabPanel header="DESIGN" />
                     <TabPanel header="BACKEND" />
-                    <TabPanel header="ARCHITECTURE" />
+                    {/* <TabPanel header="ARCHITECTURE" /> */}
                 </TabView>
             </div>
             <WorkspaceContent />

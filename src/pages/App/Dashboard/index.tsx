@@ -12,7 +12,7 @@ import type { MenuItemCommandEvent } from 'primereact/menuitem';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
 import ProjectTemplate from 'src/assets/components/app/ProjectTemplate';
 import { notify } from 'src/store/slices/toastSlice';
-import { setProject, setProjects } from 'src/store/slices/projectSlice';
+import { setProject, setProjects, InitProject } from 'src/store/slices/projectSlice';
 import { setTemplates, setTemplate } from 'src/store/slices/templateSlice';
 import { PROJECT_POSITIONS } from 'src/constants';
 import type { RootState } from 'src/store';
@@ -195,6 +195,7 @@ const Dashboard = () => {
         if (currentUser) {
             GetProjectsByCreator();
             GetAllTemplates();
+            dispatch(InitProject());
         }
     }, [currentUser])
 

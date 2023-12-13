@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit"
-import type { IProject } from "src/libs/types";
+import type { IProject, IStructure } from "src/libs/types";
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface projectState {
     project: IProject | null;
-    structure: Object | null;
+    structure: IStructure | null;
     projects: Array<IProject>;
 }
 
@@ -18,10 +18,15 @@ export const projectSlice = createSlice({
     name: "project",
     initialState,
     reducers: {
-        setProject: (state, action: PayloadAction<IProject>) => {
+        InitProject: (state) => {
+            state.project = null;
+            state.structure = null;
+            state.projects = [];
+        },
+        setProject: (state, action: PayloadAction<IProject | null>) => {
             state.project = action.payload
         },
-        setStructure: (state, action: PayloadAction<Array<Object>>) => {
+        setStructure: (state, action: PayloadAction<IStructure>) => {
             state.structure = action.payload
         },
         setProjects: (state, action: PayloadAction<Array<IProject>>) => {
@@ -30,6 +35,6 @@ export const projectSlice = createSlice({
     }
 })
 
-export const { setProject, setStructure, setProjects } = projectSlice.actions
+export const { setProject, setStructure, setProjects, InitProject } = projectSlice.actions
 
 export default projectSlice.reducer

@@ -31,3 +31,14 @@ export interface ITemplate {
     description: string,
     defaultTemplate: boolean
 }
+
+export interface IProjectStructure {
+    id: number
+    name: string
+    design: object
+    backend: object
+}
+
+export interface IStructure {
+    project: IProjectStructure
+}
