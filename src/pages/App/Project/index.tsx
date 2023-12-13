@@ -7,19 +7,19 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { TabView, TabPanel } from 'primereact/tabview';
-import { PROJECT_POSITIONS } from 'src/constants';
+import { PROJECT_POSITIONS } from "constants/";
 import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
-import { notify } from 'src/store/slices/toastSlice';
-import { InviteMembersByProject, getProjectById, setOpenAtById } from 'src/libs/axios/api/project';
-import { setProject, setStructure } from 'src/store/slices/projectSlice';
-import type { IMember, IProject } from 'src/libs/types';
-import type { RootState } from 'src/store';
+import { notify } from 'store/slices/toastSlice';
+import { InviteMembersByProject, getProjectById, setOpenAtById } from 'libs/axios/api/project';
+import { setProject, setStructure } from 'store/slices/projectSlice';
+import type { IMember, IProject } from 'libs/types';
+import type { RootState } from 'store';
 
-import DesignWorkspace from 'src/pages/App/Project/Design';
-import BackendWorkspace from 'src/pages/App/Project/Backend';
-// import ArchitectureWorkspace from 'src/pages/App/Project/Architecture';
+import DesignWorkspace from 'pages/App/Project/Design';
+import BackendWorkspace from 'pages/App/Project/Backend';
+// import ArchitectureWorkspace from 'pages/App/Project/Architecture';
 
-import 'src/assets/styles/pages/app/project.scss';
+import 'assets/styles/pages/app/project.scss';
 
 const WorkspaceContent = () => {
     return (

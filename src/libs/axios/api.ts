@@ -1,5 +1,5 @@
 import axios, { AxiosHeaders, AxiosRequestHeaders, InternalAxiosRequestConfig } from "axios";
-import { API_BASE_URL } from "src/constants";
+import { API_BASE_URL } from "constants/";
 // import { getAccessTokenByRefreshToken } from "./api/auth";
 
 const controller = new AbortController();

@@ -1,9 +1,9 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit';
 
-import authReducer from 'src/store/slices/authSlice';
-import toastReducer from 'src/store/slices/toastSlice';
-import projectReducer from 'src/store/slices/projectSlice';
-import templateReducer from 'src/store/slices/templateSlice';
+import authReducer from 'store/slices/authSlice';
+import toastReducer from 'store/slices/toastSlice';
+import projectReducer from 'store/slices/projectSlice';
+import templateReducer from 'store/slices/templateSlice';
 
 export const rootReducer = combineReducers({
     auth: authReducer,

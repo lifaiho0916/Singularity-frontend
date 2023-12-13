@@ -1,10 +1,10 @@
 import React from "react";
 import { useDispatch } from 'react-redux';
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { login } from 'src/store/slices/authSlice';
-import { notify } from 'src/store/slices/toastSlice';
-import { AcceptMemberInvitation } from "src/libs/axios/api/project";
-import { AUTHENTICATED_ENTRY, AUTH_ACCESS_TOKEN, AUTH_LOGIN_PATH, INVITATION_TOKEN } from 'src/constants';
+import { login } from 'store/slices/authSlice';
+import { notify } from 'store/slices/toastSlice';
+import { AcceptMemberInvitation } from "libs/axios/api/project";
+import { AUTHENTICATED_ENTRY, AUTH_ACCESS_TOKEN, AUTH_LOGIN_PATH, INVITATION_TOKEN } from "constants/";
 
 const OAuth2RedirectHandler = () => {
     const dispatch = useDispatch();

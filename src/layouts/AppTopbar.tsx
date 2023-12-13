@@ -3,14 +3,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Avatar } from "primereact/avatar";
 import { Menu } from "primereact/menu";
-import { logout } from "src/store/slices/authSlice";
-import { notify } from "src/store/slices/toastSlice";
-import { AUTH_LOGIN_PATH } from "src/constants";
-import { getCurrentUser } from "src/libs/axios/api/auth";
-import { setCurrentUser } from "src/store/slices/authSlice";
-import type { RootState } from "src/store";
-import type { IUser } from "src/libs/types";
-import "src/assets/styles/layouts/topbar.scss";
+import { logout } from "store/slices/authSlice";
+import { notify } from "store/slices/toastSlice";
+import { AUTH_LOGIN_PATH } from "constants/";
+import { getCurrentUser } from "libs/axios/api/auth";
+import { setCurrentUser } from "store/slices/authSlice";
+import type { RootState } from "store";
+import type { IUser } from "libs/types";
+import "assets/styles/layouts/topbar.scss";
 
 const AppTopbar = () => {
     const { isLogged, currentUser } = useSelector((state: RootState) => state.auth);

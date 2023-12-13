@@ -2,10 +2,10 @@ import * as React from 'react';
 import { CascadeSelect } from "primereact/cascadeselect";
 import { Button } from 'primereact/button';
 // import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import ViewBox from 'src/assets/components/app/ViewBox/ViewBox';
+import ViewBox from 'components/ViewBox';
 import { useSelector } from 'react-redux';
-import type { RootState } from 'src/store';
-import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from 'src/constants';
+import type { RootState } from 'store';
+import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
 
 const DesignWorkspace = () => {
     const { structure } = useSelector((state: RootState) => state.project)

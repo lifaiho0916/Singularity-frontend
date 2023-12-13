@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit"
-import type { IProject, IStructure } from "src/libs/types";
+import type { IProject, IStructure } from "libs/types";
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface projectState {

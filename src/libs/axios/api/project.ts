@@ -1,5 +1,5 @@
-import API from "src/libs/axios/api";
-import { IMember } from "src/libs/types";
+import API from "libs/axios/api";
+import { IMember } from "libs/types";
 
 export const createProject = async (data: object): Promise<object | undefined> => {
     try {

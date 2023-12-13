@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import { AUTH_ACCESS_TOKEN, AUTH_LOGIN_PATH } from "src/constants";
-import Layout from "src/layouts";
+import { AUTH_ACCESS_TOKEN, AUTH_LOGIN_PATH } from "constants/";
+import Layout from "layouts";
 interface PrivateRouteProps {
     children: React.ReactNode;
 }

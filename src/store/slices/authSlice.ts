@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
-import { AUTH_ACCESS_TOKEN } from "src/constants";
+import { AUTH_ACCESS_TOKEN } from "constants/";
 
-import type { IUser } from "src/libs/types";
+import type { IUser } from "libs/types";
 import type { PayloadAction } from "@reduxjs/toolkit"
 
 interface AuthState {

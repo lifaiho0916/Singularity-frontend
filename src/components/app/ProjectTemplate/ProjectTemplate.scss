@@ -1,0 +1,31 @@
+.project-template {
+  margin: 5px 20px;
+  cursor: pointer;
+
+  .template {
+    width: 250px;
+    height: 200px;
+    background-color: white;
+    border-radius: 5px;
+  }
+
+  .description {
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    align-items: center;
+
+    h6 {
+      font-size: 12px;
+    }
+  }
+
+  &:hover {
+    scale: 1.02;
+
+    .template {
+      border: 2px solid #AAAAAA;
+    }
+  }
+}

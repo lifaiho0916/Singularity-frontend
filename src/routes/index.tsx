@@ -1,8 +1,8 @@
 import { Route, Routes, Navigate, BrowserRouter } from "react-router-dom";
-import { publicRoutes, privateRoutes } from "src/configs/RoutesConfigs";
-import PrivateRoute from "src/routes/PrivateRoute";
+import { publicRoutes, privateRoutes } from "config/RoutesConfigs";
+import PrivateRoute from "routes/PrivateRoute";
 import PublicRoute from "./PublicRoute";
-import { AUTH_LOGIN_PATH } from "src/constants";
+import { AUTH_LOGIN_PATH } from "constants/";
 
 const AppRouter = () => {
     return (

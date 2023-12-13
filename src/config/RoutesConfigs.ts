@@ -1,12 +1,12 @@
 // Public Pages
-import LoginPage from "src/pages/Auth/Login";
-import HomePage from "src/pages/Home";
-import OAuth2RedirectHandler from "src/pages/Auth/OAuth2";
-import InviteHandler from "src/pages/Invite";
+import LoginPage from "pages/Auth/Login";
+import HomePage from "pages/Home";
+import OAuth2RedirectHandler from "pages/Auth/OAuth2";
+import InviteHandler from "pages/Invite";
 
 // Private Pages
-import Dashboard from 'src/pages/App/Dashboard';
-import Project from "src/pages/App/Project";
+import Dashboard from 'pages/App/Dashboard';
+import Project from "pages/App/Project";
 
 export const publicRoutes = [
     {
