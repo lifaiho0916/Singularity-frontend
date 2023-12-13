@@ -1,11 +1,8 @@
-import "src/assets/styles/components/projectTemplate.scss";
-import type { ITemplate } from "src/libs/types";
-interface templateProps {
-    template: ITemplate,
-    createProject: () => void
-}
+import { type FC } from 'react'
+import { ProjectTemplateProps } from './ProjectTemplate.types'
+import "./ProjectTemplate.scss";
 
-const ProjectTemplate = ({ template, createProject }: templateProps) => {
+const ProjectTemplate:FC<ProjectTemplateProps> = ({ template, createProject }) => {
     return (
         <div className="project-template" onClick={createProject}>
             <div className="template"></div>
