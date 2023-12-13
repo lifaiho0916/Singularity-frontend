@@ -1,8 +1,10 @@
 import * as React from "react";
+import { type FC } from 'react';
 import { Button } from "primereact/button";
-import 'src/assets/styles/components/viewBox.scss';
+import { ViewBoxProps } from "./ViewBox.types";
+import './ViewBox.scss';
 
-const ViewBox = () => {
+const ViewBox:FC<ViewBoxProps> = () => {
     const [isShowSpliter, setIsShowSpliter] = React.useState(false);
     const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
     const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
