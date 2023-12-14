@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { ButtonComponentProps } from "./ButtonComponent.types";
-import './ButtonComponentDialog.scss';
+import './ButtonComponent.scss';
 
 const ButtonComponent:FC<ButtonComponentProps> = () => {
   return (

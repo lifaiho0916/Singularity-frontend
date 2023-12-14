@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { TextComponentDialogProps } from "./TextComponentDialog.types";
-import './ButtonComponentDialog.scss';
+import './TextComponentDialog.scss';
 
 const TextComponentDialog:FC<TextComponentDialogProps> = () => {
   return (

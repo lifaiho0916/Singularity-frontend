@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { LabelComponentProps } from "./LabelComponent.types";
-import './ButtonComponentDialog.scss';
+import './LabelComponent.scss';
 
 const LabelComponent:FC<LabelComponentProps> = () => {
   return (

@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { ImageComponentDialogProps } from "./ImageComponentDialog.types";
-import './ButtonComponentDialog.scss';
+import './ImageComponentDialog.scss';
 
 const ImageComponentDialog:FC<ImageComponentDialogProps> = () => {
   return (

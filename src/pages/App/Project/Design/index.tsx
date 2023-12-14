@@ -2,7 +2,7 @@ import * as React from 'react';
 import { CascadeSelect } from "primereact/cascadeselect";
 import { Button } from 'primereact/button';
 // import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import ViewBox from 'components/ViewBox';
+import { ViewBox } from 'components';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";

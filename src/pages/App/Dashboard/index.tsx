@@ -10,7 +10,7 @@ import { AvatarGroup } from 'primereact/avatargroup';
 import { Menu } from 'primereact/menu';
 import type { MenuItemCommandEvent } from 'primereact/menuitem';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import {ProjectTemplate} from 'assets/components/app';
+import {ProjectTemplate} from 'components';
 import { notify } from 'store/slices/toastSlice';
 import { setProject, setProjects, InitProject } from 'store/slices/projectSlice';
 import { setTemplates, setTemplate } from 'store/slices/templateSlice';

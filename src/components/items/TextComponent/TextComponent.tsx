@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { TextComponentProps } from "./TextComponent.types";
-import './ButtonComponentDialog.scss';
+import './TextComponent.scss';
 
 const TextComponent:FC<TextComponentProps> = () => {
   return (
