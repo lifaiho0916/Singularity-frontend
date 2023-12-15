@@ -1,5 +1,5 @@
 export { ProjectTemplate, ViewBox } from './app'
 export { ButtonComponentDialog, ImageComponentDialog, LabelComponentDialog, TextComponentDialog } from './dialog'
 export { ToastContainer } from './ToastContainer'
-export { Toolbar } from './toolbar'
+export { Toolbar, ToolbarItem } from './toolbar'
 export { ButtonComponent, ImageComponent, LabelComponent, TextComponent } from './items'
