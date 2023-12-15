@@ -1,0 +1,19 @@
+// ButtonComponent.scss
+.button {
+    // Define your button styles here
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  
+    &:hover {
+      background-color: #0056b3;
+    }
+  
+    // Add more styles as needed
+  }
+  
+  // Additional styles or modifiers can be added here
+  

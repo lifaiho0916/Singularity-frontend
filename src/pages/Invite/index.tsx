@@ -1,7 +1,7 @@
 import React from "react";
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { AcceptMemberInvitation } from "src/libs/axios/api/project";
-import { AUTH_LOGIN_PATH, INVITATION_TOKEN, AUTH_ACCESS_TOKEN, AUTHENTICATED_ENTRY } from 'src/constants';
+import { AcceptMemberInvitation } from "libs/axios/api/project";
+import { AUTH_LOGIN_PATH, INVITATION_TOKEN, AUTH_ACCESS_TOKEN, AUTHENTICATED_ENTRY } from "constants/";
 
 const InviteHandler = () => {
     const navigate = useNavigate();

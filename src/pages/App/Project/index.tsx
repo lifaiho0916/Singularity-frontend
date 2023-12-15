@@ -7,26 +7,26 @@ import { Dialog } from 'primereact/dialog';
 import { InputText } from 'primereact/inputtext';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { TabView, TabPanel } from 'primereact/tabview';
-import { PROJECT_POSITIONS } from 'src/constants';
+import { PROJECT_POSITIONS } from "constants/";
 import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
-import { notify } from 'src/store/slices/toastSlice';
-import { InviteMembersByProject, getProjectById, setOpenAtById } from 'src/libs/axios/api/project';
-import { setProject, setStructure } from 'src/store/slices/projectSlice';
-import type { IMember, IProject } from 'src/libs/types';
-import type { RootState } from 'src/store';
+import { notify } from 'store/slices/toastSlice';
+import { InviteMembersByProject, getProjectById, setOpenAtById } from 'libs/axios/api/project';
+import { setProject, setStructure } from 'store/slices/projectSlice';
+import type { IMember, IProject } from 'libs/types';
+import type { RootState } from 'store';
 
-import DesignWorkspace from 'src/pages/App/Project/Design';
-import BackendWorkspace from 'src/pages/App/Project/Backend';
-// import ArchitectureWorkspace from 'src/pages/App/Project/Architecture';
+import DesignWorkspace from 'pages/App/Project/Design';
+import BackendWorkspace from 'pages/App/Project/Backend';
+import ArchitectureWorkspace from 'pages/App/Project/Architecture';
 
-import 'src/assets/styles/pages/app/project.scss';
+import 'assets/styles/pages/app/project.scss';
 
 const WorkspaceContent = () => {
     return (
         <Routes>
             <Route path="design-workspace" element={<DesignWorkspace />} />
             <Route path="backend-workspace" element={<BackendWorkspace />} />
-            {/* <Route path="architecture-workspace" element={<ArchitectureWorkspace />} /> */}
+            <Route path="architecture-workspace" element={<ArchitectureWorkspace />} />
             <Route path="*" element={<Navigate to="design-workspace" replace />} />
         </Routes>
     )
@@ -91,9 +91,9 @@ const Project = () => {
             case 1:
                 navigate(`/app/project/${projectId}/backend-workspace`);
                 break;
-            // case 2:
-            //     navigate(`/app/project/${projectId}/architecture-workspace`);
-            //     break;
+            case 2:
+                navigate(`/app/project/${projectId}/architecture-workspace`);
+                break; 
             default:
                 break;
         }
@@ -125,9 +125,9 @@ const Project = () => {
                 case `/app/project/${projectId}/backend-workspace`:
                     setActiveTab(1)
                     break;
-                // case `/app/project/${projectId}/architecture-workspace`:
-                //     setActiveTab(2)
-                //     break;
+                case `/app/project/${projectId}/architecture-workspace`:
+                    setActiveTab(2)
+                    break;
                 default:
                     break;
             }
@@ -140,7 +140,7 @@ const Project = () => {
                 <TabView activeIndex={activeTab} onTabChange={(e) => NavigateWorkspace(e.index)}>
                     <TabPanel header="DESIGN" />
                     <TabPanel header="BACKEND" />
-                    {/* <TabPanel header="ARCHITECTURE" /> */}
+                    <TabPanel header="ARCHITECTURE" />
                 </TabView>
             </div>
             <WorkspaceContent />

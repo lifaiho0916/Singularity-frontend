@@ -1,6 +1,6 @@
 import { Button } from 'primereact/button';
-import { GOOGLE_AUTH_URL } from 'src/constants';
-import 'src/assets/styles/pages/login.scss';
+import { GOOGLE_AUTH_URL } from "constants/";
+import 'assets/styles/pages/login.scss';
 
 const Login = () => {
 

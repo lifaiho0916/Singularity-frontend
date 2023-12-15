@@ -1,3 +1,5 @@
+import { ButtonComponent, ImageComponent, TextComponent, LabelComponent } from "components"
+
 export interface IUser {
     id: number;
     first_name: string;

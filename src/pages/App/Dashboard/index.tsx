@@ -10,16 +10,16 @@ import { AvatarGroup } from 'primereact/avatargroup';
 import { Menu } from 'primereact/menu';
 import type { MenuItemCommandEvent } from 'primereact/menuitem';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import {ProjectTemplate} from 'src/assets/components/app';
-import { notify } from 'src/store/slices/toastSlice';
-import { setProject, setProjects, InitProject } from 'src/store/slices/projectSlice';
-import { setTemplates, setTemplate } from 'src/store/slices/templateSlice';
-import { PROJECT_POSITIONS } from 'src/constants';
-import type { RootState } from 'src/store';
-import type { IMember, IProject, IProjectMember, ITemplate } from 'src/libs/types';
-import { createProject, getProjectsByCreator, deleteProject, InviteMembersByProject } from 'src/libs/axios/api/project';
-import { getAllTemplates } from 'src/libs/axios/api/template';
-import "src/assets/styles/pages/app/dashboard.scss";
+import {ProjectTemplate} from 'components';
+import { notify } from 'store/slices/toastSlice';
+import { setProject, setProjects, InitProject } from 'store/slices/projectSlice';
+import { setTemplates, setTemplate } from 'store/slices/templateSlice';
+import { PROJECT_POSITIONS } from "constants/";
+import type { RootState } from 'store';
+import type { IMember, IProject, IProjectMember, ITemplate } from 'libs/types';
+import { createProject, getProjectsByCreator, deleteProject, InviteMembersByProject } from 'libs/axios/api/project';
+import { getAllTemplates } from 'libs/axios/api/template';
+import "assets/styles/pages/app/dashboard.scss";
 
 interface ProjectRowProps {
     project: IProject,

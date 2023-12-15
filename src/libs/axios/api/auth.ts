@@ -1,4 +1,4 @@
-import API from "src/libs/axios/api";
+import API from "libs/axios/api";
 
 export const getCurrentUser = async (): Promise<object | undefined> => {
     try {

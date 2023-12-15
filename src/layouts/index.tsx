@@ -1,5 +1,5 @@
 import React from "react";
-import AppTopbar from "src/layouts/AppTopbar";
+import AppTopbar from "layouts/AppTopbar";
 interface LayoutProps {
     children: React.ReactNode;
     isAuthenticated: boolean;

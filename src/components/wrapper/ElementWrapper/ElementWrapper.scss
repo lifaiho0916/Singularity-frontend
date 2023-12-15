@@ -1,0 +1,6 @@
+.element-wapper {
+  border: 0;
+  &:hover {
+    border: 0.5px dashed var(--highlight-bg);
+  }
+}
