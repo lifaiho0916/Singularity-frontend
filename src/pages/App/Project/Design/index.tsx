@@ -45,45 +45,6 @@ const DesignWorkspace = () => {
     }
   }
 
-  const MainView = (mainView: any) => {
-      if (mainView.content && mainView.content.length > 0) {
-          if (mainView.content[0].horizontalView) {
-              return (
-                  <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                      <div style={{ width: '100%', height: 'calc(50% - 1px)' }}>{MainView(mainView.content[0].horizontalView)}</div>
-                      <div style={{ width: '100%', height: 'calc(50% - 1px)' }}>{MainView(mainView.content[1].horizontalView)}</div>
-                  </div>
-              )
-          } else if (mainView.content[0].verticalView) {
-              return (
-                  <div style={{ display: 'flex', width: '100%', height: '100%', justifyContent: 'space-between' }}>
-                      <div style={{ width: 'calc(50% - 1px)', height: '100%' }}>{MainView(mainView.content[0].verticalView)}</div>
-                      <div style={{ width: 'calc(50% - 1px)', height: '100%' }}>{MainView(mainView.content[1].verticalView)}</div>
-                  </div>
-              )
-          } else {
-              return (
-                  <div style={{ width: '100%', height: '100%' }}>
-                      {mainView.content.map((con: any) => {
-                          if (con.label) {
-                              return <label>{con.label.text}</label>
-                          } else if (con.button) {
-                              return <button>{con.button.text}</button>
-                          }
-                      })}
-                  </div>
-              )
-          }
-      } else return <div style={{ width: '100%', height: '100%' }}><ViewBox /></div>
-  }
-
-  const mainView = useMemo(() => {
-      if (page) return MainView(page.defaultView);
-      else return <></>
-  }, [page])
-
-
-
   return (
       <div className="design-workspace ">
           <div className='workspace-header'>
@@ -115,11 +76,11 @@ const DesignWorkspace = () => {
                   />
               </div>
           </div>
+
           <div className="workspace-body">
               <Toolbar items={["Button","Text","Label","Image"]} onClicked={toolSelected}/>
               <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
-                  <div className="element-tool"></div>
-                  {mainView}
+                {isToolItemSelected && getCurrentComponent() }
               </div>
           </div>
       </div>

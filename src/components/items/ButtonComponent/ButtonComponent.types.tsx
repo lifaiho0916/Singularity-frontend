@@ -1,5 +1,3 @@
-import { PropsWithChildren } from "react"
-
-export interface ButtonComponentProps extends PropsWithChildren {
-    onClick?: () => void;
+export interface ButtonComponentProps {
+    onClick?: () => void,
 }
