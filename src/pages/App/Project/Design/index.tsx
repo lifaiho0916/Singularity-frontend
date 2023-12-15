@@ -1,35 +1,49 @@
-import * as React from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { CascadeSelect } from "primereact/cascadeselect";
 import { Button } from 'primereact/button';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { ViewBox, Toolbar } from 'components';
+import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
 
 const DesignWorkspace = () => {
   const { structure } = useSelector((state: RootState) => state.project)
-  const [ zoom, setZoom ] = React.useState(1);
-  const [ responsive, setResponsive ] = React.useState('mobile');
-  const [ design, setDesign ] = React.useState<any>(null);
-  const [ pageIndex, setPageIndex ] = React.useState(0);
-  const [ page, setPage ] = React.useState<any>(null);
+  const [ zoom, setZoom ] = useState(1);
+  const [ responsive, setResponsive ] = useState('mobile');
+  const [ design, setDesign ] = useState<any>(null);
+  const [ pageIndex, setPageIndex ] = useState(0);
+  const [ page, setPage ] = useState<any>(null);
+  const [ currentToolId, selectTool ] = useState(0);
+  const [ isToolItemSelected, setToolItemSelected ] = useState(false);
 
   const toolSelected = (value: number) => {
-    console.log(`Toolbar Item ${value} selected`);
+    console.log(`Toolbar Item ${value} selected`)
+    setToolItemSelected(true)
+    selectTool(value)
   }
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (structure) {
       setDesign(structure.project.design)
     }
   }, [structure])
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (page === null && design) {
       setPage(design.pages[pageIndex])
     }
   }, [design, page])
+
+  const getCurrentComponent = () => {
+    switch(currentToolId)
+    {
+      case 0: return <ButtonComponent />
+      case 1: return <TextComponent />
+      case 2: return <LabelComponent />
+      case 3: return <ImageComponent />
+    }
+  }
 
   const MainView = (mainView: any) => {
       if (mainView.content && mainView.content.length > 0) {
@@ -63,7 +77,7 @@ const DesignWorkspace = () => {
       } else return <div style={{ width: '100%', height: '100%' }}><ViewBox /></div>
   }
 
-  const mainView = React.useMemo(() => {
+  const mainView = useMemo(() => {
       if (page) return MainView(page.defaultView);
       else return <></>
   }, [page])
@@ -107,15 +121,6 @@ const DesignWorkspace = () => {
                   <div className="element-tool"></div>
                   {mainView}
               </div>
-              {/* <TransformWrapper
-                  initialScale={1}
-              >
-                  <TransformComponent
-                      wrapperStyle={{ height: '100vh', width: '100vw' }}
-                  >
-                      <h1>Element</h1>
-                  </TransformComponent>
-              </TransformWrapper> */}
           </div>
       </div>
   )
