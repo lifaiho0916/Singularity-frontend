@@ -1,5 +1,5 @@
 import { type FC } from 'react';
-import { WrapperProps } from './Wrapper.types';
+import { WrapperProps } from "./Wrapper.types";
 import './Wrapper.scss';
 
 const Wrapper:FC<WrapperProps> = ({style, children}) => {

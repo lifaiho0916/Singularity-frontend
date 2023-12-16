@@ -7,7 +7,7 @@ const ImageComponent: FC<ImageComponentProps> = ({ imageUri }) => {
   return (
     <Image
       className='image-component'
-      src={imageUri}
+      src={imageUri || '/src/assets/images/login.jpg'}
       alt="Image"
     />
   )

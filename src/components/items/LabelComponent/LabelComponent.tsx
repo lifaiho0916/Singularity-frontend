@@ -7,7 +7,7 @@ const LabelComponent: FC<LabelComponentProps> = ({ text }) => {
     <label
       className="label-component"
     >
-      {text}
+      {text || 'Hello'}
     </label>
   )
 }

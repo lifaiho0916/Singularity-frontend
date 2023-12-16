@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { CascadeSelect } from "primereact/cascadeselect";
 import { Button } from 'primereact/button';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
+import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent, Element } from 'components';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
@@ -50,14 +50,14 @@ const DesignWorkspace = () => {
   }, [design, page])
 
   const getCurrentComponent = () => {
-    return <></>
-    // switch(currentToolId)
-    // {
-    //   case 0: return <ButtonComponent />
-    //   case 1: return <TextComponent />
-    //   case 2: return <LabelComponent />
-    //   case 3: return <ImageComponent />
-    // }
+    console.log(currentToolId," item selected");
+    switch(currentToolId)
+    {
+      case 0: return <ButtonComponent />
+      case 1: return <TextComponent />
+      case 2: return <LabelComponent />
+      case 3: return <ImageComponent />
+    }
   }
 
   return (
@@ -95,9 +95,9 @@ const DesignWorkspace = () => {
       <div className="workspace-body">
         <Toolbar items={["Button","Text","Label","Image"]} onClicked={toolSelected}/>
         <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
+        <Element item={rootElement} />
           {isToolItemSelected && getCurrentComponent() }
         </div>
-              <TextComponent text='test' setText={() => {}}/>
       </div>
     </div>
   )

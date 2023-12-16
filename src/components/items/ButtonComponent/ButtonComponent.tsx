@@ -3,13 +3,13 @@ import { Button } from 'primereact/button';
 import { ButtonComponentProps } from "./ButtonComponent.types";
 import './ButtonComponent.scss';
 
-const ButtonComponent:FC<ButtonComponentProps> = ({ onClick }) => {  
+const ButtonComponent:FC<ButtonComponentProps> = ({ text, onClick }) => {  
   return (
     <Button 
       className="button-component"
       onClick={onClick}
     >
-      Hello
+      {text || 'Hello'}
     </Button>
   )
 }
