@@ -6,6 +6,8 @@ import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, Image
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
+import { IElement, IComponentType } from 'libs/types';
+import { v4 as uuidv4 } from 'uuid'
 
 const DesignWorkspace = () => {
   const { structure } = useSelector((state: RootState) => state.project)
@@ -16,6 +18,18 @@ const DesignWorkspace = () => {
   const [ page, setPage ] = useState<any>(null);
   const [ currentToolId, selectTool ] = useState(0);
   const [ isToolItemSelected, setToolItemSelected ] = useState(false);
+  const rootElement: IElement = {
+    id: uuidv4(),
+    parent: '',
+    name: 'root',
+    style: { backgroundColor: 'lightgray', color: 'white' },
+    child: [],
+    type: IComponentType.Wrapper,
+    action: () => {
+      console.log('Button clicked!');
+    }, // Added closing parenthesis and semicolon
+  };
+  const allElements : Array<IElement> = [rootElement]
 
   const toolSelected = (value: number) => {
     console.log(`Toolbar Item ${value} selected`)
@@ -46,44 +60,44 @@ const DesignWorkspace = () => {
   }
 
   return (
-      <div className="design-workspace ">
-          <div className='workspace-header'>
-              <div className='responsive-tool'>
-                  <Button
-                      icon="pi pi-desktop" text
-                      raised={responsive === 'desktop'}
-                      onClick={() => setResponsive('desktop')}
-                  />
-                  <Button
-                      icon="pi pi-tablet" text
-                      raised={responsive === 'tablet'}
-                      onClick={() => setResponsive('tablet')}
-                  />
-                  <Button
-                      icon="pi pi-mobile" text
-                      raised={responsive === 'mobile'}
-                      onClick={() => setResponsive('mobile')}
-                  />
-              </div>
-              <div className='view-tool'>
-                  <CascadeSelect
-                      value={`${zoom * 100}%`}
-                      onChange={(e) => {
-                          setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100);
-                      }}
-                      options={['50%', '75%', '100%', '125%', '150%']}
-                      optionGroupChildren={[]}
-                  />
-              </div>
-          </div>
-
-          <div className="workspace-body">
-              <Toolbar items={["Button","Text","Label","Image"]} onClicked={toolSelected}/>
-              <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
-                {isToolItemSelected && getCurrentComponent() }
-              </div>
-          </div>
+    <div className="design-workspace ">
+      <div className='workspace-header'>
+        <div className='responsive-tool'>
+          <Button
+            icon="pi pi-desktop" text
+            raised={responsive === 'desktop'}
+            onClick={() => setResponsive('desktop')}
+          />
+          <Button
+            icon="pi pi-tablet" text
+            raised={responsive === 'tablet'}
+            onClick={() => setResponsive('tablet')}
+          />
+          <Button
+            icon="pi pi-mobile" text
+            raised={responsive === 'mobile'}
+            onClick={() => setResponsive('mobile')}
+          />
+        </div>
+        <div className='view-tool'>
+          <CascadeSelect
+            value={`${zoom * 100}%`}
+            onChange={(e) => {
+                setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100);
+            }}
+            options={['50%', '75%', '100%', '125%', '150%']}
+            optionGroupChildren={[]}
+          />
+        </div>
       </div>
+
+      <div className="workspace-body">
+        <Toolbar items={["Button","Text","Label","Image"]} onClicked={toolSelected}/>
+        <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
+          {isToolItemSelected && getCurrentComponent() }
+        </div>
+      </div>
+    </div>
   )
 }
 

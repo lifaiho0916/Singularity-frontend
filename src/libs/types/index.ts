@@ -1,4 +1,5 @@
-import { ButtonComponent, ImageComponent, TextComponent, LabelComponent } from "components"
+import React from 'react'
+import { ButtonComponent, ImageComponent, TextComponent, LabelComponent, Wrapper } from "components"
 
 export interface IUser {
     id: number;
@@ -43,4 +44,22 @@ export interface IProjectStructure {
 
 export interface IStructure {
     project: IProjectStructure
+}
+
+export interface IElement {
+    id: string,
+    parent: string,
+    name: string,
+    style: React.CSSProperties,
+    child: Array<IElement>,
+    type: IComponentType,
+    action: ()=>void
+}
+
+export enum IComponentType {
+    ButtonComponent = 'ButtonComponent',
+    TextComponent = 'TextComponent',
+    LabelComponent = 'LabelComponent',
+    ImageComponent = 'ImageComponent',
+    Wrapper = 'Wrapper'
 }

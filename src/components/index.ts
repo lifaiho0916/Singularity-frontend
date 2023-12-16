@@ -3,3 +3,4 @@ export { ButtonComponentDialog, ImageComponentDialog, LabelComponentDialog, Text
 export { ToastContainer } from './ToastContainer'
 export { Toolbar, ToolbarItem } from './toolbar'
 export { ButtonComponent, ImageComponent, LabelComponent, TextComponent } from './items'
+export { Wrapper} from './Wrapper'

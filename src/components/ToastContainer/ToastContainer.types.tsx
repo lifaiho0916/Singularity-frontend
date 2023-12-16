@@ -1,3 +1,3 @@
-export interface ButtonComponentDialogProps {
+export interface ToastContainerProps {
     
 }
