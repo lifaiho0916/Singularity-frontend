@@ -36,13 +36,14 @@ const DesignWorkspace = () => {
   }, [design, page])
 
   const getCurrentComponent = () => {
-    switch(currentToolId)
-    {
-      case 0: return <ButtonComponent />
-      case 1: return <TextComponent />
-      case 2: return <LabelComponent />
-      case 3: return <ImageComponent />
-    }
+    return <></>
+    // switch(currentToolId)
+    // {
+    //   case 0: return <ButtonComponent />
+    //   case 1: return <TextComponent />
+    //   case 2: return <LabelComponent />
+    //   case 3: return <ImageComponent />
+    // }
   }
 
   return (
@@ -82,6 +83,7 @@ const DesignWorkspace = () => {
               <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
                 {isToolItemSelected && getCurrentComponent() }
               </div>
+              <TextComponent text='test' setText={() => {}}/>
           </div>
       </div>
   )
