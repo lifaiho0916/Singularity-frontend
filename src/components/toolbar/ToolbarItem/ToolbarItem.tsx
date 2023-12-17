@@ -2,7 +2,6 @@ import { type FC, useState } from 'react';
 import { Button } from 'primereact/button';
 import { ToolbarItemProps } from "./ToolbarItem.types";
 import './ToolbarItem.scss';
-import { DEFAULT_WIDTH } from '../../../constants/index';
 
 const ToolbarItem:FC<ToolbarItemProps> = ({index, item, onClicked}) => {
   const [ selected, setSelect ] = useState(false)
@@ -11,7 +10,8 @@ const ToolbarItem:FC<ToolbarItemProps> = ({index, item, onClicked}) => {
     <Button 
       className='toolbar-item'
       label={item.charAt(0).toUpperCase()} 
-      severity='secondary' 
+      severity='secondary'
+      size="small"
       raised 
       onClick={()=>{ 
         onClicked(index); 
