@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from 'react';
 import { CascadeSelect } from "primereact/cascadeselect";
 import { Button } from 'primereact/button';
 import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent, Element } from 'components';
+import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent, Element, LabelComponentDialog, TextComponentDialog, ButtonComponentDialog, ImageComponentDialog } from 'components';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
@@ -11,13 +11,13 @@ import { v4 as uuidv4 } from 'uuid'
 
 const DesignWorkspace = () => {
   const { structure } = useSelector((state: RootState) => state.project)
-  const [ zoom, setZoom ] = useState(1);
-  const [ responsive, setResponsive ] = useState('mobile');
-  const [ design, setDesign ] = useState<any>(null);
-  const [ pageIndex, setPageIndex ] = useState(0);
-  const [ page, setPage ] = useState<any>(null);
-  const [ currentToolId, selectTool ] = useState(0);
-  const [ isToolItemSelected, setToolItemSelected ] = useState(false);
+  const [zoom, setZoom] = useState(1);
+  const [responsive, setResponsive] = useState('mobile');
+  const [design, setDesign] = useState<any>(null);
+  const [pageIndex, setPageIndex] = useState(0);
+  const [page, setPage] = useState<any>(null);
+  const [currentToolId, selectTool] = useState(0);
+  const [isToolItemSelected, setToolItemSelected] = useState(false);
   const rootElement: IElement = {
     id: uuidv4(),
     parent: '',
@@ -29,7 +29,7 @@ const DesignWorkspace = () => {
       console.log('Button clicked!');
     }, // Added closing parenthesis and semicolon
   };
-  const allElements : Array<IElement> = [rootElement]
+  const allElements: Array<IElement> = [rootElement]
 
   const toolSelected = (value: number) => {
     console.log(`Toolbar Item ${value} selected`)
@@ -50,9 +50,8 @@ const DesignWorkspace = () => {
   }, [design, page])
 
   const getCurrentComponent = () => {
-    console.log(currentToolId," item selected");
-    switch(currentToolId)
-    {
+    console.log(currentToolId, " item selected");
+    switch (currentToolId) {
       case 0: return <ButtonComponent />
       case 1: return <TextComponent />
       case 2: return <LabelComponent />
@@ -84,7 +83,7 @@ const DesignWorkspace = () => {
           <CascadeSelect
             value={`${zoom * 100}%`}
             onChange={(e) => {
-                setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100);
+              setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100);
             }}
             options={['50%', '75%', '100%', '125%', '150%']}
             optionGroupChildren={[]}
@@ -93,11 +92,15 @@ const DesignWorkspace = () => {
       </div>
 
       <div className="workspace-body">
-        <Toolbar items={["Button","Text","Label","Image"]} onClicked={toolSelected}/>
+        <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
         <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
-        <Element item={rootElement} />
-          {isToolItemSelected && getCurrentComponent() }
+          <Element item={rootElement} />
+          {isToolItemSelected && getCurrentComponent()}
         </div>
+        <LabelComponentDialog />
+        <TextComponentDialog />
+        <ButtonComponentDialog />
+        <ImageComponentDialog />
       </div>
     </div>
   )
