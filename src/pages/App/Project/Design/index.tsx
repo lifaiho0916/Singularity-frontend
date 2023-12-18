@@ -59,6 +59,15 @@ const DesignWorkspace = () => {
     }
   }
 
+  const getCurrentPropertyDialog = () => {
+    switch (currentToolId) {
+      case 0: return <ButtonComponentDialog />
+      case 1: return <TextComponentDialog />
+      case 2: return <LabelComponentDialog />
+      case 3: return <ImageComponentDialog />
+    }
+  }
+
   return (
     <div className="design-workspace ">
       <div className='workspace-header'>
@@ -97,10 +106,7 @@ const DesignWorkspace = () => {
           <Element item={rootElement} />
           {isToolItemSelected && getCurrentComponent()}
         </div>
-        <LabelComponentDialog />
-        <TextComponentDialog />
-        <ButtonComponentDialog />
-        <ImageComponentDialog />
+        {isToolItemSelected && getCurrentPropertyDialog()}
       </div>
     </div>
   )

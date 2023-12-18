@@ -1,5 +1,6 @@
 import { PropsWithChildren } from "react"
 
 export interface WrapperProps extends PropsWithChildren {
-    style: {}
+    style: {},
+    viewType: 'Vertical' | 'Horizontal' | undefined
 }

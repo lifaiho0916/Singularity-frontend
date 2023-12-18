@@ -34,6 +34,15 @@
     top: calc(50% - 24px);
   }
 
+  .horizontal-view {
+    height: 100%;
+  }
+
+  .vertical-view {
+    display: flex;
+    height: 100%;
+  }
+
   &:hover {
     border-color: #999;
   }

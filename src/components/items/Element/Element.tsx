@@ -5,20 +5,20 @@ import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, Image
 import { ElementProps } from "./Element.types";
 import './Element.scss';
 
-const Element:FC<ElementProps> = ({item}) => {  
+const Element: FC<ElementProps> = ({ item }) => {
   return (
     <>
-    {item.type == IComponentType.Wrapper ?
-      <div id={item.id} style={item.style} >
-        {item.child && item.child.map((subItem, index)=>(
-          <Element item={subItem} key={index} />
-        ))}
-      </div> : 
-      item.type == IComponentType.ButtonComponent ? <ButtonComponent /> :
-      item.type == IComponentType.TextComponent ? <TextComponent /> :
-      item.type == IComponentType.LabelComponent ? <LabelComponent /> :
-      <ImageComponent />
-    }
+      {item.type === IComponentType.Wrapper ?
+        <div id={item.id} style={item.style} >
+          {item.child && item.child.map((subItem, index) => (
+            <Element item={subItem} key={index} />
+          ))}
+        </div> :
+        item.type === IComponentType.ButtonComponent ? <ButtonComponent /> :
+          item.type === IComponentType.TextComponent ? <TextComponent /> :
+            item.type === IComponentType.LabelComponent ? <LabelComponent /> :
+              <ImageComponent />
+      }
     </>
   )
 }
