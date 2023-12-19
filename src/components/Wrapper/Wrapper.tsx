@@ -4,7 +4,7 @@ import './Wrapper.scss';
 
 const Wrapper: FC<WrapperProps> = ({ style, children }) => {
   return (
-    <div className="wapper" style={style}>
+    <div className="wrapper" style={style}>
       {children}
     </div>
   )

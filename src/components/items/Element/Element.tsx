@@ -1,7 +1,6 @@
 import { type FC } from 'react';
 import { IComponentType } from 'libs/types';
-import { ViewBox, Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
-
+import { ButtonComponent, TextComponent, LabelComponent, ImageComponent, Wrapper } from 'components';
 import { ElementProps } from "./Element.types";
 import './Element.scss';
 
