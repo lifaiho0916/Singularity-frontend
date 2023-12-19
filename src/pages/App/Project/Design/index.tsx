@@ -14,8 +14,6 @@ const DesignWorkspace = () => {
   const [design, setDesign] = useState<any>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [page, setPage] = useState<any>(null);
-  const [currentToolId, selectTool] = useState(0);
-  const [isToolItemSelected, setToolItemSelected] = useState(false);
 
   const rootElement: IElement = {
     id: uuidv4(),
@@ -51,18 +49,18 @@ const DesignWorkspace = () => {
 
   return (
     <div className="design-workspace ">
-      <DesignHeader 
-        responsive={responsive} 
+      <DesignHeader
+        responsive={responsive}
         setResponsive={setResponsive}
         zoom={zoom}
         setZoom={setZoom}
       />
-      <MainWorkspace 
+      <MainWorkspace
         root={rootElement}
         zoom={zoom}
         screens={screens}
-        structure={structure} 
-        pageIndex={pageIndex} 
+        structure={structure}
+        pageIndex={pageIndex}
         setPageIndex={setPageIndex}
         page={page}
         setPage={setPage}

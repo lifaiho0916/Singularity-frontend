@@ -17,10 +17,7 @@ import {
   ButtonComponentDialog,
   ImageComponentDialog,
   AddScreenDialog,
-  Wrapper,
-  DesignHeader
 } from 'components';
-import { IStructure } from 'libs/types';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
@@ -29,7 +26,6 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , page, setPage, pa
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
-  const [newScreenName, setNewscreenName] = useState('');
 
   const toolSelected = (value: number) => {
     setToolItemSelected(true)
@@ -56,7 +52,6 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , page, setPage, pa
   }
 
   const AddNewScreenBtnClick = () => {
-    setNewscreenName('')
     setIsOpenAddScreenModal(true);
   }
 
@@ -86,7 +81,6 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , page, setPage, pa
       <AddScreenDialog 
         isOpenAddScreenModal={isOpenAddScreenModal}
         setIsOpenAddScreenModal={setIsOpenAddScreenModal} 
-        structure={structure} 
       />
     </div>
   )
