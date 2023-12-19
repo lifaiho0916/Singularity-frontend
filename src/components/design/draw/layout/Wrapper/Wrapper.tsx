@@ -16,7 +16,6 @@ const Wrapper: FC<WrapperProps> = ({ style, children, hasWrapper }) => {
       onMouseEnter={() => { setIsShowSpliter(true) }}
       onMouseLeave={() => { setIsShowSpliter(false) }}
     >
-      {children}
       {!hasWrapper &&
         <React.Fragment>
           {isShowSpliter ?
@@ -49,6 +48,7 @@ const Wrapper: FC<WrapperProps> = ({ style, children, hasWrapper }) => {
           }
         </React.Fragment>
       }
+      {children}
     </div>
   )
 }
