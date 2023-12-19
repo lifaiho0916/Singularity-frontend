@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import React, { type FC } from 'react';
 import { IComponentType, IWrapperType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 
@@ -33,10 +33,24 @@ const Element: FC<ElementProps> = ({ item }) => {
             <Element item={subView} key={index} />
           ))}
         </Wrapper> :
-        item.type == IComponentType.ButtonComponent ? <ButtonComponent /> :
-          item.type == IComponentType.TextComponent ? <TextComponent /> :
-            item.type == IComponentType.LabelComponent ? <LabelComponent /> :
-              <ImageComponent />
+        <Wrapper
+          hasWrapper={true}
+          style={{
+            width: `${item.x.max - item.x.min}%`,
+            height: `${item.y.max - item.y.min}%`,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: 'auto'
+          }}
+        >
+          {
+            item.type == IComponentType.ButtonComponent ? <ButtonComponent /> :
+              item.type == IComponentType.TextComponent ? <TextComponent /> :
+                item.type == IComponentType.LabelComponent ? <LabelComponent text={item.details?.text} style={item.details?.style} />
+                  : <ImageComponent />
+          }
+        </Wrapper>
       }
     </>
   )
