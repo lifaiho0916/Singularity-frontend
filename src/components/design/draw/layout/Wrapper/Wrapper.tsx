@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import './Wrapper.scss';
 
-const Wrapper:FC<WrapperProps> = () => {
+const Wrapper: FC<WrapperProps> = ({ style, children }) => {
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
   const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
@@ -12,36 +12,42 @@ const Wrapper:FC<WrapperProps> = () => {
   return (
     <div
       className="view-box"
-      onMouseEnter={ ()=>{ setIsShowSpliter(true) } }
-      onMouseLeave={ ()=>{ setIsShowSpliter(false) } }
+      style={{ ...style, border: children ? 'none' : undefined }}
+      onMouseEnter={() => { setIsShowSpliter(true) }}
+      onMouseLeave={() => { setIsShowSpliter(false) }}
     >
-      {isShowSpliter ?
+      {children ?
+        children :
         <React.Fragment>
-          { isShowVerticalLine ? <div className="vertical-line" /> : null }
-          <Button
-            className="vertical-spliter"
-            icon="pi pi-pencil"
-            severity="secondary"
-            text rounded
-            size="small"
-            onMouseEnter={ ()=>{ setIsShowVerticalLine(true) } }
-            onMouseLeave={ ()=>{ setIsShowVerticalLine(false) } }
-            onClick={ ()=>{} }
-          />
-          
-          { isShowHorizontalLine ? <div className="horizontal-line" /> : null }
-          <Button
-            className="horizontal-spliter"
-            icon="pi pi-pencil"
-            severity="secondary"
-            text rounded
-            size="small"
-            onMouseEnter={ ()=>{ setIsShowHorizontalLine(true) } }
-            onMouseLeave={ ()=>{ setIsShowHorizontalLine(false) } }
-            onClick={() => { }}
-          />
+          {isShowSpliter ?
+            <React.Fragment>
+              {isShowVerticalLine ? <div className="vertical-line" /> : null}
+              <Button
+                className="vertical-spliter"
+                icon="pi pi-pencil"
+                severity="secondary"
+                text rounded
+                size="small"
+                onMouseEnter={() => { setIsShowVerticalLine(true) }}
+                onMouseLeave={() => { setIsShowVerticalLine(false) }}
+                onClick={() => { }}
+              />
+
+              {isShowHorizontalLine ? <div className="horizontal-line" /> : null}
+              <Button
+                className="horizontal-spliter"
+                icon="pi pi-pencil"
+                severity="secondary"
+                text rounded
+                size="small"
+                onMouseEnter={() => { setIsShowHorizontalLine(true) }}
+                onMouseLeave={() => { setIsShowHorizontalLine(false) }}
+                onClick={() => { }}
+              />
+            </React.Fragment>
+            : null
+          }
         </React.Fragment>
-        : null
       }
     </div>
   )

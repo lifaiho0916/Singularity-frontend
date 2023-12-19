@@ -19,8 +19,11 @@ import {
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'store';
 
 const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, pageIndex, setPageIndex, screens, structure }) => {
+  const { viewTree } = useSelector((state: RootState) => state.viewTree);
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
@@ -72,7 +75,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
       </div>
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
       <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
-        <Element item={root} />
+        <Element item={viewTree} />
         {isToolItemSelected && getCurrentComponent()}
       </div>
       {isToolItemSelected && getCurrentPropertyDialog()}
