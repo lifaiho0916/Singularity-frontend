@@ -1,6 +1,7 @@
 export { ProjectTemplate } from './ProjectTemplate'
 export { ToastContainer } from './ToastContainer'
 export { 
+  DesignHeader,
   Toolbar, 
   ToolbarItem,
   MainWorkSpace,
@@ -13,6 +14,5 @@ export {
   LabelComponent, 
   TextComponent, 
   Element,
-  ViewBox, 
   Wrapper 
 } from './design'

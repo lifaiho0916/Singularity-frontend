@@ -13,4 +13,4 @@ export {
   Element 
 } from './items'
 
-export { ViewBox, Wrapper } from './layout'
+export { Wrapper } from './layout'

@@ -4,14 +4,25 @@ import { useMouse } from 'primereact/hooks';
 
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
 import { MainWorkspaceProps } from './MainWorkspace.types';
-import { Toolbar, ButtonComponent, TextComponent, LabelComponent, ImageComponent, Element, LabelComponentDialog, TextComponentDialog, ButtonComponentDialog, ImageComponentDialog } from 'components';
+import { 
+  Toolbar, 
+  ButtonComponent, 
+  TextComponent, 
+  LabelComponent,
+  ImageComponent,
+  Element,
+  LabelComponentDialog, 
+  TextComponentDialog,
+  ButtonComponentDialog,
+  ImageComponentDialog,
+  Wrapper
+} from 'components';
 
 const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom }) => {  
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   
   const toolSelected = (value: number) => {
-    console.log(`Toolbar Item ${value} selected`)
     setToolItemSelected(true)
     selectTool(value)
   }

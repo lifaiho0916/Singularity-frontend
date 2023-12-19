@@ -1,5 +1,6 @@
 export { Toolbar, ToolbarItem } from './toolbar'
 export { MainWorkSpace} from './MainWorkspace'
+export { DesignHeader} from './DesignHeader'
 export { 
   ButtonComponentDialog,
   ImageComponentDialog, 
@@ -10,6 +11,5 @@ export {
   LabelComponent, 
   TextComponent, 
   Element,
-  ViewBox, 
   Wrapper 
 } from './draw'
