@@ -120,7 +120,10 @@ const initialState: viewTreeSliceState = {
                                     text: "Dragon Fly",
                                     style: {
                                         fontSize: 20,
-                                        color: "#f0903c"
+                                        color: "#f0903c",
+                                        // fontFamily: "Times New Roman"
+                                        // fontFamily: "Arial"
+                                        // fontFamily: "Calibri"
                                     }
                                 }
                             }

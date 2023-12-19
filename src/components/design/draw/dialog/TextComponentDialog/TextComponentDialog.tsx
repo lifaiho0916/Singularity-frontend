@@ -86,7 +86,7 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
         <div className="section-body">
           <CascadeSelect
             value="Arial"
-            options={['Arial', 'Times New Roman', 'Calibri']}
+            options={['Default', 'Arial', 'Times New Roman', 'Calibri']}
             optionGroupChildren={[]}
             className='input-text'
           />
