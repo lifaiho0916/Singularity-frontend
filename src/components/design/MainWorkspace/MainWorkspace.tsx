@@ -1,7 +1,6 @@
-import { type FC, useState } from 'react'
-import { v4 as uuidv4 } from 'uuid'
+import { type FC, useState, LegacyRef, CSSProperties } from 'react'
 import { useMouse } from 'primereact/hooks';
-
+import { useDispatch } from 'react-redux';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import {
   Toolbar,
@@ -21,27 +20,55 @@ import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { INewlyInsertedElement, IView } from 'libs/types'; 
+import { addSubViewToViewTree } from 'store/slices/viewTreeSlice';
+import { IComponentType } from '../../../libs/types/index';
+import { Image } from 'primereact/image';
 
-const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPageIndex, screens, structure }) => {  
+const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex, screens }) => {  
+  const { ref, x, y, reset } = useMouse();
   const { viewTree } = useSelector((state: RootState) => state.viewTree);
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
+  const dispatch = useDispatch();
 
   const toolSelected = (value: number) => {
     setToolItemSelected(true)
     selectTool(value)
   }
 
-  // const getCurrentComponent = () => {
-  //   console.log(currentToolId, " item selected");
-  //   switch (currentToolId) {
-  //     case 0: return <ButtonComponent />
-  //     case 1: return <TextComponent />
-  //     case 2: return <LabelComponent />
-  //     case 3: return <ImageComponent />
-  //   }
-  // }
+  const getCurrentComponent = () => {
+    return (
+      <div
+        style={getDynamicComponentStyle()}
+        onMouseLeave={reset}
+      >
+        {getToolComponent()}
+      </div>
+    );
+  }
+
+  const getDynamicComponentStyle = (): CSSProperties => {
+    const positionStyle: CSSProperties = {
+      position: 'absolute',
+      left: `${x}px`,
+      top: `${y}px`,
+      opacity: 0.3
+    };
+
+    return positionStyle;
+  };
+
+  const getToolComponent = () => {
+    switch (currentToolId) {
+      case 0: return <ButtonComponent />;
+      case 1: return <TextComponent />;
+      case 2: return <LabelComponent />;
+      case 3: return <ImageComponent />;
+      default: return null;
+    }
+  }
 
   const getCurrentPropertyDialog = () => {
     switch (currentToolId) {
@@ -56,6 +83,32 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPag
     setIsOpenAddScreenModal(true);
   }
 
+  const getCurrentComponentType = () => {
+    return currentToolId == 0 ? IComponentType.ButtonComponent : 
+      currentToolId == 1 ? IComponentType.TextComponent :
+      currentToolId == 2 ? IComponentType.LabelComponent :
+      IComponentType.ImageComponent;
+  }
+
+  const onAddComponent = () => {
+    if(isToolItemSelected) {
+      {
+        const newElement : INewlyInsertedElement = {
+          x: x,
+          y: y,
+          type: getCurrentComponentType(),
+          width: 100,
+          height: 30,
+          details: {
+            text: 'This is Button'
+          }
+        }
+        console.log("Dispatching Payload: ", newElement);
+        dispatch(addSubViewToViewTree(newElement));
+        setToolItemSelected(false);
+      }
+    }
+  }
 
   return (
     <div className="workspace-body">
@@ -73,11 +126,20 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPag
           <Button size='small' raised onClick={AddNewScreenBtnClick}>New Screen</Button>
         </div>
       </div>
+
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
-      <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
+      <div 
+        style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} 
+        className="main-view"
+        ref={ref as LegacyRef<HTMLDivElement>}
+        onMouseLeave={reset}
+        onMouseDown={onAddComponent}
+      >
         <Element item={viewTree} />
+        {isToolItemSelected && getCurrentComponent()}
       </div>
       {isToolItemSelected && getCurrentPropertyDialog()}
+
       <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
         setIsOpenAddScreenModal={setIsOpenAddScreenModal}

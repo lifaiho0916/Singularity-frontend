@@ -25,20 +25,22 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
 }
 
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
-    // first check if subview is 
-    if (view.type === IComponentType.Wrapper && fitsWithin(view, element)) {
-        if (!view.subviews) {
-            view.subviews = [];
-        }
+    // Check if the element fits within the current view
+    if (fitsWithin(view, element)) {
+      // If the view is a Wrapper and has subviews, check each subview
+      if (view.type === IComponentType.Wrapper && view.subviews) {
         for (const childView of view.subviews) {
-            insertSubview(childView, element);
+          insertSubview(childView, element);
         }
-        // If no suitable child container is found, add the subview to this container
-        if (view.subviews.every(childView => childView.type !== IComponentType.Wrapper || !fitsWithin(childView, element))) {
-            view.subviews.push(getViewFormatDataFromElement(element));
+      } else {
+        // If the view is not a Wrapper or has no subviews, create a new subview
+        if (!view.subviews) {
+          view.subviews = [];
         }
+        view.subviews.push(getViewFormatDataFromElement(element));
+      }
     }
-}
+  }
 
 const initialState: viewTreeSliceState = {
     viewTree: {
@@ -117,6 +119,7 @@ export const viewTreeSlice = createSlice({
             state.viewTree = action.payload;
         },
         addSubViewToViewTree: (state, action: PayloadAction<INewlyInsertedElement>) => {
+            console.log("Payload : ", action.payload);
             let element = action.payload;
             element.x *= 100 / state.xMultiplier;
             element.y *= 100 / state.yMultiplier;
@@ -128,6 +131,6 @@ export const viewTreeSlice = createSlice({
     }
 })
 
-export const { fetchViewTree } = viewTreeSlice.actions;
+export const { fetchViewTree, addSubViewToViewTree } = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer
