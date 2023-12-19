@@ -55,7 +55,6 @@ const DesignWorkspace = () => {
         setZoom={setZoom}
       />
       <MainWorkspace
-        root={rootElement}
         zoom={zoom}
         screens={screens}
         structure={structure}

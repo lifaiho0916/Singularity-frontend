@@ -6,12 +6,14 @@ interface projectState {
     project: IProject | null;
     structure: IStructure | null;
     projects: Array<IProject>;
+    zoom: number;
 }
 
 const initialState: projectState = {
     project: null,
     structure: null,
-    projects: []
+    projects: [],
+    zoom: 1
 }
 
 export const projectSlice = createSlice({
@@ -31,10 +33,13 @@ export const projectSlice = createSlice({
         },
         setProjects: (state, action: PayloadAction<Array<IProject>>) => {
             state.projects = action.payload
+        },
+        setZoom: (state, action: PayloadAction<number>) => {
+            state.zoom = action.payload
         }
     }
 })
 
-export const { setProject, setStructure, setProjects, InitProject } = projectSlice.actions
+export const { setProject, setStructure, setProjects, InitProject, setZoom } = projectSlice.actions
 
 export default projectSlice.reducer
