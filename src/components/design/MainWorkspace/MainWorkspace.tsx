@@ -25,6 +25,16 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom }) => {
       case 3: return <ImageComponent />
     }
   }
+  
+  const displayComponentDialogForCurrentTool = () => {
+    switch (currentToolId) {
+      case 0: return <ButtonComponentDialog />
+      case 1: return <TextComponentDialog />
+      case 2: return <LabelComponentDialog />
+      case 3: return <ImageComponentDialog />
+      default: return null
+    }
+  }
 
   return (
     <div className="workspace-body">
@@ -33,10 +43,7 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom }) => {
         <Element item={root} />
         {isToolItemSelected && getCurrentComponent()}
       </div>
-      <LabelComponentDialog />
-      <TextComponentDialog />
-      <ButtonComponentDialog />
-      <ImageComponentDialog />
+      { displayComponentDialogForCurrentTool() }
   </div>
   )
 }
