@@ -1,5 +1,4 @@
 import React from 'react'
-import { ButtonComponent, ImageComponent, TextComponent, LabelComponent, Wrapper } from "components"
 
 export interface IUser {
     id: number
@@ -38,7 +37,7 @@ export interface ITemplate {
 export interface IProjectStructure {
     id: number
     name: string
-    design: object
+    design: any
     backend: object
 }
 

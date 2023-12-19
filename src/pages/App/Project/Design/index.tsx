@@ -1,11 +1,10 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CascadeSelect } from "primereact/cascadeselect";
-import { Button } from 'primereact/button';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { MainWorkSpace } from 'components';
+import { DesignHeader } from 'components';
+import MainWorkspace from 'components/design/MainWorkspace/MainWorkspace';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { IElement, IComponentType } from 'libs/types';
+import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
+import { IElement, IComponentType, IStructure } from 'libs/types';
 import { v4 as uuidv4 } from 'uuid'
 
 const DesignWorkspace = () => {
@@ -15,6 +14,7 @@ const DesignWorkspace = () => {
   const [design, setDesign] = useState<any>(null);
   const [pageIndex, setPageIndex] = useState(0);
   const [page, setPage] = useState<any>(null);
+
   const rootElement: IElement = {
     id: uuidv4(),
     parent: '',
@@ -24,17 +24,9 @@ const DesignWorkspace = () => {
     type: IComponentType.Wrapper,
     action: () => {
       console.log('Button clicked!');
-    }, // Added closing parenthesis and semicolon
+    },
   };
   const allElements: Array<IElement> = [rootElement]
-
-  
-
-  useEffect(() => {
-    if (structure) {
-      setDesign(structure.project.design)
-    }
-  }, [structure])
 
   useEffect(() => {
     if (page === null && design) {
@@ -42,40 +34,36 @@ const DesignWorkspace = () => {
     }
   }, [design, page])
 
+  const screens = useMemo(() => {
+    if (design) {
+      return design.pages.map((pg: any, index: number) => (
+        {
+          index: index,
+          name: pg.name
+        }
+      ))
+    } else {
+      return []
+    }
+  }, [design])
+
   return (
     <div className="design-workspace ">
-      <div className='workspace-header'>
-        <div className='responsive-tool'>
-          <Button
-            icon="pi pi-desktop" text
-            raised={responsive === 'desktop'}
-            onClick={() => setResponsive('desktop')}
-          />
-          <Button
-            icon="pi pi-tablet" text
-            raised={responsive === 'tablet'}
-            onClick={() => setResponsive('tablet')}
-          />
-          <Button
-            icon="pi pi-mobile" text
-            raised={responsive === 'mobile'}
-            onClick={() => setResponsive('mobile')}
-          />
-        </div>
-        <div className='view-tool'>
-          <CascadeSelect
-            value={`${zoom * 100}%`}
-            onChange={(e) => {
-              setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100);
-            }}
-            options={['50%', '75%', '100%', '125%', '150%']}
-            optionGroupChildren={[]}
-          />
-        </div>
-      </div>
-      <MainWorkSpace 
+      <DesignHeader
+        responsive={responsive}
+        setResponsive={setResponsive}
+        zoom={zoom}
+        setZoom={setZoom}
+      />
+      <MainWorkspace
         root={rootElement}
         zoom={zoom}
+        screens={screens}
+        structure={structure}
+        pageIndex={pageIndex}
+        setPageIndex={setPageIndex}
+        page={page}
+        setPage={setPage}
       />
     </div>
   )

@@ -2,7 +2,8 @@ export {
   ButtonComponentDialog,
   ImageComponentDialog, 
   LabelComponentDialog, 
-  TextComponentDialog 
+  TextComponentDialog,
+  AddScreenDialog
 } from './dialog'
 
 export { 
@@ -13,4 +14,4 @@ export {
   Element 
 } from './items'
 
-export { ViewBox, Wrapper } from './layout'
+export { Wrapper } from './layout'
