@@ -1,18 +1,11 @@
 import { useState, useEffect, useMemo } from 'react';
-import { CascadeSelect } from "primereact/cascadeselect";
-import { Button } from 'primereact/button';
-import { TransformWrapper, TransformComponent } from "react-zoom-pan-pinch";
-import { MainWorkSpace, DesignHeader } from 'components';
+import { DesignHeader } from 'components';
+import MainWorkspace from 'components/design/MainWorkspace/MainWorkspace';
 import { useSelector } from 'react-redux';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
-import { RadioButton } from 'primereact/radiobutton';
-import { Divider } from 'primereact/divider';
 import type { RootState } from 'store';
 import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
 import { IElement, IComponentType, IStructure } from 'libs/types';
 import { v4 as uuidv4 } from 'uuid'
-import MainWorkspace from '../../../../components/design/MainWorkspace/MainWorkspace';
 
 const DesignWorkspace = () => {
   const { structure } = useSelector((state: RootState) => state.project)
