@@ -56,19 +56,22 @@ function findElementInViewById(view: IView, id: string) : IView | null {
     return null;
 }
 
-function findAndReplaceSubview(view: IView, updatedSubview: IView) {
-    if (view.id == updatedSubview.id) {
-        Object.assign(view, updatedSubview);
-        return true;
+function replaceSubview(view: IView, updatedComponent: IView | null) : IView | null {
+    if (!updatedComponent)
+        return null
+    if (view.id == updatedComponent.id) {
+        return updatedComponent
     }
-    if (view.subviews) {
+    if (view.subviews && view.subviews.length > 0) {
         for (let i = 0; i < view.subviews.length; i++) {
-            if (findAndReplaceSubview(view.subviews[i], updatedSubview)) {
-                return true;
+            let updatedSubview = replaceSubview(view.subviews[i], updatedComponent)
+            if (updatedSubview) {
+                view.subviews[i] = updatedSubview
+                return view
             }
         }
     }
-    return false;
+    return null;
 }
 
 const initialState: viewTreeSliceState = {
@@ -163,7 +166,8 @@ export const viewTreeSlice = createSlice({
             state.currentElement = findElementInViewById(state.viewTree, elementId);
         },
         updateSelectedElementInViewTree: (state, action:PayloadAction<IView>) => {
-            findAndReplaceSubview(state.viewTree, action.payload);
+            replaceSubview(state.viewTree, action.payload);
+            state.currentElement = findElementInViewById(state.viewTree,action.payload.id);
         }
     }
 })

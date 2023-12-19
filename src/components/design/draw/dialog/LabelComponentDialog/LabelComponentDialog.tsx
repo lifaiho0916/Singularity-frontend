@@ -38,19 +38,6 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
         <Divider className="custom-divider" />
 
         <div className="section-header">
-          <h4>Link</h4>
-        </div>
-        <div className="section-body">
-          <CascadeSelect
-            value="First Screen"
-            options={['First Screen', 'Second Screen', 'Third Screen', 'Fourth Screen']}
-            optionGroupChildren={[]}
-            className='input-text'
-          />
-        </div>
-        <Divider className="custom-divider" />
-
-        <div className="section-header">
           <h4>Size</h4>
         </div>
         <div className="section-body">
