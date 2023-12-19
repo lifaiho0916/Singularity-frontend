@@ -25,7 +25,7 @@ import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 
-const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , page, setPage, pageIndex, setPageIndex, screens, structure }) => {  
+const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPageIndex, screens, structure }) => {  
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);

@@ -5,8 +5,6 @@ export interface MainWorkspaceProps {
   zoom : number,
   pageIndex: number
   setPageIndex: (value : number) => void
-  page: any
-  setPage: (value: any) => void
   screens: any
   structure: IStructure | null
 }

@@ -71,8 +71,6 @@ const DesignWorkspace = () => {
         structure={structure} 
         pageIndex={pageIndex} 
         setPageIndex={setPageIndex}
-        page={page}
-        setPage={setPage}
       />
     </div>
   )
