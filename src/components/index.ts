@@ -9,6 +9,7 @@ export {
   ImageComponentDialog, 
   LabelComponentDialog, 
   TextComponentDialog,
+  AddScreenDialog,
   ButtonComponent, 
   ImageComponent, 
   LabelComponent, 

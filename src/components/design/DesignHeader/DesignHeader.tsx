@@ -1,7 +1,7 @@
 import { type FC } from 'react'
 import { Button } from 'primereact/button';
 import { CascadeSelect } from 'primereact/cascadeselect';
-import { DesignHeaderProps } from './DesignHeaderProps';
+import { DesignHeaderProps } from './DesignHeader.types';
 
 const DesignHeader : FC<DesignHeaderProps> = ({
   responsive,

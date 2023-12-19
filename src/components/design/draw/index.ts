@@ -2,7 +2,8 @@ export {
   ButtonComponentDialog,
   ImageComponentDialog, 
   LabelComponentDialog, 
-  TextComponentDialog 
+  TextComponentDialog,
+  AddScreenDialog
 } from './dialog'
 
 export { 
