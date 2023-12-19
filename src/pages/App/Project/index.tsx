@@ -93,7 +93,7 @@ const Project = () => {
                 break;
             case 2:
                 navigate(`/app/project/${projectId}/architecture-workspace`);
-                break; 
+                break;
             default:
                 break;
         }
@@ -140,7 +140,7 @@ const Project = () => {
                 <TabView activeIndex={activeTab} onTabChange={(e) => NavigateWorkspace(e.index)}>
                     <TabPanel header="DESIGN" />
                     <TabPanel header="BACKEND" />
-                    <TabPanel header="ARCHITECTURE" />
+                    {/* <TabPanel header="ARCHITECTURE" /> */}
                 </TabView>
             </div>
             <WorkspaceContent />

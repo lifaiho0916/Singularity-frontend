@@ -28,35 +28,35 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // Check if the element fits within the current view
     if (fitsWithin(view, element)) {
-      // If the view is a Wrapper and has subviews, check each subview
-      if (view.type === IComponentType.Wrapper && view.subviews) {
-        for (const childView of view.subviews) {
-          insertSubview(childView, element);
+        // If the view is a Wrapper and has subviews, check each subview
+        if (view.type === IComponentType.Wrapper && view.subviews) {
+            for (const childView of view.subviews) {
+                insertSubview(childView, element);
+            }
+        } else {
+            // If the view is not a Wrapper or has no subviews, create a new subview
+            if (!view.subviews) {
+                view.subviews = [];
+            }
+            view.subviews.push(getViewFormatDataFromElement(element));
         }
-      } else {
-        // If the view is not a Wrapper or has no subviews, create a new subview
-        if (!view.subviews) {
-          view.subviews = [];
-        }
-        view.subviews.push(getViewFormatDataFromElement(element));
-      }
     }
-  }
+}
 
-function findElementInViewById(view: IView, id: string) : IView | null {
+function findElementInViewById(view: IView, id: string): IView | null {
     if (view.id === id) {
-      return view;
+        return view;
     }
     if (view.subviews) {
-      for (let i = 0; i < view.subviews.length; i++) {
-        const result = findElementInViewById(view.subviews[i], id);
-        if (result) return result;
-      }
+        for (let i = 0; i < view.subviews.length; i++) {
+            const result = findElementInViewById(view.subviews[i], id);
+            if (result) return result;
+        }
     }
     return null;
 }
 
-function replaceSubview(view: IView, updatedComponent: IView | null) : IView | null {
+function replaceSubview(view: IView, updatedComponent: IView | null): IView | null {
     if (!updatedComponent)
         return null
     if (view.id === updatedComponent.id) {
@@ -131,7 +131,8 @@ const initialState: viewTreeSliceState = {
                                 details: {
                                     text: "Hello",
                                     style: {
-                                        fontSize: 20
+                                        fontSize: 20,
+                                        backgroundColor: '#00FF00'
                                     }
                                 }
                             }
@@ -172,13 +173,13 @@ export const viewTreeSlice = createSlice({
             // subview contains mouse position(242, 518), type (view, text, image, label, button).
             insertSubview(state.viewTree, element);
         },
-        selectElementInViewTreeById: (state, action:PayloadAction<string>) => {
+        selectElementInViewTreeById: (state, action: PayloadAction<string>) => {
             const elementId = action.payload;
             state.currentElement = findElementInViewById(state.viewTree, elementId);
         },
-        updateSelectedElementInViewTree: (state, action:PayloadAction<IView>) => {
+        updateSelectedElementInViewTree: (state, action: PayloadAction<IView>) => {
             replaceSubview(state.viewTree, action.payload);
-            state.currentElement = findElementInViewById(state.viewTree,action.payload.id);
+            state.currentElement = findElementInViewById(state.viewTree, action.payload.id);
         }
     }
 })
