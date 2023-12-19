@@ -71,7 +71,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
         </div>
       </div>
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
-      <div style={{ width: 320 * zoom, height: 650 * zoom }} className="main-view">
+      <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
         <Element item={root} />
         {isToolItemSelected && getCurrentComponent()}
       </div>
