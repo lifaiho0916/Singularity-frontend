@@ -9,7 +9,7 @@ const ToolbarItem:FC<ToolbarItemProps> = ({index, item, onClicked}) => {
   return (
     <Button 
       className='toolbar-item'
-      label={item.charAt(0).toUpperCase()} 
+      label={item} 
       severity='secondary'
       size="small"
       raised 

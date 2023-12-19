@@ -2,49 +2,45 @@ import { type FC, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useMouse } from 'primereact/hooks';
 
-import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
-import { setStructure } from 'store/slices/projectSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
-import { 
-  Toolbar, 
-  ButtonComponent, 
-  TextComponent, 
+import {
+  Toolbar,
+  ButtonComponent,
+  TextComponent,
   LabelComponent,
   ImageComponent,
   Element,
-  LabelComponentDialog, 
+  LabelComponentDialog,
   TextComponentDialog,
   ButtonComponentDialog,
   ImageComponentDialog,
   AddScreenDialog,
-  Wrapper,
-  DesignHeader
 } from 'components';
-import { IStructure } from 'libs/types';
 import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
+import { useSelector } from 'react-redux';
+import type { RootState } from 'store';
 
 const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPageIndex, screens, structure }) => {  
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
-  const [newScreenName, setNewscreenName] = useState('');
 
   const toolSelected = (value: number) => {
     setToolItemSelected(true)
     selectTool(value)
   }
 
-  const getCurrentComponent = () => {
-    console.log(currentToolId, " item selected");
-    switch (currentToolId) {
-      case 0: return <ButtonComponent />
-      case 1: return <TextComponent />
-      case 2: return <LabelComponent />
-      case 3: return <ImageComponent />
-    }
-  }
+  // const getCurrentComponent = () => {
+  //   console.log(currentToolId, " item selected");
+  //   switch (currentToolId) {
+  //     case 0: return <ButtonComponent />
+  //     case 1: return <TextComponent />
+  //     case 2: return <LabelComponent />
+  //     case 3: return <ImageComponent />
+  //   }
+  // }
 
   const getCurrentPropertyDialog = () => {
     switch (currentToolId) {
@@ -56,7 +52,6 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPag
   }
 
   const AddNewScreenBtnClick = () => {
-    setNewscreenName('')
     setIsOpenAddScreenModal(true);
   }
 
@@ -78,15 +73,13 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPag
         </div>
       </div>
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
-      <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
-        <Element item={root} />
-        {isToolItemSelected && getCurrentComponent()}
+      <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
+        <Element item={viewTree} />
       </div>
       {isToolItemSelected && getCurrentPropertyDialog()}
-      <AddScreenDialog 
+      <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
-        setIsOpenAddScreenModal={setIsOpenAddScreenModal} 
-        structure={structure} 
+        setIsOpenAddScreenModal={setIsOpenAddScreenModal}
       />
     </div>
   )

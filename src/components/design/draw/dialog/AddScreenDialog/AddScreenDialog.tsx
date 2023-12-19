@@ -1,5 +1,5 @@
-import { type FC, useState } from 'react'
-import { useDispatch } from 'react-redux';
+import { type FC, useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Dialog } from 'primereact/dialog'
 import { InputText } from 'primereact/inputtext'
@@ -7,18 +7,15 @@ import { Divider } from 'primereact/divider'
 import { Button } from 'primereact/button'
 import { notify } from 'store/slices/toastSlice'
 
-
 import { AddScreenDialogProps } from './AddScreenDialog.types'
-import { IStructure } from 'libs/types';
+import type { IStructure } from 'libs/types';
 import { setStructure } from 'store/slices/projectSlice';
+import type { RootState } from 'store';
 
-const AddScreenDialog : FC<AddScreenDialogProps> = ({isOpenAddScreenModal, setIsOpenAddScreenModal, structure }) => {
-	const dispatch = useDispatch();
-	const [newScreenName, setNewscreenName] = useState('');
-	const AddNewScreenBtnClick = () => {
-    setNewscreenName('')
-    setIsOpenAddScreenModal(true);
-  }
+const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIsOpenAddScreenModal }) => {
+  const { structure } = useSelector((staet: RootState) => staet.project)
+  const dispatch = useDispatch();
+  const [newScreenName, setNewscreenName] = useState('');
 
   const AddNewScreen = () => {
     if (newScreenName === '') {
@@ -57,35 +54,41 @@ const AddScreenDialog : FC<AddScreenDialogProps> = ({isOpenAddScreenModal, setIs
     setIsOpenAddScreenModal(false);
   }
 
-	return (
-		<Dialog
-			header="New Screen"
-			visible={isOpenAddScreenModal}
-			style={{ width: 300 }}
-			onHide={() => setIsOpenAddScreenModal(false)}
-			draggable={false}
-		>
-			<InputText
-				type='text'
-				value={newScreenName}
-				placeholder='New Screen Name'
-				onChange={(e) => {
-					setNewscreenName(e.target.value)
-				}}
-			/>
-			<Divider />
-			<Button
-				severity="info"
-				raised
-				size='small'
-				style={{ width: '100%', }}
-				onClick={AddNewScreen}
-			>
-				<span style={{ textAlign: 'center', width: '100%' }}>Add</span>
-			</Button>
+  useEffect(() => {
+    if (isOpenAddScreenModal) {
+      setNewscreenName('')
+    }
+  }, [isOpenAddScreenModal])
 
-		</Dialog>
-	)
+  return (
+    <Dialog
+      header="New Screen"
+      visible={isOpenAddScreenModal}
+      style={{ width: 300 }}
+      onHide={() => setIsOpenAddScreenModal(false)}
+      draggable={false}
+    >
+      <InputText
+        type='text'
+        value={newScreenName}
+        placeholder='New Screen Name'
+        onChange={(e) => {
+          setNewscreenName(e.target.value)
+        }}
+      />
+      <Divider />
+      <Button
+        severity="info"
+        raised
+        size='small'
+        style={{ width: '100%', }}
+        onClick={AddNewScreen}
+      >
+        <span style={{ textAlign: 'center', width: '100%' }}>Add</span>
+      </Button>
+
+    </Dialog>
+  )
 }
 
 export default AddScreenDialog;
