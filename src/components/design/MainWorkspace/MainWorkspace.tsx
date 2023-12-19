@@ -2,17 +2,15 @@ import { type FC, useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useMouse } from 'primereact/hooks';
 
-import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
-import { setStructure } from 'store/slices/projectSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
-import { 
-  Toolbar, 
-  ButtonComponent, 
-  TextComponent, 
+import {
+  Toolbar,
+  ButtonComponent,
+  TextComponent,
   LabelComponent,
   ImageComponent,
   Element,
-  LabelComponentDialog, 
+  LabelComponentDialog,
   TextComponentDialog,
   ButtonComponentDialog,
   ImageComponentDialog,
@@ -22,7 +20,7 @@ import { Divider } from 'primereact/divider';
 import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 
-const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , page, setPage, pageIndex, setPageIndex, screens, structure }) => {  
+const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, pageIndex, setPageIndex, screens, structure }) => {
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
@@ -73,14 +71,14 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , page, setPage, pa
         </div>
       </div>
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
-      <div style={{ width: DEFAULT_WIDTH * zoom, height: DEFAULT_HEIGHT * zoom }} className="main-view">
+      <div style={{ width: 320 * zoom, height: 650 * zoom }} className="main-view">
         <Element item={root} />
         {isToolItemSelected && getCurrentComponent()}
       </div>
       {isToolItemSelected && getCurrentPropertyDialog()}
-      <AddScreenDialog 
+      <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
-        setIsOpenAddScreenModal={setIsOpenAddScreenModal} 
+        setIsOpenAddScreenModal={setIsOpenAddScreenModal}
       />
     </div>
   )

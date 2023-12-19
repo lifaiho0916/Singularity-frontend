@@ -8,8 +8,6 @@ export const PROJECT_POSITIONS = [
     'DevOps',
     'Manager'
 ]
-export const DEFAULT_WIDTH = 320;
-export const DEFAULT_HEIGHT = 650;
 
 export const API_BASE_URL = 'http://localhost:8080'
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
