@@ -41,7 +41,6 @@ const DesignWorkspace = () => {
     }, // Added closing parenthesis and semicolon
   };
   const allElements: Array<IElement> = [rootElement]
-  const [ingredient, setIngredient] = useState('');
 
   const toolSelected = (value: number) => {
     console.log(`Toolbar Item ${value} selected`)
