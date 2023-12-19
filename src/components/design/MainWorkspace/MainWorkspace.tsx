@@ -33,15 +33,15 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
     selectTool(value)
   }
 
-  const getCurrentComponent = () => {
-    console.log(currentToolId, " item selected");
-    switch (currentToolId) {
-      case 0: return <ButtonComponent />
-      case 1: return <TextComponent />
-      case 2: return <LabelComponent />
-      case 3: return <ImageComponent />
-    }
-  }
+  // const getCurrentComponent = () => {
+  //   console.log(currentToolId, " item selected");
+  //   switch (currentToolId) {
+  //     case 0: return <ButtonComponent />
+  //     case 1: return <TextComponent />
+  //     case 2: return <LabelComponent />
+  //     case 3: return <ImageComponent />
+  //   }
+  // }
 
   const getCurrentPropertyDialog = () => {
     switch (currentToolId) {
@@ -76,7 +76,6 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
       <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
         <Element item={viewTree} />
-        {isToolItemSelected && getCurrentComponent()}
       </div>
       {isToolItemSelected && getCurrentPropertyDialog()}
       <AddScreenDialog

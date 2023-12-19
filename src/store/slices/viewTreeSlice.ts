@@ -24,7 +24,7 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
 
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // first check if subview is 
-    if (view.type == IComponentType.Wrapper && fitsWithin(view, element)) {
+    if (view.type === IComponentType.Wrapper && fitsWithin(view, element)) {
         if (!view.subviews) {
             view.subviews = [];
         }
@@ -32,7 +32,7 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
             insertSubview(childView, element);
         }
         // If no suitable child container is found, add the subview to this container
-        if (view.subviews.every(childView => childView.type != IComponentType.Wrapper || !fitsWithin(childView, element))) {
+        if (view.subviews.every(childView => childView.type !== IComponentType.Wrapper || !fitsWithin(childView, element))) {
             view.subviews.push(getViewFormatDataFromElement(element));
         }
     }
@@ -78,6 +78,7 @@ const initialState: viewTreeSliceState = {
                                 details: {
                                     text: "Dragon Fly",
                                     style: {
+                                        fontSize: 20,
                                         color: "#f0903c"
                                     }
                                 }
