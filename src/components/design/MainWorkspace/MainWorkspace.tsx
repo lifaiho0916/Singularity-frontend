@@ -4,11 +4,11 @@ import { useDispatch } from 'react-redux';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import {
   Toolbar,
+  Element,
   ButtonComponent,
   TextComponent,
   LabelComponent,
   ImageComponent,
-  Element,
   LabelComponentDialog,
   TextComponentDialog,
   ButtonComponentDialog,
@@ -27,7 +27,8 @@ import { Image } from 'primereact/image';
 
 const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex, screens }) => {  
   const { ref, x, y, reset } = useMouse();
-  const { viewTree } = useSelector((state: RootState) => state.viewTree);
+  const { viewTree, currentElement } = useSelector((state: RootState) => state.viewTree);
+
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
@@ -70,12 +71,13 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex
     }
   }
 
-  const getCurrentPropertyDialog = () => {
-    switch (currentToolId) {
-      case 0: return <ButtonComponentDialog />
-      case 1: return <TextComponentDialog />
-      case 2: return <LabelComponentDialog />
-      case 3: return <ImageComponentDialog />
+  const getPropertyDialogForCurrentElement = () => {
+    if (!currentElement) return;
+    switch (currentElement.type) {
+      case IComponentType.ButtonComponent: return <ButtonComponentDialog />
+      case IComponentType.TextComponent: return <TextComponentDialog />
+      case IComponentType.LabelComponent: return <LabelComponentDialog />
+      case IComponentType.ImageComponent: return <ImageComponentDialog />
     }
   }
 
@@ -138,8 +140,7 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex
         <Element item={viewTree} />
         {isToolItemSelected && getCurrentComponent()}
       </div>
-      {isToolItemSelected && getCurrentPropertyDialog()}
-
+      { getPropertyDialogForCurrentElement()}
       <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
         setIsOpenAddScreenModal={setIsOpenAddScreenModal}

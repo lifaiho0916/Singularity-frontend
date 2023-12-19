@@ -3,7 +3,7 @@ import { useDispatch } from "react-redux";
 import { IComponentType, IWrapperType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 
-import { selectElementInViewTree } from "store/slices/viewTreeSlice";
+import { selectElementInViewTreeById } from "store/slices/viewTreeSlice";
 
 import { ElementProps } from "./Element.types";
 import './Element.scss';
@@ -22,7 +22,7 @@ const Element: FC<ElementProps> = ({ item }) => {
 
   const selectThisWrapperInViewTree = (id: string) => {
     console.log(`wrapper ${id} selected`);
-    dispatch(selectElementInViewTree(id));
+    dispatch(selectElementInViewTreeById(id));
   }
 
   return (

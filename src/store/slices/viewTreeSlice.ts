@@ -7,7 +7,7 @@ interface viewTreeSliceState {
     viewTree: IView,
     xMultiplier: number,
     yMultiplier: number,
-    currentElementId: string
+    currentElement: IView | null
 }
 
 function fitsWithin(view: IView, element: INewlyInsertedElement): boolean {
@@ -42,6 +42,34 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
       }
     }
   }
+
+function findElementInViewById(view: IView, id: string) : IView | null {
+    if (view.id == id) {
+      return view;
+    }
+    if (view.subviews) {
+      for (let i = 0; i < view.subviews.length; i++) {
+        const result = findElementInViewById(view.subviews[i], id);
+        if (result) return result;
+      }
+    }
+    return null;
+}
+
+function findAndReplaceSubview(view: IView, updatedSubview: IView) {
+    if (view.id == updatedSubview.id) {
+        Object.assign(view, updatedSubview);
+        return true;
+    }
+    if (view.subviews) {
+        for (let i = 0; i < view.subviews.length; i++) {
+            if (findAndReplaceSubview(view.subviews[i], updatedSubview)) {
+                return true;
+            }
+        }
+    }
+    return false;
+}
 
 const initialState: viewTreeSliceState = {
     viewTree: {
@@ -110,7 +138,7 @@ const initialState: viewTreeSliceState = {
     },
     xMultiplier: 320,
     yMultiplier: 650,
-    currentElementId: ""
+    currentElement: null
 }
 
 export const viewTreeSlice = createSlice({
@@ -130,13 +158,16 @@ export const viewTreeSlice = createSlice({
             // subview contains mouse position(242, 518), type (view, text, image, label, button).
             insertSubview(state.viewTree, element);
         },
-        selectElementInViewTree: (state, action:PayloadAction<string>) => {
-            state.currentElementId = action.payload;
+        selectElementInViewTreeById: (state, action:PayloadAction<string>) => {
+            const elementId = action.payload;
+            state.currentElement = findElementInViewById(state.viewTree, elementId);
+        },
+        updateSelectedElementInViewTree: (state, action:PayloadAction<IView>) => {
+            findAndReplaceSubview(state.viewTree, action.payload);
         }
     }
 })
 
-
-export const { fetchViewTree, addSubViewToViewTree, selectElementInViewTree } = viewTreeSlice.actions;
+export const { fetchViewTree, addSubViewToViewTree, selectElementInViewTreeById, updateSelectedElementInViewTree } = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer
