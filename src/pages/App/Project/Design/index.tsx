@@ -3,8 +3,7 @@ import { DesignHeader } from 'components';
 import MainWorkspace from 'components/design/MainWorkspace/MainWorkspace';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { DEFAULT_WIDTH, DEFAULT_HEIGHT } from "constants/";
-import { IElement, IComponentType, IStructure } from 'libs/types';
+import { IElement, IComponentType } from 'libs/types';
 import { v4 as uuidv4 } from 'uuid'
 
 const DesignWorkspace = () => {
