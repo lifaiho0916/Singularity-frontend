@@ -23,6 +23,7 @@ import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 
 const MainWorkspace : FC<MainWorkspaceProps> = ({ root, zoom , pageIndex, setPageIndex, screens, structure }) => {  
+  const { viewTree } = useSelector((state: RootState) => state.viewTree);
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
