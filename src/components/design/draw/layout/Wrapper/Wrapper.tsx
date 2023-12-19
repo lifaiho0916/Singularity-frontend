@@ -1,20 +1,25 @@
 import * as React from "react";
 import { type FC } from 'react';
+import { useSelector } from "react-redux";
 import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
+import { RootState } from "store";
 import './Wrapper.scss';
 
-const Wrapper: FC<WrapperProps> = ({ style, children, hasWrapper }) => {
+const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick }) => {
+  const { currentElementId } = useSelector((state: RootState) => state.viewTree);
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
   const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
 
   return (
     <div
+      id={id}
       className="view-box"
-      style={{ ...style, border: hasWrapper ? 'none' : undefined }}
+      style={{ ...style, border: currentElementId == id ? '2px solid' : hasWrapper ? 'none' : undefined }}
       onMouseEnter={() => { setIsShowSpliter(true) }}
       onMouseLeave={() => { setIsShowSpliter(false) }}
+      onClick={onClick}
     >
       {!hasWrapper &&
         <React.Fragment>

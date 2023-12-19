@@ -6,7 +6,8 @@ import { v4 as uuidv4 } from 'uuid'
 interface viewTreeSliceState {
     viewTree: IView,
     xMultiplier: number,
-    yMultiplier: number
+    yMultiplier: number,
+    currentElementId: string
 }
 
 function fitsWithin(view: IView, element: INewlyInsertedElement): boolean {
@@ -108,7 +109,8 @@ const initialState: viewTreeSliceState = {
         ]
     },
     xMultiplier: 320,
-    yMultiplier: 650
+    yMultiplier: 650,
+    currentElementId: ""
 }
 
 export const viewTreeSlice = createSlice({
@@ -127,10 +129,14 @@ export const viewTreeSlice = createSlice({
             element.height *= 100 / state.yMultiplier;
             // subview contains mouse position(242, 518), type (view, text, image, label, button).
             insertSubview(state.viewTree, element);
+        },
+        selectElementInViewTree: (state, action:PayloadAction<string>) => {
+            state.currentElementId = action.payload;
         }
     }
 })
 
-export const { fetchViewTree, addSubViewToViewTree } = viewTreeSlice.actions;
+
+export const { fetchViewTree, addSubViewToViewTree, selectElementInViewTree } = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer
