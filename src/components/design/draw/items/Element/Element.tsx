@@ -19,6 +19,7 @@ const Element: FC<ElementProps> = ({ item }) => {
     <>
       {item.type == IComponentType.Wrapper ?
         <Wrapper
+          hasWrapper={(item.subviews && item.subviews[0].type === IComponentType.Wrapper) ? true : false}
           style={{
             ...item.details?.style,
             width: `${item.x.max - item.x.min}%`,

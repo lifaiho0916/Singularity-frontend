@@ -4,7 +4,7 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import './Wrapper.scss';
 
-const Wrapper: FC<WrapperProps> = ({ style, children }) => {
+const Wrapper: FC<WrapperProps> = ({ style, children, hasWrapper }) => {
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
   const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
@@ -12,12 +12,12 @@ const Wrapper: FC<WrapperProps> = ({ style, children }) => {
   return (
     <div
       className="view-box"
-      style={{ ...style, border: children ? 'none' : undefined }}
+      style={{ ...style, border: hasWrapper ? 'none' : undefined }}
       onMouseEnter={() => { setIsShowSpliter(true) }}
       onMouseLeave={() => { setIsShowSpliter(false) }}
     >
-      {children ?
-        children :
+      {children}
+      {!hasWrapper &&
         <React.Fragment>
           {isShowSpliter ?
             <React.Fragment>
