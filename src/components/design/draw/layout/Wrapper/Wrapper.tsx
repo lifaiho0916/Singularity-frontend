@@ -1,12 +1,23 @@
 import { type FC } from 'react';
+import { ViewBox } from 'components';
 import { WrapperProps } from "./Wrapper.types";
 import './Wrapper.scss';
 
 const Wrapper:FC<WrapperProps> = ({style, children}) => {
+
+  const onHorizontalSplit = () => {    
+  }
+
+  const onVerticalSplit = () => {    
+  }
+
+  const onDeleteButtonPressed = () => {    
+  }
+
   return (
-    <div className="wapper" style={style}>
+    <ViewBox style={style}>
       {children}
-    </div>
+    </ViewBox>
   )
 }
 

@@ -1,9 +1,6 @@
-export { ProjectTemplate } from './ProjectTemplate'
-export { ToastContainer } from './ToastContainer'
+export { Toolbar, ToolbarItem } from './toolbar'
+export { MainWorkSpace} from './MainWorkspace'
 export { 
-  Toolbar, 
-  ToolbarItem,
-  MainWorkSpace,
   ButtonComponentDialog,
   ImageComponentDialog, 
   LabelComponentDialog, 
@@ -15,4 +12,4 @@ export {
   Element,
   ViewBox, 
   Wrapper 
-} from './design'
+} from './draw'
