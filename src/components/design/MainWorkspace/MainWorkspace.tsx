@@ -76,7 +76,6 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
       <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
         <Element item={viewTree} />
-        {/* {isToolItemSelected && getCurrentComponent()} */}
       </div>
       {isToolItemSelected && getCurrentPropertyDialog()}
       <AddScreenDialog

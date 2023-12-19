@@ -78,8 +78,8 @@ const initialState: viewTreeSliceState = {
                                 details: {
                                     text: "Dragon Fly",
                                     style: {
-                                        color: "#f0903c",
-                                        fontSize: 20
+                                        fontSize: 20,
+                                        color: "#f0903c"
                                     }
                                 }
                             }
