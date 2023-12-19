@@ -108,7 +108,11 @@ export const viewTreeSlice = createSlice({
             state.viewTree = action.payload;
         },
         addSubViewToViewTree: (state, action: PayloadAction<INewlyInsertedElement>) => {
-            const element = action.payload;
+            let element = action.payload;
+            element.x *= 100 / state.xMultiplier;
+            element.y *= 100 / state.yMultiplier;
+            element.width *= 100 / state.xMultiplier;
+            element.height *= 100 / state.yMultiplier;
             // subview contains mouse position(242, 518), type (view, text, image, label, button).
             insertSubview(state.viewTree, element);
         }
