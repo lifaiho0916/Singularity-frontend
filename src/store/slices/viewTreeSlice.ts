@@ -10,14 +10,14 @@ interface viewTreeSliceState {
 
 function fitsWithin(view: IView, element: INewlyInsertedElement): boolean {
     return element.x >= view.x.min && element.x + element.width <= view.x.max &&
-           element.y >= view.y.min && element.y + element.height <= view.y.max;
+        element.y >= view.y.min && element.y + element.height <= view.y.max;
 }
 
 function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
     return {
         type: element.type,
-        x: { min: element.x, max: element.x + element.width},
-        y: { min: element.y, max: element.y + element.height},
+        x: { min: element.x, max: element.x + element.width },
+        y: { min: element.y, max: element.y + element.height },
         details: element.details
     }
 }
@@ -26,14 +26,14 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // first check if subview is 
     if (view.type == IComponentType.Wrapper && fitsWithin(view, element)) {
         if (!view.subviews) {
-          view.subviews = [];
+            view.subviews = [];
         }
         for (const childView of view.subviews) {
-          insertSubview(childView, element);
+            insertSubview(childView, element);
         }
         // If no suitable child container is found, add the subview to this container
         if (view.subviews.every(childView => childView.type != IComponentType.Wrapper || !fitsWithin(childView, element))) {
-          view.subviews.push(getViewFormatDataFromElement(element));
+            view.subviews.push(getViewFormatDataFromElement(element));
         }
     }
 }
@@ -41,53 +41,55 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
 const initialState: viewTreeSliceState = {
     viewTree: {
         type: IComponentType.Wrapper,
-        x: {min: 0, max: 100},
-        y: {min: 0, max: 100},
+        x: { min: 0, max: 100 },
+        y: { min: 0, max: 100 },
         details: {
-            kind: IWrapperType.Vertical
+            kind: IWrapperType.Horizontal
         },
         subviews: [
             {
                 type: IComponentType.Wrapper,
-                x: {min: 0, max: 100},
-                y: {min: 0, max: 50},
+                x: { min: 0, max: 100 },
+                y: { min: 0, max: 50 },
                 details: {
-                    kind: IWrapperType.Horizontal
+                    kind: IWrapperType.Vertical
                 }
             },
             {
                 type: IComponentType.Wrapper,
-                x: {min: 0, max: 100},
-                y: {min: 50, max: 100},
+                x: { min: 0, max: 100 },
+                y: { min: 50, max: 100 },
                 details: {
-                    kind: IWrapperType.Horizontal
+                    kind: IWrapperType.Vertical
                 },
                 subviews: [
                     {
                         type: IComponentType.Wrapper,
-                        x: {min: 0, max: 50},
-                        y: {min: 0, max: 100},
+                        x: { min: 0, max: 50 },
+                        y: { min: 0, max: 100 },
                         details: {
-                            kind: IWrapperType.Vertical
+                            kind: IWrapperType.Horizontal
                         },
                         subviews: [
                             {
                                 type: IComponentType.LabelComponent,
-                                x: {min: 10, max: 90},
-                                y: {min: 10, max: 20},
+                                x: { min: 10, max: 90 },
+                                y: { min: 10, max: 20 },
                                 details: {
                                     text: "Dragon Fly",
-                                    color: "#f0903c"
+                                    style: {
+                                        color: "#f0903c"
+                                    }
                                 }
                             }
                         ]
                     },
                     {
                         type: IComponentType.Wrapper,
-                        x: {min: 50, max: 100},
-                        y: {min: 0, max: 100},
+                        x: { min: 50, max: 100 },
+                        y: { min: 0, max: 100 },
                         details: {
-                            kind: IWrapperType.Vertical
+                            kind: IWrapperType.Horizontal
                         }
                     }
                 ]
