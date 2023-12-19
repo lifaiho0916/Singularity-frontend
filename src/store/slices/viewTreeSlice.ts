@@ -94,8 +94,8 @@ const initialState: viewTreeSliceState = {
             }
         ]
     },
-    xMultiplier: 768,
-    yMultiplier: 1024
+    xMultiplier: 320,
+    yMultiplier: 650
 }
 
 export const viewTreeSlice = createSlice({
