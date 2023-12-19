@@ -1,9 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IComponentType, IView, INewlyInsertedElement } from "libs/types";
+import { IComponentType, IView, INewlyInsertedElement, IWrapperType } from "libs/types";
 
 interface viewTreeSliceState {
-    viewTree: IView
+    viewTree: IView,
+    xMultiplier: number,
+    yMultiplier: number
 }
 
 function fitsWithin(view: IView, element: INewlyInsertedElement): boolean {
@@ -39,28 +41,40 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
 const initialState: viewTreeSliceState = {
     viewTree: {
         type: IComponentType.Wrapper,
-        x: {min: 0, max: 768},
-        y: {min: 0, max: 1024},
+        x: {min: 0, max: 100},
+        y: {min: 0, max: 100},
+        details: {
+            kind: IWrapperType.Vertical
+        },
         subviews: [
             {
                 type: IComponentType.Wrapper,
-                x: {min: 0, max: 768},
-                y: {min: 0, max: 512}
+                x: {min: 0, max: 100},
+                y: {min: 0, max: 50},
+                details: {
+                    kind: IWrapperType.Horizontal
+                }
             },
             {
                 type: IComponentType.Wrapper,
-                x: {min: 0, max: 768},
-                y: {min: 512, max: 1024},
+                x: {min: 0, max: 100},
+                y: {min: 50, max: 100},
+                details: {
+                    kind: IWrapperType.Horizontal
+                },
                 subviews: [
                     {
                         type: IComponentType.Wrapper,
-                        x: {min: 0, max: 384},
-                        y: {min: 0, max: 512},
+                        x: {min: 0, max: 50},
+                        y: {min: 0, max: 100},
+                        details: {
+                            kind: IWrapperType.Vertical
+                        },
                         subviews: [
                             {
                                 type: IComponentType.LabelComponent,
-                                x: {min: 50, max: 350},
-                                y: {min: 50, max: 100},
+                                x: {min: 10, max: 90},
+                                y: {min: 10, max: 20},
                                 details: {
                                     text: "Dragon Fly",
                                     color: "#f0903c"
@@ -70,13 +84,18 @@ const initialState: viewTreeSliceState = {
                     },
                     {
                         type: IComponentType.Wrapper,
-                        x: {min: 384, max: 768},
-                        y: {min: 0, max: 512}
+                        x: {min: 50, max: 100},
+                        y: {min: 0, max: 100},
+                        details: {
+                            kind: IWrapperType.Vertical
+                        }
                     }
                 ]
             }
         ]
-    }
+    },
+    xMultiplier: 768,
+    yMultiplier: 1024
 }
 
 export const viewTreeSlice = createSlice({

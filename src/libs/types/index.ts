@@ -84,3 +84,8 @@ export enum IComponentType {
     ImageComponent = 'ImageComponent',
     Wrapper = 'Wrapper'
 }
+
+export enum IWrapperType {
+    Horizontal = 'Horizontal',
+    Vertical = 'Vertical'
+}
