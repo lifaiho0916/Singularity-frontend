@@ -5,10 +5,6 @@ import { useMouse } from 'primereact/hooks';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import {
   Toolbar,
-  ButtonComponent,
-  TextComponent,
-  LabelComponent,
-  ImageComponent,
   Element,
   LabelComponentDialog,
   TextComponentDialog,
@@ -21,9 +17,10 @@ import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import { IComponentType, IView } from 'libs/types';
 
 const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, pageIndex, setPageIndex, screens, structure }) => {
-  const { viewTree } = useSelector((state: RootState) => state.viewTree);
+  const { viewTree, currentElement } = useSelector((state: RootState) => state.viewTree);
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
@@ -43,12 +40,13 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
   //   }
   // }
 
-  const getCurrentPropertyDialog = () => {
-    switch (currentToolId) {
-      case 0: return <ButtonComponentDialog />
-      case 1: return <TextComponentDialog />
-      case 2: return <LabelComponentDialog />
-      case 3: return <ImageComponentDialog />
+  const getPropertyDialogForCurrentElement = () => {
+    if (!currentElement) return;
+    switch (currentElement.type) {
+      case IComponentType.ButtonComponent: return <ButtonComponentDialog />
+      case IComponentType.TextComponent: return <TextComponentDialog />
+      case IComponentType.LabelComponent: return <LabelComponentDialog />
+      case IComponentType.ImageComponent: return <ImageComponentDialog />
     }
   }
 
@@ -77,7 +75,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ root, zoom, page, setPage, page
       <div style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} className="main-view">
         <Element item={viewTree} />
       </div>
-      {isToolItemSelected && getCurrentPropertyDialog()}
+      { getPropertyDialogForCurrentElement()}
       <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
         setIsOpenAddScreenModal={setIsOpenAddScreenModal}

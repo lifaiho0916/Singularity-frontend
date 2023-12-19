@@ -1,13 +1,24 @@
 import { type FC } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { LabelComponentDialogProps } from "./LabelComponentDialog.types";
 import { InputText } from 'primereact/inputtext';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
 import './LabelComponentDialog.scss';
+import { RootState } from 'store';
+import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
-  return (
+  const dispatch = useDispatch();
+  const { currentElement, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree)
+
+  const onTextChange = (newText: string) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({...currentElement, details: {...currentElement.details, text: newText}}));
+  }
+
+  return currentElement ? (
     <div className="label-component-dialog">
       <div className="label-header">
         <label>LABEL PROPERTIES</label>
@@ -20,6 +31,8 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
           <InputText
             type='text'
             className='input-text'
+            value={currentElement.details?.text}
+            onChange={(e) => onTextChange(e.target.value)}
           />
         </div>
         <Divider className="custom-divider" />
@@ -120,7 +133,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
         </div>
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default LabelComponentDialog;
