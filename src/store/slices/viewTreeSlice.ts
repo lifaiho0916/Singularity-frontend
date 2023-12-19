@@ -114,16 +114,24 @@ const initialState: viewTreeSliceState = {
                             {
                                 id: uuidv4(),
                                 type: IComponentType.LabelComponent,
-                                x: { min: 10, max: 90 },
-                                y: { min: 10, max: 20 },
+                                x: { min: 0, max: 90 },
+                                y: { min: 0, max: 20 },
                                 details: {
                                     text: "Dragon Fly",
                                     style: {
-                                        fontSize: 20,
-                                        color: "#f0903c",
-                                        // fontFamily: "Times New Roman"
-                                        // fontFamily: "Arial"
-                                        // fontFamily: "Calibri"
+                                        fontSize: 20
+                                    }
+                                }
+                            },
+                            {
+                                id: uuidv4(),
+                                type: IComponentType.ButtonComponent,
+                                x: { min: 0, max: 90 },
+                                y: { min: 0, max: 20 },
+                                details: {
+                                    text: "Dragon Fly",
+                                    style: {
+                                        fontSize: 20
                                     }
                                 }
                             }
