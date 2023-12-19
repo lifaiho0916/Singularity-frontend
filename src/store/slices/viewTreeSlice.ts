@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import { IComponentType, IView, INewlyInsertedElement, IWrapperType } from "libs/types";
+import { v4 as uuidv4 } from 'uuid'
 
 interface viewTreeSliceState {
     viewTree: IView,
@@ -15,6 +16,7 @@ function fitsWithin(view: IView, element: INewlyInsertedElement): boolean {
 
 function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
     return {
+        id: uuidv4(),
         type: element.type,
         x: { min: element.x, max: element.x + element.width },
         y: { min: element.y, max: element.y + element.height },
@@ -40,6 +42,7 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
 
 const initialState: viewTreeSliceState = {
     viewTree: {
+        id: uuidv4(),
         type: IComponentType.Wrapper,
         x: { min: 0, max: 100 },
         y: { min: 0, max: 100 },
@@ -48,6 +51,7 @@ const initialState: viewTreeSliceState = {
         },
         subviews: [
             {
+                id: uuidv4(),
                 type: IComponentType.Wrapper,
                 x: { min: 0, max: 100 },
                 y: { min: 0, max: 50 },
@@ -56,6 +60,7 @@ const initialState: viewTreeSliceState = {
                 }
             },
             {
+                id: uuidv4(),
                 type: IComponentType.Wrapper,
                 x: { min: 0, max: 100 },
                 y: { min: 50, max: 100 },
@@ -64,6 +69,7 @@ const initialState: viewTreeSliceState = {
                 },
                 subviews: [
                     {
+                        id: uuidv4(),
                         type: IComponentType.Wrapper,
                         x: { min: 0, max: 50 },
                         y: { min: 0, max: 100 },
@@ -72,6 +78,7 @@ const initialState: viewTreeSliceState = {
                         },
                         subviews: [
                             {
+                                id: uuidv4(),
                                 type: IComponentType.LabelComponent,
                                 x: { min: 10, max: 90 },
                                 y: { min: 10, max: 20 },
@@ -86,6 +93,7 @@ const initialState: viewTreeSliceState = {
                         ]
                     },
                     {
+                        id: uuidv4(),
                         type: IComponentType.Wrapper,
                         x: { min: 50, max: 100 },
                         y: { min: 0, max: 100 },
