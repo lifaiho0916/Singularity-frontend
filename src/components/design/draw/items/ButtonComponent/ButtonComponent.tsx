@@ -1,16 +1,16 @@
 import { type FC } from 'react';
-import { Button } from 'primereact/button';
 import { ButtonComponentProps } from "./ButtonComponent.types";
 import './ButtonComponent.scss';
 
-const ButtonComponent:FC<ButtonComponentProps> = ({ text, onClick }) => {  
+const ButtonComponent: FC<ButtonComponentProps> = ({ text, onClick, style }) => {
   return (
-    <Button 
+    <div
       className="button-component"
       onClick={onClick}
+      style={style}
     >
-      {text || 'Hello'}
-    </Button>
+      {text}
+    </div>
   )
 }
 

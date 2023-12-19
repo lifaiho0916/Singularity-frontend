@@ -1,16 +1,14 @@
-import React, { type FC } from 'react';
+import { type FC } from 'react';
 import { useDispatch } from "react-redux";
 import { IComponentType, IWrapperType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
-
 import { selectElementInViewTreeById } from "store/slices/viewTreeSlice";
-
 import { ElementProps } from "./Element.types";
 import './Element.scss';
 
 const Element: FC<ElementProps> = ({ item }) => {
   const dispatch = useDispatch();
-  
+
   const onHorizontalSplit = () => {
   }
 
@@ -27,7 +25,7 @@ const Element: FC<ElementProps> = ({ item }) => {
 
   return (
     <>
-      {item.type == IComponentType.Wrapper ?
+      {item.type === IComponentType.Wrapper ?
         <Wrapper
           id={item.id}
           hasWrapper={(item.subviews && item.subviews[0].type === IComponentType.Wrapper) ? true : false}
@@ -58,9 +56,9 @@ const Element: FC<ElementProps> = ({ item }) => {
           }}
         >
           {
-            item.type == IComponentType.ButtonComponent ? <ButtonComponent /> :
-              item.type == IComponentType.TextComponent ? <TextComponent /> :
-                item.type == IComponentType.LabelComponent ? <LabelComponent text={item.details?.text} style={item.details?.style} />
+            item.type === IComponentType.ButtonComponent ? <ButtonComponent text={item.details?.text} style={item.details?.style} /> :
+              item.type === IComponentType.TextComponent ? <TextComponent /> :
+                item.type === IComponentType.LabelComponent ? <LabelComponent text={item.details?.text} style={item.details?.style} />
                   : <ImageComponent />
           }
         </Wrapper>

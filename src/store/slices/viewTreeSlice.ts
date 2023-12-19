@@ -44,7 +44,7 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
   }
 
 function findElementInViewById(view: IView, id: string) : IView | null {
-    if (view.id == id) {
+    if (view.id === id) {
       return view;
     }
     if (view.subviews) {
@@ -59,7 +59,7 @@ function findElementInViewById(view: IView, id: string) : IView | null {
 function replaceSubview(view: IView, updatedComponent: IView | null) : IView | null {
     if (!updatedComponent)
         return null
-    if (view.id == updatedComponent.id) {
+    if (view.id === updatedComponent.id) {
         return updatedComponent
     }
     if (view.subviews && view.subviews.length > 0) {
@@ -129,7 +129,7 @@ const initialState: viewTreeSliceState = {
                                 x: { min: 0, max: 90 },
                                 y: { min: 0, max: 20 },
                                 details: {
-                                    text: "Dragon Fly",
+                                    text: "Hello",
                                     style: {
                                         fontSize: 20
                                     }

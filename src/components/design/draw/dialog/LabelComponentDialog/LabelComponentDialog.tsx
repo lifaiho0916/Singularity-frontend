@@ -1,14 +1,14 @@
-import { type FC } from 'react';
+import { useMemo, type FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { LabelComponentDialogProps } from "./LabelComponentDialog.types";
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
-import { ColorPicker, ColorPickerChangeEvent } from 'primereact/colorpicker';
-import './LabelComponentDialog.scss';
-import { RootState } from 'store';
+import { ColorPicker } from 'primereact/colorpicker';
+import type { RootState } from 'store';
 import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import './LabelComponentDialog.scss';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
   const dispatch = useDispatch();
@@ -57,7 +57,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
     }));
   }
 
-  const onFontWeightChange = (newFontWeight: number) => {
+  const onFontWeightChange = (newFontWeight: string) => {
     if (!currentElement || !currentElement.details) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
@@ -65,7 +65,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
         ...currentElement.details,
         style: {
           ...currentElement.details.style,
-          fontWeight: newFontWeight
+          fontWeight: fontWeightNumber(newFontWeight)
         }
       }
     }));
@@ -83,6 +83,28 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
         }
       }
     }));
+  }
+
+  const fontWeight = useMemo(() => {
+    if (currentElement) {
+      if (currentElement.details.style.fontWeight) {
+        switch (currentElement.details.style.fontWeight) {
+          case 200: return 'Light';
+          case 400: return 'Normal';
+          case 600: return 'Semi-Bold';
+          case 700: return 'Bold';
+        }
+      } return 'Normal'
+    }
+  }, [currentElement])
+
+  const fontWeightNumber = (fontWeight: string) => {
+    switch (fontWeight) {
+      case 'Light': return 200;
+      case 'Normal': return 400;
+      case 'Semi-Bold': return 600;
+      case 'Bold': return 700;
+    }
   }
 
   return currentElement ? (
@@ -176,8 +198,8 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
             }}
           >
             <CascadeSelect
-              value={currentElement.details.style.fontWeight ? currentElement.details.style.fontWeight : 400}
-              options={[100, 200, 300, 400, 500, 600, 700, 800, 900]}
+              value={fontWeight}
+              options={['Light', 'Normal', 'Semi-Bold', 'Bold']}
               optionGroupChildren={[]}
               className='input-text'
               onChange={(e) => onFontWeightChange(e.value)}
@@ -186,7 +208,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
               format="hex"
               value={currentElement.details.style.color ? currentElement.details.style.color.substring(1) : '000000'}
               style={{ marginLeft: 5 }}
-              onChange={(e: ColorPickerChangeEvent) => onFontColorChange(e.value as string)}
+              onChange={(e) => onFontColorChange(e.value as string)}
             />
           </div>
           <div
