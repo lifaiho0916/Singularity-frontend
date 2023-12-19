@@ -2,36 +2,36 @@ import React from 'react'
 import { ButtonComponent, ImageComponent, TextComponent, LabelComponent, Wrapper } from "components"
 
 export interface IUser {
-    id: number;
-    first_name: string;
-    last_name: string;
-    avatar: string;
+    id: number
+    first_name: string
+    last_name: string
+    avatar: string
 }
 
 export interface IMember {
-    email: string;
-    position: string;
+    email: string
+    position: string
 }
 
 export interface IProjectMember {
-    user: IUser;
-    position: string;
+    user: IUser
+    position: string
 }
 
 export interface IProject {
-    id: number,
-    name: string,
-    description: string,
-    creator: IUser,
-    openedAt: string,
+    id: number
+    name: string
+    description: string
+    creator: IUser
+    openedAt: string
     members: Array<IProjectMember>
     data: string
 }
 
 export interface ITemplate {
-    id: number,
-    name: string,
-    description: string,
+    id: number
+    name: string
+    description: string
     defaultTemplate: boolean
 }
 
@@ -47,13 +47,35 @@ export interface IStructure {
 }
 
 export interface IElement {
-    id: string,
-    parent: string,
-    name: string,
-    style: React.CSSProperties,
-    child: Array<IElement>,
-    type: IComponentType,
-    action: ()=>void
+    id: string
+    parent: string
+    name: string
+    style: React.CSSProperties
+    child: Array<IElement>
+    type: IComponentType
+    action: () => void
+}
+
+export interface IMinMaxPair {
+    min: number
+    max: number
+}
+
+export interface IView {
+    type: IComponentType
+    x: IMinMaxPair
+    y: IMinMaxPair
+    subviews?: IView[]
+    details?: any
+}
+
+export interface INewlyInsertedElement {
+    x: number
+    y: number
+    type: IComponentType
+    width: number
+    height: number
+    details?: any
 }
 
 export enum IComponentType {
