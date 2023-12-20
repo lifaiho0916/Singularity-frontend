@@ -135,6 +135,18 @@ const initialState: viewTreeSliceState = {
                                         backgroundColor: '#00FF00'
                                     }
                                 }
+                            },
+                            {
+                                id: uuidv4(),
+                                type: IComponentType.TextComponent,
+                                x: { min: 0, max: 90 },
+                                y: { min: 0, max: 20 },
+                                details: {
+                                    text: "Hello",
+                                    style: {
+                                        fontSize: 20
+                                    }
+                                }
                             }
                         ]
                     },

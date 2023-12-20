@@ -16,7 +16,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
     <div
       id={id}
       className="view-box"
-      style={{ ...style, border: currentElement && currentElement.id == id ? '2px dashed' : hasWrapper ? 'none' : undefined }}
+      style={{ ...style, border: currentElement && currentElement.id === id ? '2px dashed' : hasWrapper ? 'none' : undefined }}
       onMouseEnter={() => { setIsShowSpliter(true) }}
       onMouseLeave={() => { setIsShowSpliter(false) }}
       onClick={onClick}
