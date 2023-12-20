@@ -20,12 +20,12 @@ import { Button } from 'primereact/button';
 import { RadioButton } from 'primereact/radiobutton';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { INewlyInsertedElement, IView } from 'libs/types'; 
+import { INewlyInsertedElement, IView } from 'libs/types';
 import { addSubViewToViewTree } from 'store/slices/viewTreeSlice';
 import { IComponentType } from '../../../libs/types/index';
 import { Image } from 'primereact/image';
 
-const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex, screens }) => {  
+const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom, pageIndex, setPageIndex, screens }) => {
   const { ref, x, y, reset } = useMouse();
   const { viewTree, currentElement } = useSelector((state: RootState) => state.viewTree);
 
@@ -86,23 +86,30 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex
   }
 
   const getCurrentComponentType = () => {
-    return currentToolId == 0 ? IComponentType.ButtonComponent : 
+    return currentToolId == 0 ? IComponentType.ButtonComponent :
       currentToolId == 1 ? IComponentType.TextComponent :
-      currentToolId == 2 ? IComponentType.LabelComponent :
-      IComponentType.ImageComponent;
+        currentToolId == 2 ? IComponentType.LabelComponent :
+          IComponentType.ImageComponent;
   }
 
   const onAddComponent = () => {
-    if(isToolItemSelected) {
+    const item = getCurrentComponentType();
+    if (isToolItemSelected) {
       {
-        const newElement : INewlyInsertedElement = {
+        const newElement: INewlyInsertedElement = {
           x: x,
           y: y,
-          type: getCurrentComponentType(),
+          type: item,
           width: 100,
           height: 30,
           details: {
-            text: 'This is Button'
+            text: item === IComponentType.ButtonComponent ? 'Button' :
+              item === IComponentType.LabelComponent ? 'Label' :
+                item === IComponentType.TextComponent ? 'Text' :
+                  'Image',
+            style: {
+              fontSize: 20
+            }
           }
         }
         console.log("Dispatching Payload: ", newElement);
@@ -130,8 +137,8 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex
       </div>
 
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
-      <div 
-        style={{ width: (480 + 16) * zoom, height: (850 + 16) * zoom }} 
+      <div
+        style={{ width: (480 + 16) * zoom, height: (850 + 16) * zoom }}
         className="main-view"
         ref={ref as LegacyRef<HTMLDivElement>}
         onMouseLeave={reset}
@@ -140,7 +147,7 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex
         <Element item={viewTree} />
         {isToolItemSelected && getCurrentComponent()}
       </div>
-      { getPropertyDialogForCurrentElement()}
+      {getPropertyDialogForCurrentElement()}
       <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
         setIsOpenAddScreenModal={setIsOpenAddScreenModal}

@@ -1,7 +1,6 @@
 import { useMemo, type FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { TextComponentDialogProps } from "./TextComponentDialog.types";
-import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
@@ -123,7 +122,7 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
             rows={1}
             value={currentElement.details?.text}
             onChange={(e) => onTextChange(e.target.value)}
-            autoResize={true}
+            // autoResize={true}
           />
         </div>
         <Divider className="custom-divider" />
