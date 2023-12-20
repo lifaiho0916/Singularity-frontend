@@ -33,7 +33,7 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // Check if the element fits within the current view
     if (isElementBelongInViewPanel(element)) {
         // If the view is a Wrapper and has subviews, check each subview
-        if (view.type == IComponentType.Wrapper && view.subviews && view.subviews.length > 0 && view.subviews[0].type == IComponentType.Wrapper) {
+        if (view.type === IComponentType.Wrapper && view.subviews && view.subviews.length > 0 && view.subviews[0].type === IComponentType.Wrapper) {
             for (const childView of view.subviews) {
                 let elementClone = JSON.parse(JSON.stringify(element))
                 insertSubview(childView, {

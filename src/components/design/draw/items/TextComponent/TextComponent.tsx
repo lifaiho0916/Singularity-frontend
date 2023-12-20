@@ -8,8 +8,7 @@ const TextComponent: FC<TextComponentProps> = ({ text, style }) => {
     <InputTextarea
       className="text-component"
       style={style}
-      value={text}
-    // onChange={(e) => setText(e.target.value)} 
+      value={text || 'Text'}
     />
   )
 }
