@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IComponentType, IView, INewlyInsertedElement, IWrapperType, IMinMaxPair } from "libs/types";
+import { IComponentType, IView, INewlyInsertedElement, IWrapperType, IMinMaxPair, ISplitParameterPair } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
 
 interface viewTreeSliceState {
@@ -62,6 +62,44 @@ function findElementInViewById(view: IView, id: string): IView | null {
         for (let i = 0; i < view.subviews.length; i++) {
             const result = findElementInViewById(view.subviews[i], id);
             if (result) return result;
+        }
+    }
+    return null;
+}
+
+function splitWrapper(view: IView, wrapperId: string, kind: IWrapperType) {
+    if (view.id === wrapperId && view.type == IComponentType.Wrapper) {
+        let firstWrapper: IView = {
+            id: uuidv4(),
+            type: IComponentType.Wrapper,
+            x: kind == IWrapperType.Horizontal ? { min: 0, max: 100} : { min: 0, max: 50 },
+            y: kind == IWrapperType.Horizontal ? { min: 0, max: 50 } : { min: 0, max: 100},
+            details: {
+                kind: IWrapperType.Horizontal
+            }
+        }
+        let secondWrapper: IView = {
+            id: uuidv4(),
+            type: IComponentType.Wrapper,
+            x: kind == IWrapperType.Horizontal ? { min: 0, max: 100} : { min: 0, max: 50 },
+            y: kind == IWrapperType.Horizontal ? { min: 0, max: 50 } : { min: 0, max: 100},
+            details: {
+                kind: IWrapperType.Horizontal
+            }
+        }
+
+        if (view.subviews) {
+            firstWrapper.subviews = view.subviews
+        }
+        view.subviews = [firstWrapper, secondWrapper]
+        view.details = {
+            ...view.details,
+            kind
+        }
+    }
+    if (view.subviews && view.subviews.length > 0) {
+        for (let i = 0; i < view.subviews.length; i++) {
+            splitWrapper(view.subviews[i], wrapperId, kind)
         }
     }
     return null;
@@ -203,10 +241,15 @@ export const viewTreeSlice = createSlice({
         updateSelectedElementInViewTree: (state, action: PayloadAction<IView>) => {
             replaceSubview(state.viewTree, action.payload);
             state.currentElement = findElementInViewById(state.viewTree, action.payload.id);
+        },
+        applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
+            const {wrapperId, kind} = action.payload;
+            // based on wrapperId & kind, need to add two wrappers.
+            splitWrapper(state.viewTree, wrapperId, kind);
         }
     }
 })
 
-export const { fetchViewTree, addSubViewToViewTree, selectElementInViewTreeById, updateSelectedElementInViewTree } = viewTreeSlice.actions;
+export const { fetchViewTree, addSubViewToViewTree, selectElementInViewTreeById, updateSelectedElementInViewTree, applySplitToWrapper } = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer

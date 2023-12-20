@@ -78,6 +78,11 @@ export interface INewlyInsertedElement {
     details?: any
 }
 
+export interface ISplitParameterPair {
+    wrapperId: string,
+    kind: IWrapperType
+}
+
 export enum IComponentType {
     ButtonComponent = 'ButtonComponent',
     TextComponent = 'TextComponent',

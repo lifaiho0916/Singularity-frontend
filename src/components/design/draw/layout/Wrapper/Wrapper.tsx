@@ -1,16 +1,23 @@
 import * as React from "react";
 import { type FC } from 'react';
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import { RootState } from "store";
+import { IWrapperType } from "libs/types";
 import './Wrapper.scss';
+import { applySplitToWrapper } from "store/slices/viewTreeSlice";
 
 const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick }) => {
+  const dispatch = useDispatch();
   const { currentElement } = useSelector((state: RootState) => state.viewTree);
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
   const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
+
+  const onSplitButtonClickWith = (wrapperType: IWrapperType) => {
+    dispatch(applySplitToWrapper({wrapperId: id, kind: wrapperType}));
+  }
 
   return (
     <div
@@ -34,7 +41,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
                 size="small"
                 onMouseEnter={() => { setIsShowVerticalLine(true) }}
                 onMouseLeave={() => { setIsShowVerticalLine(false) }}
-                onClick={() => { }}
+                onClick={() => { onSplitButtonClickWith(IWrapperType.Vertical) }}
               />
 
               {isShowHorizontalLine ? <div className="horizontal-line" /> : null}
@@ -46,7 +53,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
                 size="small"
                 onMouseEnter={() => { setIsShowHorizontalLine(true) }}
                 onMouseLeave={() => { setIsShowHorizontalLine(false) }}
-                onClick={() => { }}
+                onClick={() => { onSplitButtonClickWith(IWrapperType.Horizontal) }}
               />
             </React.Fragment>
             : null
