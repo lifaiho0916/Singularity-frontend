@@ -27,21 +27,38 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
 
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // Check if the element fits within the current view
-    if (fitsWithin(view, element)) {
-      // If the view is a Wrapper and has subviews, check each subview
-      if (view.type === IComponentType.Wrapper && view.subviews) {
-        for (const childView of view.subviews) {
-          insertSubview(childView, element);
+    if (fitsWithin(view, element)) { 
+        // If the view is a Wrapper and has subviews, check each subview
+        if (view.type === IComponentType.Wrapper && view.subviews) {
+            for (const childView of view.subviews) {
+                insertSubview(childView, element);
+            }
+        } else {
+            // If the view is not a Wrapper or has no subviews, create a new subview
+            if (!view.subviews) {
+            view.subviews = [];
+            }
+            view.subviews.push(getViewFormatDataFromElement(element));
         }
-      } else {
-        // If the view is not a Wrapper or has no subviews, create a new subview
-        if (!view.subviews) {
-          view.subviews = [];
-        }
-        view.subviews.push(getViewFormatDataFromElement(element));
-      }
     }
-  }
+}
+
+function recalculateToPixel(view: IView, xMultiplier: number, yMultiplier: number, xMin: number, yMin: number) {
+    view.x.min = view.x.min * xMultiplier/100 + xMin
+    view.x.max = view.x.max * xMultiplier/100 + xMin
+    view.y.min = view.y.min * yMultiplier/100 + yMin
+    view.y.max = view.y.max * yMultiplier/100 + yMin
+
+    if (view.type == IComponentType.Wrapper && view.subviews) {
+        for (let i = 0; i < view.subviews.length; i++) {
+            recalculateToPixel(view.subviews[i], view.x.max - view.x.min, view.y.max - view.y.min, view.x.min, view.y.min);
+        }
+    }
+}
+
+function compareAndUpdateViewTree(viewTree: IView, pixelViewTree: IView) {
+
+}
 
 function findElementInViewById(view: IView, id: string) : IView | null {
     if (view.id == id) {
@@ -142,8 +159,8 @@ const initialState: viewTreeSliceState = {
             }
         ]
     },
-    xMultiplier: 320,
-    yMultiplier: 650,
+    xMultiplier: 480,
+    yMultiplier: 850,
     currentElement: null
 }
 
@@ -157,12 +174,18 @@ export const viewTreeSlice = createSlice({
         addSubViewToViewTree: (state, action: PayloadAction<INewlyInsertedElement>) => {
             console.log("Payload : ", action.payload);
             let element = action.payload;
-            element.x *= 100 / state.xMultiplier;
-            element.y *= 100 / state.yMultiplier;
-            element.width *= 100 / state.xMultiplier;
-            element.height *= 100 / state.yMultiplier;
             // subview contains mouse position(242, 518), type (view, text, image, label, button).
-            insertSubview(state.viewTree, element);
+            let cloneOfViewTree = JSON.parse(JSON.stringify(state.viewTree))
+            recalculateToPixel(cloneOfViewTree, state.xMultiplier, state.yMultiplier, 0, 0)
+            console.log(`clone of view tree is here:`)
+            JSON.stringify(cloneOfViewTree);
+
+            // find uuid
+            insertSubview(cloneOfViewTree, element);
+            compareAndUpdateViewTree(state.viewTree, cloneOfViewTree);
+
+
+            // insertSubview(state.viewTree, element);
         },
         selectElementInViewTreeById: (state, action:PayloadAction<string>) => {
             const elementId = action.payload;
