@@ -131,7 +131,7 @@ const MainWorkspace : FC<MainWorkspaceProps> = ({ zoom , pageIndex, setPageIndex
 
       <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
       <div 
-        style={{ width: (320 + 16) * zoom, height: (650 + 16) * zoom }} 
+        style={{ width: (480 + 16) * zoom, height: (850 + 16) * zoom }} 
         className="main-view"
         ref={ref as LegacyRef<HTMLDivElement>}
         onMouseLeave={reset}

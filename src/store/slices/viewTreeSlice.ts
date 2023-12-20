@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IComponentType, IView, INewlyInsertedElement, IWrapperType } from "libs/types";
+import { IComponentType, IView, INewlyInsertedElement, IWrapperType, IMinMaxPair } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
 
 interface viewTreeSliceState {
@@ -10,9 +10,9 @@ interface viewTreeSliceState {
     currentElement: IView | null
 }
 
-function fitsWithin(view: IView, element: INewlyInsertedElement): boolean {
-    return element.x >= view.x.min && element.x + element.width <= view.x.max &&
-        element.y >= view.y.min && element.y + element.height <= view.y.max;
+function isElementBelongInViewPanel(element: INewlyInsertedElement): boolean {
+    return element.x >= 0 && element.x + element.width <= 100 &&
+        element.y >= 0 && element.y + element.height <= 100;
 }
 
 function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
@@ -27,11 +27,18 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
 
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // Check if the element fits within the current view
-    if (fitsWithin(view, element)) {
+    if (isElementBelongInViewPanel(element)) { 
         // If the view is a Wrapper and has subviews, check each subview
-        if (view.type === IComponentType.Wrapper && view.subviews) {
+        if (view.type == IComponentType.Wrapper && view.subviews && view.subviews.length > 0 && view.subviews[0].type == IComponentType.Wrapper) {
             for (const childView of view.subviews) {
-                insertSubview(childView, element);
+                let elementClone = JSON.parse(JSON.stringify(element))
+                insertSubview(childView, { 
+                    ...elementClone, 
+                    x: 100.0 * (elementClone.x - childView.x.min) / (childView.x.max - childView.x.min),
+                    y: 100.0 * (elementClone.y - childView.y.min) / (childView.y.max - childView.y.min),
+                    width: elementClone.width * 100 / (childView.x.max - childView.x.min),
+                    height: elementClone.height * 100 / (childView.y.max - childView.y.min)
+                });
             }
         } else {
             // If the view is not a Wrapper or has no subviews, create a new subview
@@ -163,8 +170,8 @@ const initialState: viewTreeSliceState = {
             }
         ]
     },
-    xMultiplier: 320,
-    yMultiplier: 650,
+    xMultiplier: 480,
+    yMultiplier: 850,
     currentElement: null
 }
 
@@ -182,7 +189,7 @@ export const viewTreeSlice = createSlice({
             element.y *= 100 / state.yMultiplier;
             element.width *= 100 / state.xMultiplier;
             element.height *= 100 / state.yMultiplier;
-            // subview contains mouse position(242, 518), type (view, text, image, label, button).
+
             insertSubview(state.viewTree, element);
         },
         selectElementInViewTreeById: (state, action: PayloadAction<string>) => {
