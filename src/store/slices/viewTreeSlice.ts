@@ -81,8 +81,8 @@ function splitWrapper(view: IView, wrapperId: string, kind: IWrapperType) {
         let secondWrapper: IView = {
             id: uuidv4(),
             type: IComponentType.Wrapper,
-            x: kind == IWrapperType.Horizontal ? { min: 0, max: 100} : { min: 0, max: 50 },
-            y: kind == IWrapperType.Horizontal ? { min: 0, max: 50 } : { min: 0, max: 100},
+            x: kind == IWrapperType.Horizontal ? { min: 0, max: 100} : { min: 50, max: 100 },
+            y: kind == IWrapperType.Horizontal ? { min: 50, max: 100 } : { min: 0, max: 100},
             details: {
                 kind: IWrapperType.Horizontal
             }
