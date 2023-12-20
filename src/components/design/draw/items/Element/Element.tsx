@@ -9,15 +9,6 @@ import './Element.scss';
 const Element: FC<ElementProps> = ({ item }) => {
   const dispatch = useDispatch();
 
-  const onHorizontalSplit = () => {
-  }
-
-  const onVerticalSplit = () => {
-  }
-
-  const onDeleteButtonPressed = () => {
-  }
-
   const selectThisWrapperInViewTree = (id: string) => {
     console.log(`wrapper ${id} selected`);
     dispatch(selectElementInViewTreeById(id));
@@ -35,8 +26,6 @@ const Element: FC<ElementProps> = ({ item }) => {
             height: `${item.y.max - item.y.min}%`,
             display: item.details.kind === IWrapperType.Vertical ? 'flex' : undefined
           }}
-          onHorizontalSplit={onHorizontalSplit}
-          onVerticalSplit={onVerticalSplit}
         >
           {item.subviews && item.subviews.map((subView, index) => (
             <Element item={subView} key={index} />

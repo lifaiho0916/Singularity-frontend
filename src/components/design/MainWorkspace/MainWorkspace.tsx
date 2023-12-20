@@ -1,5 +1,5 @@
 import { type FC, useState, LegacyRef, CSSProperties, useEffect } from 'react'
-import { useMouse } from 'primereact/hooks';
+import { useMouse, useMove } from 'primereact/hooks';
 import { useDispatch } from 'react-redux';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import {
@@ -25,15 +25,20 @@ import { addSubViewToViewTree, setViewTree, setViewTrees } from 'store/slices/vi
 import { IComponentType } from '../../../libs/types/index';
 import { Image } from 'primereact/image';
 
+import './MainWorkspace.scss';
+import { classNames } from 'primereact/utils';
+
 const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom }) => {
   const [viewIndex, setViewIndex] = useState(0)
-  const { ref, x, y, reset } = useMouse();
+  const { ref: newItemRef, x, y, reset } = useMouse();
+  const { ref: moveItemRef, x: moveX, y: moveY, active } = useMove('horizontal', { x: 0.2, y: 0.6 });
   const { viewTrees, viewTree, currentElement } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
   const dispatch = useDispatch();
+  const toolBarItems = ["Button", "Text", "Label", "Image"];
 
   const toolSelected = (value: number) => {
     setToolItemSelected(true)
@@ -56,6 +61,17 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom }) => {
       position: 'absolute',
       left: `${x}px`,
       top: `${y}px`,
+      opacity: 0.3
+    };
+
+    return positionStyle;
+  };
+
+  const getMoveComponentStyle = (): CSSProperties => {
+    const positionStyle: CSSProperties = {
+      position: 'absolute',
+      left: `${moveX*100}px`,
+      top: `${moveY*100}px`,
       opacity: 0.3
     };
 
@@ -128,31 +144,38 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom }) => {
 
   return (
     <div className="workspace-body">
+      {/* screen dialog */}
       <div className="screen-view">
         <h3>Screens</h3>
         <Divider className="custom-divider" />
-        {viewTrees.map((screen: any, index: number) => (
-          <div className="screen" key={index}>
-            <RadioButton inputId={`screen${index}`} value={index} onChange={(e) => {
-              const updatedViewTrees = [...viewTrees]
-              updatedViewTrees[viewIndex] = viewTree as IView
-              dispatch(setViewTrees(updatedViewTrees))
-              setViewIndex(Number(e.value))
-            }} checked={viewIndex === index} />
-            <label htmlFor={`screen${index}`}>Screen {index + 1}</label>
-          </div>
-        ))}
+          { viewTrees.map( (screen: any, index: number) => (
+            <div className="screen" key={index}>
+              <RadioButton 
+                inputId={`screen${index}`} 
+                value={index} 
+                onChange={(e) => {
+                  const updatedViewTrees = [...viewTrees]
+                  updatedViewTrees[viewIndex] = viewTree as IView
+                  dispatch(setViewTrees(updatedViewTrees))
+                  setViewIndex(Number(e.value))
+                }} 
+                checked={viewIndex === index} 
+              />
+              <label htmlFor={`screen${index}`}>Screen {index + 1}</label>
+            </div>
+          ))}
         <Divider className="custom-divider" />
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div className="screen-button">
           <Button size='small' raised onClick={AddNewScreenBtnClick}>New Screen</Button>
         </div>
       </div>
 
-      <Toolbar items={["Button", "Text", "Label", "Image"]} onClicked={toolSelected} />
+      <Toolbar items={toolBarItems} onClicked={toolSelected} />
+
       <div
         style={{ width: (480 + 16) * zoom, height: (850 + 16) * zoom }}
         className="main-view"
-        ref={ref as LegacyRef<HTMLDivElement>}
+        ref={newItemRef as LegacyRef<HTMLDivElement>}
         onMouseLeave={reset}
         onMouseDown={onAddComponent}
       >
@@ -160,6 +183,16 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom }) => {
         {isToolItemSelected && getCurrentComponent()}
       </div>
       {getPropertyDialogForCurrentElement()}
+      <div
+        className="main-view"
+        ref={moveItemRef as LegacyRef<HTMLDivElement>}
+        style={{ width: (100 + 16) * zoom, height: (100 + 16) * zoom, border: 2,}}
+      >
+        <div 
+          style={getMoveComponentStyle()}>
+          <i className="pi pi-arrows-alt"></i>
+        </div>
+      </div>
       <AddScreenDialog
         isOpenAddScreenModal={isOpenAddScreenModal}
         setIsOpenAddScreenModal={setIsOpenAddScreenModal}
