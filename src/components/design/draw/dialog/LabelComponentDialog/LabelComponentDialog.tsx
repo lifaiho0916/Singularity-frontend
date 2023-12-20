@@ -16,17 +16,35 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ ...currentElement, details: { ...currentElement.details, text: newText } }));
+    dispatch(updateSelectedElementInViewTree({ 
+      ...currentElement, 
+      details: { 
+        ...currentElement.details, 
+        text: newText 
+      } 
+    }));
   }
 
   const onWidthChange = (newWidth: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ ...currentElement, x: { ...currentElement.x, max: newWidth } }));
+    dispatch(updateSelectedElementInViewTree({ 
+      ...currentElement, 
+      x: { 
+        ...currentElement.x, 
+        max: newWidth 
+      } 
+    }));
   }
 
   const onHeightChange = (newHeight: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ ...currentElement, y: { ...currentElement.y, max: newHeight } }));
+    dispatch(updateSelectedElementInViewTree({ 
+      ...currentElement, 
+      y: { 
+        ...currentElement.y, 
+        max: newHeight 
+      } 
+    }));
   }
 
   const onFontSizeChange = (newFontSize: number) => {
