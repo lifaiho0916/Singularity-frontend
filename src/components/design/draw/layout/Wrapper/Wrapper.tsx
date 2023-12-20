@@ -5,8 +5,8 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import { RootState } from "store";
 import { IWrapperType } from "libs/types";
-import './Wrapper.scss';
 import { applySplitToWrapper } from "store/slices/viewTreeSlice";
+import './Wrapper.scss';
 
 const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick }) => {
   const dispatch = useDispatch();

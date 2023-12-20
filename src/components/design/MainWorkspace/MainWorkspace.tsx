@@ -1,4 +1,4 @@
-import { type FC, useState, LegacyRef, CSSProperties } from 'react'
+import { type FC, useState, LegacyRef, CSSProperties, useEffect } from 'react'
 import { useMouse } from 'primereact/hooks';
 import { useDispatch } from 'react-redux';
 import { MainWorkspaceProps } from './MainWorkspace.types';
@@ -21,13 +21,14 @@ import { RadioButton } from 'primereact/radiobutton';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import { INewlyInsertedElement, IView } from 'libs/types';
-import { addSubViewToViewTree } from 'store/slices/viewTreeSlice';
+import { addSubViewToViewTree, setViewTree, setViewTrees } from 'store/slices/viewTreeSlice';
 import { IComponentType } from '../../../libs/types/index';
 import { Image } from 'primereact/image';
 
-const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom, pageIndex, setPageIndex, screens }) => {
+const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom }) => {
+  const [viewIndex, setViewIndex] = useState(0)
   const { ref, x, y, reset } = useMouse();
-  const { viewTree, currentElement } = useSelector((state: RootState) => state.viewTree);
+  const { viewTrees, viewTree, currentElement } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
@@ -119,15 +120,26 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom, pageIndex, setPageIndex, 
     }
   }
 
+  useEffect(() => {
+    if (viewTrees.length) {
+      dispatch(setViewTree(viewTrees[viewIndex]))
+    }
+  }, [viewTrees, viewIndex])
+
   return (
     <div className="workspace-body">
       <div className="screen-view">
         <h3>Screens</h3>
         <Divider className="custom-divider" />
-        {screens.map((screen: any, index: number) => (
+        {viewTrees.map((screen: any, index: number) => (
           <div className="screen" key={index}>
-            <RadioButton inputId={`screen${index}`} value={screen.index} onChange={(e) => setPageIndex(Number(e.value))} checked={pageIndex === index} />
-            <label htmlFor={`screen${index}`}>{screen.name}</label>
+            <RadioButton inputId={`screen${index}`} value={index} onChange={(e) => {
+              const updatedViewTrees = [...viewTrees]
+              updatedViewTrees[viewIndex] = viewTree as IView
+              dispatch(setViewTrees(updatedViewTrees))
+              setViewIndex(Number(e.value))
+            }} checked={viewIndex === index} />
+            <label htmlFor={`screen${index}`}>Screen {index + 1}</label>
           </div>
         ))}
         <Divider className="custom-divider" />
@@ -144,7 +156,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = ({ zoom, pageIndex, setPageIndex, 
         onMouseLeave={reset}
         onMouseDown={onAddComponent}
       >
-        <Element item={viewTree} />
+        {viewTree ? <Element item={viewTree} /> : null}
         {isToolItemSelected && getCurrentComponent()}
       </div>
       {getPropertyDialogForCurrentElement()}

@@ -6,14 +6,14 @@ import { InputText } from 'primereact/inputtext'
 import { Divider } from 'primereact/divider'
 import { Button } from 'primereact/button'
 import { notify } from 'store/slices/toastSlice'
-
+import { setViewTrees } from 'store/slices/viewTreeSlice';
 import { AddScreenDialogProps } from './AddScreenDialog.types'
-import type { IStructure } from 'libs/types';
-import { setStructure } from 'store/slices/projectSlice';
+import { v4 as uuidv4 } from 'uuid'
+import { IComponentType, IWrapperType } from 'libs/types';
 import type { RootState } from 'store';
 
 const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIsOpenAddScreenModal }) => {
-  const { structure } = useSelector((staet: RootState) => staet.project)
+  const { viewTrees } = useSelector((state: RootState) => state.viewTree)
   const dispatch = useDispatch();
   const [newScreenName, setNewscreenName] = useState('');
 
@@ -26,31 +26,19 @@ const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIs
       }))
       return
     }
-    const newPage = {
-      name: newScreenName,
-      defaultView: {
-        name: 'main view',
-        align: {
-          vertical: 'center',
-          horizontal: 'center'
-        },
-        content: []
-      }
-    }
-    const updateStructure = {
-      ...structure,
-      project: {
-        ...structure?.project,
-        design: {
-          ...structure?.project.design,
-          pages: [
-            ...structure?.project.design.pages,
-            newPage
-          ]
+    const updatedViewTrees = [
+      ...viewTrees,
+      {
+        id: uuidv4(),
+        type: IComponentType.Wrapper,
+        x: { min: 0, max: 100 },
+        y: { min: 0, max: 100 },
+        details: {
+          kind: IWrapperType.Horizontal
         }
       }
-    }
-    dispatch(setStructure(updateStructure as IStructure));
+    ]
+    dispatch(setViewTrees(updatedViewTrees))
     setIsOpenAddScreenModal(false);
   }
 
