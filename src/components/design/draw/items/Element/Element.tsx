@@ -41,7 +41,8 @@ const Element: FC<ElementProps> = ({ item }) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            margin: 'auto'
+            margin: 'auto',
+            overflow: 'hidden'
           }}
         >
           {

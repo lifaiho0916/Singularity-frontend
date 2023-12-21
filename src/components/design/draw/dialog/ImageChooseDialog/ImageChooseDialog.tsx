@@ -7,14 +7,11 @@ import { Divider } from 'primereact/divider'
 import { Button } from 'primereact/button'
 import { notify } from 'store/slices/toastSlice'
 import { ImageChooseDialogProps } from './ImageChooseDialog.types';
-import { FileUpload } from 'primereact/fileupload';
 import { TabView, TabPanel } from 'primereact/tabview';
 import type { RootState } from 'store';
 
 const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenModal }) => {
     const dispatch = useDispatch();
-
-
 
     return (
         <Dialog
@@ -34,17 +31,7 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
                     </p>
                 </TabPanel>
                 <TabPanel header="Upload Image">
-                    <FileUpload
-                        name="images[]"
-                        multiple
-                        accept="image/*"
-                        maxFileSize={5000000}
-                        customUpload 
-                        emptyTemplate={
-                            <p>Drag and drop files to here to upload.</p>
-                        }
-                        uploadHandler={(e) => console.log(e)}
-                    />
+                    
                 </TabPanel>
             </TabView>
         </Dialog>

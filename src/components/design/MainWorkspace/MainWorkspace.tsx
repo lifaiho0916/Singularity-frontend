@@ -5,10 +5,6 @@ import { MainWorkspaceProps } from './MainWorkspace.types';
 import {
   Toolbar,
   Element,
-  ButtonComponent,
-  TextComponent,
-  LabelComponent,
-  ImageComponent,
   LabelComponentDialog,
   TextComponentDialog,
   ButtonComponentDialog,
@@ -92,16 +88,6 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const toolSelected = (value: number) => {
     setToolItemSelected(true)
     selectTool(value)
-  }
-
-  const getToolComponent = () => {
-    switch (currentToolId) {
-      case 0: return <ButtonComponent />;
-      case 1: return <TextComponent />;
-      case 2: return <LabelComponent />;
-      case 3: return <ImageComponent />;
-      default: return null;
-    }
   }
 
   const getPropertyDialogForCurrentElement = () => {
