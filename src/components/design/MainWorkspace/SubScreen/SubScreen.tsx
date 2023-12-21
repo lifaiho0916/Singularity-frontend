@@ -2,9 +2,7 @@ import { type FC, LegacyRef } from 'react'
 import { Button } from 'primereact/button';
 import { useMouse } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  Element,
-} from 'components';
+import { Element } from 'components';
 import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
 import { addSubViewToViewTree, setViewTree } from 'store/slices/viewTreeSlice';
 import { SubScreenProps } from './SubScreen.types';
@@ -68,9 +66,9 @@ const SubScreen: FC<SubScreenProps> = (props) => {
       <div
         className="main-view"
         ref={newItemRef as LegacyRef<HTMLDivElement>}
-        onMouseLeave={ ()=>{ reset(); setMouseOut(true) } }
-        onMouseEnter={ ()=>{ setMouseOut(false) } }
-        onMouseDown={ ()=>onAddComponent(view) }
+        onMouseLeave={() => { reset(); setMouseOut(true) }}
+        onMouseEnter={() => { setMouseOut(false) }}
+        onMouseDown={() => onAddComponent(view)}
       >
         <Element item={view} />
       </div>

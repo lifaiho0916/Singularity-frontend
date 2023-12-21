@@ -16,7 +16,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
 
   const onSplitButtonClickWith = (wrapperType: IWrapperType) => {
-    dispatch(applySplitToWrapper({wrapperId: id, kind: wrapperType}));
+    dispatch(applySplitToWrapper({ wrapperId: id, kind: wrapperType }));
   }
 
   return (
@@ -34,6 +34,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
             <React.Fragment>
               {isShowVerticalLine ? <div className="vertical-line" /> : null}
               <Button
+                style={{ zIndex: 10 }}
                 className="vertical-spliter"
                 icon="pi pi-pencil"
                 severity="secondary"
@@ -47,6 +48,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
               {isShowHorizontalLine ? <div className="horizontal-line" /> : null}
               <Button
                 className="horizontal-spliter"
+                style={{ zIndex: 10 }}
                 icon="pi pi-pencil"
                 severity="secondary"
                 text rounded

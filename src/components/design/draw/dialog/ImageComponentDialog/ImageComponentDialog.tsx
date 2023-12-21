@@ -1,4 +1,4 @@
-import { type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { ImageComponentDialogProps } from "./ImageComponentDialog.types";
@@ -8,10 +8,15 @@ import { CascadeSelect } from 'primereact/cascadeselect';
 import type { RootState } from 'store';
 import type { IView } from 'libs/types';
 import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { Button } from 'primereact/button';
+import { ImageChooseDialog } from '../ImageChooseDialog';
+import defaultImage from "assets/images/default-image.png";
+import { Image } from 'primereact/image';
 import './ImageComponentDialog.scss';
 
 const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
   const dispatch = useDispatch();
+  const [isOpenModal, setIsOpenModal] = useState(false);
   const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onWidthChange = (newWidth: number) => {
@@ -53,6 +58,31 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
         <label>IMAGE PROPERTIES</label>
       </div>
       <div className="image-body">
+        <div className="section-header">
+          <h4>Image</h4>
+        </div>
+        <div className="section-body">
+          <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
+            <div className="image-container">
+              <Image
+                src={defaultImage}
+                preview
+              />
+            </div>
+            <div>
+              <Button
+                size="small"
+                icon="pi pi-image"
+                text
+                raised
+                severity="secondary"
+                onClick={() => setIsOpenModal(true)}
+              />
+            </div>
+          </div>
+        </div>
+        <Divider className="custom-divider" />
+
         <div className="section-header">
           <h4>Link</h4>
         </div>
@@ -119,6 +149,10 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           </div>
         </div>
       </div>
+      <ImageChooseDialog
+        isOpenModal={isOpenModal}
+        setIsOpenModal={setIsOpenModal}
+      />
     </div>
   ) : null
 }
