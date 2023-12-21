@@ -30,6 +30,7 @@ const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIs
       ...viewTrees,
       {
         id: uuidv4(),
+        name: newScreenName,
         type: IComponentType.Wrapper,
         x: { min: 0, max: 100 },
         y: { min: 0, max: 100 },

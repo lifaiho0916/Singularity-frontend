@@ -1,4 +1,4 @@
-import { type FC, useState, LegacyRef, CSSProperties, useEffect } from 'react'
+import { type FC, useState, LegacyRef, CSSProperties } from 'react'
 import { useMouse, useMove } from 'primereact/hooks';
 import { useDispatch } from 'react-redux';
 import { MainWorkspaceProps } from './MainWorkspace.types';
@@ -24,15 +24,14 @@ import { IComponentType } from '../../../libs/types/index';
 import './MainWorkspace.scss';
 
 const MainWorkspace: FC<MainWorkspaceProps> = () => {
-  const [viewIndex, setViewIndex] = useState(0)
+  const dispatch = useDispatch();
   const { ref: newItemRef, x, y, reset } = useMouse();
   const { ref: moveItemRef, x: moveX, y: moveY, active } = useMove('horizontal', { x: 0.2, y: 0.6 });
-  const { viewTrees, viewTree, currentElement, zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree);
+  const { viewTrees, currentElement, zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
-  const dispatch = useDispatch();
   const toolBarItems = ["Button", "Text", "Label", "Image"];
 
   const toolSelected = (value: number) => {
@@ -140,16 +139,18 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       </div>
       <div className="main-workspace">
         {viewTrees.map((view: IView, index) => (
-          <div
-            key={index}
-            style={{ width: (xMultiplier + 16) * zoom, height: (yMultiplier + 16) * zoom }}
-            className="main-view"
-            ref={newItemRef as LegacyRef<HTMLDivElement>}
-            onMouseLeave={reset}
-            onMouseDown={() => onAddComponent(view)}
-          >
-            <Element item={view} />
-            {/* {(isToolItemSelected && viewTree && viewTree.id === view.id) ? getCurrentComponent() : null} */}
+          <div key={index}>
+            <h2 style={{ textAlign: 'center', marginBottom: 5 }}>{view?.name}</h2>
+            <div
+              className="main-view"
+              style={{ width: (xMultiplier + 16) * zoom, height: (yMultiplier + 16) * zoom }}
+              ref={newItemRef as LegacyRef<HTMLDivElement>}
+              onMouseLeave={reset}
+              onMouseDown={() => onAddComponent(view)}
+            >
+              <Element item={view} />
+              {/* {(isToolItemSelected && viewTree && viewTree.id === view.id) ? getCurrentComponent() : null} */}
+            </div>
           </div>
         ))}
       </div>

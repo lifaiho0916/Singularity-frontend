@@ -130,6 +130,7 @@ const initialState: viewTreeSliceState = {
     viewTrees: [
         {
             id: uuidv4(),
+            name: 'First Screen',
             type: IComponentType.Wrapper,
             x: { min: 0, max: 100 },
             y: { min: 0, max: 100 },
@@ -137,41 +138,6 @@ const initialState: viewTreeSliceState = {
                 kind: IWrapperType.Horizontal
             }
         },
-        {
-            id: uuidv4(),
-            type: IComponentType.Wrapper,
-            x: { min: 0, max: 100 },
-            y: { min: 0, max: 100 },
-            details: {
-                kind: IWrapperType.Horizontal
-            }
-        },
-        {
-            id: uuidv4(),
-            type: IComponentType.Wrapper,
-            x: { min: 0, max: 100 },
-            y: { min: 0, max: 100 },
-            details: {
-                kind: IWrapperType.Horizontal
-            }
-        },
-        {
-            id: uuidv4(),
-            type: IComponentType.Wrapper,
-            x: { min: 0, max: 100 },
-            y: { min: 0, max: 100 },
-            details: {
-                kind: IWrapperType.Horizontal
-            }
-        }, {
-            id: uuidv4(),
-            type: IComponentType.Wrapper,
-            x: { min: 0, max: 100 },
-            y: { min: 0, max: 100 },
-            details: {
-                kind: IWrapperType.Horizontal
-            }
-        }
     ],
     viewTree: null,
     // viewTree: {

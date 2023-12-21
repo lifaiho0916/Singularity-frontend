@@ -61,7 +61,8 @@ export interface IMinMaxPair {
 }
 
 export interface IView {
-    id: string
+    id: string,
+    name?: string,
     type: IComponentType
     x: IMinMaxPair
     y: IMinMaxPair
