@@ -57,7 +57,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       </div>
       <div className="main-workspace">
         {viewTrees.map((view: IView, index) => (
-          <SubScreen
+          <SubScreen 
             key={index}
             isToolItemSelected={isToolItemSelected}
             setToolItemSelected={setToolItemSelected}
@@ -67,7 +67,11 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
           />
         ))}
       </div>
-      <div className="property">
+      <div 
+        className="property"
+        onMouseEnter={()=>setMouseOut(false)}
+        onMouseLeave={()=>setMouseOut(true)}
+      >
         {getPropertyDialogForCurrentElement()}
       </div>
       <AddScreenDialog
