@@ -250,7 +250,6 @@ export const viewTreeSlice = createSlice({
             state.viewTree = action.payload;
         },
         addSubViewToViewTree: (state, action: PayloadAction<INewlyInsertedElement>) => {
-            console.log("Payload : ", action.payload);
             let element = action.payload;
             element.x *= 100 / state.xMultiplier;
             element.y *= 100 / state.yMultiplier;
@@ -277,10 +276,23 @@ export const viewTreeSlice = createSlice({
             splitWrapper(state.viewTree as IView, wrapperId, kind);
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
+        },
+        initCurrentElement: (state, action) => {
+            state.currentElement = null
         }
     }
 })
 
-export const { setZoom, setViewTree, setViewTrees, fetchViewTree, addSubViewToViewTree, selectElementInViewTreeById, updateSelectedElementInViewTree, applySplitToWrapper } = viewTreeSlice.actions;
+export const { 
+    setZoom, 
+    setViewTree, 
+    setViewTrees, 
+    fetchViewTree, 
+    addSubViewToViewTree, 
+    selectElementInViewTreeById, 
+    updateSelectedElementInViewTree, 
+    applySplitToWrapper,
+    initCurrentElement
+} = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer

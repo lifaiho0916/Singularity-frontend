@@ -1,5 +1,5 @@
 export { Toolbar, ToolbarItem } from './toolbar'
-export { MainWorkSpace} from './MainWorkspace'
+export { MainWorkSpace, SubScreen} from './MainWorkspace'
 export { DesignHeader} from './DesignHeader'
 export { 
   ButtonComponentDialog,
