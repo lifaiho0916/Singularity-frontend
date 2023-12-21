@@ -1,11 +1,10 @@
-import { type FC, useState, LegacyRef, CSSProperties } from 'react'
+import { type FC, useState } from 'react'
 import { Button } from 'primereact/button';
-import { useMouse, useMove } from 'primereact/hooks';
+import { useMouse } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   SubScreen,
   Toolbar,
-  Element,
   ButtonComponent,
   TextComponent,
   LabelComponent,
@@ -16,8 +15,8 @@ import {
   ImageComponentDialog,
   AddScreenDialog,
 } from 'components';
-import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
-import { addSubViewToViewTree, setViewTree, initCurrentElement } from 'store/slices/viewTreeSlice';
+import { IView, IComponentType } from 'libs/types';
+import { initCurrentElement } from 'store/slices/viewTreeSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
 
@@ -25,9 +24,8 @@ import './MainWorkspace.scss';
 
 const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const dispatch = useDispatch();
-  const { ref: newItemRef, x, y, reset } = useMouse();
   // const { ref: moveItemRef, x: moveX, y: moveY, active } = useMove('horizontal', { x: 0.2, y: 0.6 });
-  const { viewTrees, currentElement, zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree);
+  const { viewTrees, currentElement } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
@@ -73,15 +71,15 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   //   return positionStyle;
   // };
 
-  const getToolComponent = () => {
-    switch (currentToolId) {
-      case 0: return <ButtonComponent />;
-      case 1: return <TextComponent />;
-      case 2: return <LabelComponent />;
-      case 3: return <ImageComponent />;
-      default: return null;
-    }
-  }
+  // const getToolComponent = () => {
+  //   switch (currentToolId) {
+  //     case 0: return <ButtonComponent />;
+  //     case 1: return <TextComponent />;
+  //     case 2: return <LabelComponent />;
+  //     case 3: return <ImageComponent />;
+  //     default: return null;
+  //   }
+  // }
 
   const getPropertyDialogForCurrentElement = () => {
     if (!currentElement) return;
@@ -108,7 +106,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
         <Toolbar items={toolBarItems} onClicked={toolSelected} />
       </div>
       <div className="main-workspace">
-        {viewTrees.map((view: IView, index) => (
+        {viewTrees.map((view: IView) => (
           <SubScreen 
             isToolItemSelected={isToolItemSelected}
             setToolItemSelected={setToolItemSelected}
