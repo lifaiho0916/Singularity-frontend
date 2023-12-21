@@ -1,32 +1,24 @@
-import { type FC, useState, LegacyRef, CSSProperties } from 'react'
+import { type FC, useState } from 'react'
 import { Button } from 'primereact/button';
-import { useMouse, useMove } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   SubScreen,
   Toolbar,
-  Element,
-  ButtonComponent,
-  TextComponent,
-  LabelComponent,
-  ImageComponent,
   LabelComponentDialog,
   TextComponentDialog,
   ButtonComponentDialog,
   ImageComponentDialog,
   AddScreenDialog,
 } from 'components';
-import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
-import { addSubViewToViewTree, setViewTree, initCurrentElement } from 'store/slices/viewTreeSlice';
+import { IView, IComponentType } from 'libs/types';
+import { initCurrentElement } from 'store/slices/viewTreeSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
-
 import './MainWorkspace.scss';
 
 const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const dispatch = useDispatch();
-  const { ref: newItemRef, x, y, reset } = useMouse();
-  const { viewTrees, currentElement, zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree);
+  const { viewTrees, currentElement } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
@@ -37,16 +29,6 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const toolSelected = (value: number) => {
     setToolItemSelected(true)
     selectTool(value)
-  }
-
-  const getToolComponent = () => {
-    switch (currentToolId) {
-      case 0: return <ButtonComponent />;
-      case 1: return <TextComponent />;
-      case 2: return <LabelComponent />;
-      case 3: return <ImageComponent />;
-      default: return null;
-    }
   }
 
   const getPropertyDialogForCurrentElement = () => {
@@ -64,7 +46,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   }
 
   const selectionCheck = () => {
-    mouseOut && currentElement!=null && dispatch(initCurrentElement(viewTrees));
+    mouseOut && currentElement != null && dispatch(initCurrentElement(viewTrees));
   }
 
   return (
@@ -75,12 +57,13 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       </div>
       <div className="main-workspace">
         {viewTrees.map((view: IView, index) => (
-          <SubScreen 
+          <SubScreen
+            key={index}
             isToolItemSelected={isToolItemSelected}
             setToolItemSelected={setToolItemSelected}
             setMouseOut={setMouseOut}
             currentToolId={currentToolId}
-            view={view} 
+            view={view}
           />
         ))}
       </div>
