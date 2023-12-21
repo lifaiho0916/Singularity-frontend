@@ -58,6 +58,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       <div className="main-workspace">
         {viewTrees.map((view: IView, index) => (
           <SubScreen 
+            key={index}
             isToolItemSelected={isToolItemSelected}
             setToolItemSelected={setToolItemSelected}
             setMouseOut={setMouseOut}
