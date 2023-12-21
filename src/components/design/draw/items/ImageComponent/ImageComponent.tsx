@@ -1,13 +1,13 @@
 import { type FC } from 'react';
 import { ImageComponentProps } from "./ImageComponent.types";
-import { Image } from 'primereact/image';
+import defaultImage from "assets/images/default-image.png";
 import './ImageComponent.scss';
 
 const ImageComponent: FC<ImageComponentProps> = ({ imageUri }) => {
   return (
-    <Image
+    <img
       className='image-component'
-      src={imageUri || '/src/assets/images/login.jpg'}
+      src={imageUri || defaultImage}
       alt="Image"
     />
   )
