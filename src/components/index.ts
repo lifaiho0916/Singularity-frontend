@@ -5,6 +5,7 @@ export {
   Toolbar, 
   ToolbarItem,
   MainWorkSpace,
+  SubScreen,
   ButtonComponentDialog,
   ImageComponentDialog, 
   LabelComponentDialog, 
