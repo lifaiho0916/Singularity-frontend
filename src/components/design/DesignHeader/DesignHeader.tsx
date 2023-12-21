@@ -2,13 +2,18 @@ import { type FC } from 'react'
 import { Button } from 'primereact/button';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { DesignHeaderProps } from './DesignHeader.types';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { setZoom } from 'store/slices/viewTreeSlice';
+import type { RootState } from 'store';
 
-const DesignHeader : FC<DesignHeaderProps> = ({
+const DesignHeader: FC<DesignHeaderProps> = ({
   responsive,
   setResponsive,
-  zoom,
-  setZoom
 }) => {
+  const dispatch = useDispatch();
+  const { zoom } = useSelector((state: RootState) => state.viewTree);
+
   return (
     <>
       <div className='workspace-header'>
@@ -33,7 +38,7 @@ const DesignHeader : FC<DesignHeaderProps> = ({
           <CascadeSelect
             value={`${zoom * 100}%`}
             onChange={(e) => {
-              setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100);
+              dispatch(setZoom(Number(e.value.substring(0, e.value.length - 1)) / 100));
             }}
             options={['50%', '75%', '100%', '125%', '150%']}
             optionGroupChildren={[]}
