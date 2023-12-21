@@ -139,11 +139,20 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       </div>
       <div className="main-workspace">
         {viewTrees.map((view: IView, index) => (
-          <div key={index}>
-            <h2 style={{ textAlign: 'center', marginBottom: 5 }}>{view?.name}</h2>
+          <div key={index} className="view-section" style={{ width: (xMultiplier + 16) * zoom, height: (yMultiplier + 16) * zoom }}>
+            <div className="view-header">
+              <h4 className="view-name">{view?.name}</h4>
+              <Button
+                onClick={() => { }}
+                icon="pi pi-ellipsis-h"
+                rounded text
+                size="small"
+                severity="secondary"
+                aria-label="Cancel"
+              />
+            </div>
             <div
               className="main-view"
-              style={{ width: (xMultiplier + 16) * zoom, height: (yMultiplier + 16) * zoom }}
               ref={newItemRef as LegacyRef<HTMLDivElement>}
               onMouseLeave={reset}
               onMouseDown={() => onAddComponent(view)}

@@ -61,7 +61,7 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
     }));
   }
 
-  const onFontFamilyChange = (newFontFamily: number) => {
+  const onFontFamilyChange = (newFontFamily: string) => {
     if (!currentElement || !currentElement.details) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
@@ -141,19 +141,6 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
             value={currentElement.details?.text}
             onChange={(e) => onTextChange(e.target.value)}
           // autoResize={true}
-          />
-        </div>
-        <Divider className="custom-divider" />
-
-        <div className="section-header">
-          <h4>Link</h4>
-        </div>
-        <div className="section-body">
-          <CascadeSelect
-            value="First Screen"
-            options={['First Screen', 'Second Screen', 'Third Screen', 'Fourth Screen']}
-            optionGroupChildren={[]}
-            className='input-text'
           />
         </div>
         <Divider className="custom-divider" />

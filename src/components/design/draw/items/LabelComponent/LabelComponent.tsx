@@ -12,7 +12,7 @@ const LabelComponent: FC<LabelComponentProps> = ({ text, style }) => {
       className="label-component"
       style={{ ...style, transform: `scale(${zoom})` }}
     >
-      {text || 'Label'}
+      {text}
     </label>
   )
 }

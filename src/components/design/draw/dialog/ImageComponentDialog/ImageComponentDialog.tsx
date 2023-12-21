@@ -1,36 +1,67 @@
 import { type FC } from 'react';
+import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ImageComponentDialogProps } from "./ImageComponentDialog.types";
-import { InputText } from 'primereact/inputtext';
+import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
+import type { RootState } from 'store';
+import type { IView } from 'libs/types';
+import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './ImageComponentDialog.scss';
 
 const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
-  return (
+  const dispatch = useDispatch();
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
+
+  const onWidthChange = (newWidth: number) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      x: {
+        ...currentElement.x,
+        max: newWidth
+      }
+    }));
+  }
+
+  const onHeightChange = (newHeight: number) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      y: {
+        ...currentElement.y,
+        max: newHeight
+      }
+    }));
+  }
+
+  const onLinkChange = (newLink: string) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        link: viewTrees.findIndex((view: IView) => view?.name === newLink)
+      }
+    }));
+  }
+
+  return currentElement ? (
     <div className="image-component-dialog">
       <div className="image-header">
         <label>IMAGE PROPERTIES</label>
       </div>
       <div className="image-body">
         <div className="section-header">
-          <h4>Text</h4>
-        </div>
-        <div className="section-body">
-          <InputText
-            type='text'
-            className='input-text'
-          />
-        </div>
-        <Divider className="custom-divider" />
-
-        <div className="section-header">
           <h4>Link</h4>
         </div>
         <div className="section-body">
           <CascadeSelect
-            value="First Screen"
-            options={['First Screen', 'Second Screen', 'Third Screen', 'Fourth Screen']}
+            value={viewTrees[currentElement.details.link]?.name}
+            options={viewTrees.map((view: IView) => view?.name)}
             optionGroupChildren={[]}
+            onChange={(e) => onLinkChange(e.value)}
             className='input-text'
           />
         </div>
@@ -55,9 +86,15 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
               }}
             >
               <h5 style={{ marginRight: 5 }}>W:</h5>
-              <InputText
-                type='text'
-                className='input-text'
+              <InputNumber
+                style={{
+                  height: 32
+                }}
+                prefix="%"
+                value={currentElement.x.max}
+                onChange={(e) => onWidthChange(Number(e.value))}
+                min={0}
+                max={100}
               />
             </div>
             <div
@@ -68,16 +105,22 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
               }}
             >
               <h5 style={{ marginRight: 5 }}>H:</h5>
-              <InputText
-                type='text'
-                className='input-text'
+              <InputNumber
+                style={{
+                  height: 32
+                }}
+                prefix="%"
+                value={currentElement.y.max}
+                onChange={(e) => onHeightChange(Number(e.value))}
+                min={0}
+                max={100}
               />
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  ) : null
 }
 
 export default ImageComponentDialog;

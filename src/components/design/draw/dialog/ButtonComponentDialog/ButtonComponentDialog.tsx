@@ -7,43 +7,44 @@ import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
+import { IView } from 'libs/types';
 import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './ButtonComponentDialog.scss';
 
 const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      details: { 
-        ...currentElement.details, 
-        text: newText 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        text: newText
+      }
     }));
   }
 
   const onWidthChange = (newWidth: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      x: { 
-        ...currentElement.x, 
-        max: newWidth 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      x: {
+        ...currentElement.x,
+        max: newWidth
+      }
     }));
   }
 
   const onHeightChange = (newHeight: number) => {
-    if (!currentElement || !currentElement.details) return 
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      y: { 
-        ...currentElement.y, 
-        max: newHeight 
-      } 
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      y: {
+        ...currentElement.y,
+        max: newHeight
+      }
     }));
   }
 
@@ -61,7 +62,7 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
     }));
   }
 
-  const onFontFamilyChange = (newFontFamily: number) => {
+  const onFontFamilyChange = (newFontFamily: string) => {
     if (!currentElement || !currentElement.details) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
@@ -139,6 +140,17 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
     }
   }
 
+  const onLinkChange = (newLink: string) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        link: viewTrees.findIndex((view: IView) => view?.name === newLink)
+      }
+    }));
+  }
+
   return currentElement ? (
     <div className="button-component-dialog">
       <div className="button-header">
@@ -163,9 +175,10 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
         </div>
         <div className="section-body">
           <CascadeSelect
-            value="First Screen"
-            options={['First Screen', 'Second Screen', 'Third Screen', 'Fourth Screen']}
+            value={viewTrees[currentElement.details.link]?.name}
+            options={viewTrees.map((view: IView) => view?.name)}
             optionGroupChildren={[]}
+            onChange={(e) => onLinkChange(e.value)}
             className='input-text'
           />
         </div>

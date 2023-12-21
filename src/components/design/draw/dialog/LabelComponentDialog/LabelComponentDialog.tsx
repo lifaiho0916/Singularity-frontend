@@ -7,12 +7,13 @@ import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
+import type { IView } from 'libs/types';
 import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './LabelComponentDialog.scss';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement,viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
@@ -61,7 +62,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
     }));
   }
 
-  const onFontFamilyChange = (newFontFamily: number) => {
+  const onFontFamilyChange = (newFontFamily: string) => {
     if (!currentElement || !currentElement.details) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
@@ -125,6 +126,17 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
     }
   }
 
+  const onLinkChange = (newLink: string) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        link: viewTrees.findIndex((view: IView) => view?.name === newLink)
+      }
+    }));
+  }
+
   return currentElement ? (
     <div className="label-component-dialog">
       <div className="label-header">
@@ -140,6 +152,20 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
             className='input-text'
             value={currentElement.details?.text}
             onChange={(e) => onTextChange(e.target.value)}
+          />
+        </div>
+        <Divider className="custom-divider" />
+
+        <div className="section-header">
+          <h4>Link</h4>
+        </div>
+        <div className="section-body">
+          <CascadeSelect
+            value={viewTrees[currentElement.details.link]?.name}
+            options={viewTrees.map((view: IView) => view?.name)}
+            optionGroupChildren={[]}
+            onChange={(e) => onLinkChange(e.value)}
+            className='input-text'
           />
         </div>
         <Divider className="custom-divider" />

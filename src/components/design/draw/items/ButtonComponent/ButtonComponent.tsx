@@ -13,7 +13,7 @@ const ButtonComponent: FC<ButtonComponentProps> = ({ text, onClick, style }) => 
       onClick={onClick}
       style={{ ...style, transform: `scale(${zoom})` }}
     >
-      {text || 'Button'}
+      {text}
     </div>
   )
 }

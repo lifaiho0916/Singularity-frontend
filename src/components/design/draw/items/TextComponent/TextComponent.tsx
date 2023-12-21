@@ -12,7 +12,7 @@ const TextComponent: FC<TextComponentProps> = ({ text, style }) => {
     <InputTextarea
       className="text-component"
       style={{ ...style, transform: `scale(${zoom})` }}
-      value={text || 'Text'}
+      value={text}
     />
   )
 }
