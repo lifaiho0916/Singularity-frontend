@@ -12,7 +12,7 @@ import './LabelComponentDialog.scss';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement } = useSelector((state: RootState) => state.viewTree)
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return

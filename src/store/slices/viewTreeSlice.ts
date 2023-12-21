@@ -136,6 +136,41 @@ const initialState: viewTreeSliceState = {
             details: {
                 kind: IWrapperType.Horizontal
             }
+        },
+        {
+            id: uuidv4(),
+            type: IComponentType.Wrapper,
+            x: { min: 0, max: 100 },
+            y: { min: 0, max: 100 },
+            details: {
+                kind: IWrapperType.Horizontal
+            }
+        },
+        {
+            id: uuidv4(),
+            type: IComponentType.Wrapper,
+            x: { min: 0, max: 100 },
+            y: { min: 0, max: 100 },
+            details: {
+                kind: IWrapperType.Horizontal
+            }
+        },
+        {
+            id: uuidv4(),
+            type: IComponentType.Wrapper,
+            x: { min: 0, max: 100 },
+            y: { min: 0, max: 100 },
+            details: {
+                kind: IWrapperType.Horizontal
+            }
+        }, {
+            id: uuidv4(),
+            type: IComponentType.Wrapper,
+            x: { min: 0, max: 100 },
+            y: { min: 0, max: 100 },
+            details: {
+                kind: IWrapperType.Horizontal
+            }
         }
     ],
     viewTree: null,
@@ -227,8 +262,8 @@ const initialState: viewTreeSliceState = {
     //         }
     //     ]
     // },
-    xMultiplier: 480,
-    yMultiplier: 850,
+    xMultiplier: 320,
+    yMultiplier: 650,
     currentElement: null
 }
 
@@ -257,6 +292,8 @@ export const viewTreeSlice = createSlice({
             // element.height *= 100 / state.yMultiplier;
 
             insertSubview(state.viewTree as IView, element);
+            const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
+            state.viewTrees[index] = state.viewTree as IView;
         },
         selectElementInViewTreeById: (state, action: PayloadAction<string>) => {
             const elementId = action.payload;
@@ -265,11 +302,15 @@ export const viewTreeSlice = createSlice({
         updateSelectedElementInViewTree: (state, action: PayloadAction<IView>) => {
             replaceSubview(state.viewTree as IView, action.payload);
             state.currentElement = findElementInViewById(state.viewTree as IView, action.payload.id);
+            const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
+            state.viewTrees[index] = state.viewTree as IView;
         },
         applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
             const { wrapperId, kind } = action.payload;
             // based on wrapperId & kind, need to add two wrappers.
             splitWrapper(state.viewTree as IView, wrapperId, kind);
+            const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
+            state.viewTrees[index] = state.viewTree as IView;
         }
     }
 })

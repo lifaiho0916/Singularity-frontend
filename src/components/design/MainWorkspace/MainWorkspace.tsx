@@ -18,7 +18,7 @@ import {
 import { Button } from 'primereact/button';
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { INewlyInsertedElement } from 'libs/types';
+import { INewlyInsertedElement, IView } from 'libs/types';
 import { addSubViewToViewTree, setViewTree } from 'store/slices/viewTreeSlice';
 import { IComponentType } from '../../../libs/types/index';
 import './MainWorkspace.scss';
@@ -27,7 +27,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const [viewIndex, setViewIndex] = useState(0)
   const { ref: newItemRef, x, y, reset } = useMouse();
   const { ref: moveItemRef, x: moveX, y: moveY, active } = useMove('horizontal', { x: 0.2, y: 0.6 });
-  const { viewTrees, viewTree, currentElement, zoom } = useSelector((state: RootState) => state.viewTree);
+  const { viewTrees, viewTree, currentElement, zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
@@ -104,7 +104,8 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
           IComponentType.ImageComponent;
   }
 
-  const onAddComponent = () => {
+  const onAddComponent = (view: IView) => {
+    dispatch(setViewTree(view))
     const item = getCurrentComponentType();
     if (isToolItemSelected) {
       {
@@ -131,30 +132,30 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
     }
   }
 
-  useEffect(() => {
-    if (viewTrees.length) {
-      dispatch(setViewTree(viewTrees[viewIndex]))
-    }
-  }, [viewTrees, viewIndex])
-
   return (
     <div className="workspace-body">
       <div className="screen-view">
         <Button icon="pi pi-plus" raised text onClick={AddNewScreenBtnClick} />
+        <Toolbar items={toolBarItems} onClicked={toolSelected} />
       </div>
-      <Toolbar items={toolBarItems} onClicked={toolSelected} />
-
-      <div
-        style={{ width: (480 + 16) * zoom, height: (850 + 16) * zoom }}
-        className="main-view"
-        ref={newItemRef as LegacyRef<HTMLDivElement>}
-        onMouseLeave={reset}
-        onMouseDown={onAddComponent}
-      >
-        {viewTree ? <Element item={viewTree} /> : null}
-        {isToolItemSelected && getCurrentComponent()}
+      <div className="main-workspace">
+        {viewTrees.map((view: IView, index) => (
+          <div
+            key={index}
+            style={{ width: (xMultiplier + 16) * zoom, height: (yMultiplier + 16) * zoom }}
+            className="main-view"
+            ref={newItemRef as LegacyRef<HTMLDivElement>}
+            onMouseLeave={reset}
+            onMouseDown={() => onAddComponent(view)}
+          >
+            <Element item={view} />
+            {/* {(isToolItemSelected && viewTree && viewTree.id === view.id) ? getCurrentComponent() : null} */}
+          </div>
+        ))}
       </div>
-      {getPropertyDialogForCurrentElement()}
+      <div className="property">
+        {getPropertyDialogForCurrentElement()}
+      </div>
       {/* <div
         className="main-view"
         ref={moveItemRef as LegacyRef<HTMLDivElement>}

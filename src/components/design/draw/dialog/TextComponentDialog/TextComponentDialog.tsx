@@ -12,38 +12,38 @@ import './TextComponentDialog.scss';
 
 const TextComponentDialog: FC<TextComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement } = useSelector((state: RootState) => state.viewTree)
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      details: { 
-        ...currentElement.details, 
-        text: newText 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        text: newText
+      }
     }));
   }
 
   const onWidthChange = (newWidth: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      x: { 
-        ...currentElement.x, 
-        max: newWidth 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      x: {
+        ...currentElement.x,
+        max: newWidth
+      }
     }));
   }
 
   const onHeightChange = (newHeight: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      y: { 
-        ...currentElement.y, 
-        max: newHeight 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      y: {
+        ...currentElement.y,
+        max: newHeight
+      }
     }));
   }
 
@@ -140,7 +140,7 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
             rows={1}
             value={currentElement.details?.text}
             onChange={(e) => onTextChange(e.target.value)}
-            // autoResize={true}
+          // autoResize={true}
           />
         </div>
         <Divider className="custom-divider" />
