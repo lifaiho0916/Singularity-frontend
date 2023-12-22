@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { TabView, TabPanel } from 'primereact/tabview';
+import { Button } from 'primereact/button';
 import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { getProjectById, setOpenAtById } from 'libs/axios/api/project';
 import { setProject, setStructure } from 'store/slices/projectSlice';
 import { InviteMembersDialog } from 'components/dialog/InviteMembersDialog';
+import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 import type { IMember, IProject } from 'libs/types';
 import type { RootState } from 'store';
 
 import DesignWorkspace from 'pages/App/Project/Design';
 import BackendWorkspace from 'pages/App/Project/Backend';
 import ArchitectureWorkspace from 'pages/App/Project/Architecture';
-
+import Preview from "pages/App/Project/Preview";
 import 'assets/styles/pages/app/project.scss';
-import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 
 const WorkspaceContent = () => {
     return (
@@ -21,6 +22,7 @@ const WorkspaceContent = () => {
             <Route path="design-workspace" element={<DesignWorkspace />} />
             <Route path="backend-workspace" element={<BackendWorkspace />} />
             <Route path="architecture-workspace" element={<ArchitectureWorkspace />} />
+            <Route path="preview" element={<Preview />} />
             <Route path="*" element={<Navigate to="design-workspace" replace />} />
         </Routes>
     )
@@ -96,13 +98,30 @@ const Project = () => {
 
     return (
         <div className="project-board">
-            <div style={{ margin: 5 }}>
-                <TabView activeIndex={activeTab} onTabChange={(e) => NavigateWorkspace(e.index)}>
-                    <TabPanel header="DESIGN" />
-                    <TabPanel header="BACKEND" />
-                    {/* <TabPanel header="ARCHITECTURE" /> */}
-                </TabView>
-            </div>
+            {location.pathname.indexOf('preview') === -1 &&
+                <div style={{ margin: 5, position: 'relative' }}>
+                    <TabView 
+                        activeIndex={activeTab} 
+                        onTabChange={(e) => NavigateWorkspace(e.index)}
+                    >
+                        <TabPanel header="DESIGN" />
+                        <TabPanel header="BACKEND" />
+                        {/* <TabPanel header="ARCHITECTURE" /> */}
+                    </TabView>
+                    <Button
+                        style={{
+                            position: 'absolute',
+                            top: 6,
+                            right: 5
+                        }}
+                        raised
+                        size="small"
+                        onClick={() => navigate(`/app/project/${projectId}/preview`)}
+                    >
+                        <span>PREVIEW</span>
+                    </Button>
+                </div>
+            }
             <WorkspaceContent />
             <InviteMembersDialog
                 isOpenInviteModal={isOpenInviteModal}

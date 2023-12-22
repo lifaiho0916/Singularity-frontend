@@ -32,16 +32,16 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
 }
 
 function deleteElement(view: IView, element: IView): IView | null {
-    if (view.id == element.id) {
+    if (view.id === element.id) {
         // Element found, delete it
         return null;
     } else if (view.subviews) {
         // Traverse subviews recursively
         view.subviews = view.subviews.filter(subview => deleteElement(subview, element));
-        if (view.subviews.length == 0) {
+        if (view.subviews.length === 0) {
             delete view.subviews
         }
-        else if (view.subviews.length == 1 && view.subviews[0].type == IComponentType.Wrapper) {
+        else if (view.subviews.length === 1 && view.subviews[0].type === IComponentType.Wrapper) {
             if (view.subviews[0].subviews) {
                 view.details = view.subviews[0].details;
                 view.subviews = JSON.parse(JSON.stringify(view.subviews[0].subviews));
@@ -162,94 +162,6 @@ const initialState: viewTreeSliceState = {
         },
     ],
     viewTree: null,
-    // viewTree: {
-    //     id: uuidv4(),
-    //     type: IComponentType.Wrapper,
-    //     x: { min: 0, max: 100 },
-    //     y: { min: 0, max: 100 },
-    //     details: {
-    //         kind: IWrapperType.Horizontal
-    //     },
-    //     subviews: [
-    //         {
-    //             id: uuidv4(),
-    //             type: IComponentType.Wrapper,
-    //             x: { min: 0, max: 100 },
-    //             y: { min: 0, max: 50 },
-    //             details: {
-    //                 kind: IWrapperType.Horizontal
-    //             }
-    //         },
-    //         {
-    //             id: uuidv4(),
-    //             type: IComponentType.Wrapper,
-    //             x: { min: 0, max: 100 },
-    //             y: { min: 50, max: 100 },
-    //             details: {
-    //                 kind: IWrapperType.Vertical
-    //             },
-    //             subviews: [
-    //                 {
-    //                     id: uuidv4(),
-    //                     type: IComponentType.Wrapper,
-    //                     x: { min: 0, max: 50 },
-    //                     y: { min: 0, max: 100 },
-    //                     details: {
-    //                         kind: IWrapperType.Horizontal
-    //                     },
-    //                     subviews: [
-    //                         {
-    //                             id: uuidv4(),
-    //                             type: IComponentType.LabelComponent,
-    //                             x: { min: 0, max: 90 },
-    //                             y: { min: 0, max: 20 },
-    //                             details: {
-    //                                 text: "Dragon Fly",
-    //                                 style: {
-    //                                     fontSize: 20
-    //                                 }
-    //                             }
-    //                         },
-    //                         {
-    //                             id: uuidv4(),
-    //                             type: IComponentType.ButtonComponent,
-    //                             x: { min: 0, max: 90 },
-    //                             y: { min: 0, max: 20 },
-    //                             details: {
-    //                                 text: "Hello",
-    //                                 style: {
-    //                                     fontSize: 20,
-    //                                     backgroundColor: '#00FF00'
-    //                                 }
-    //                             }
-    //                         },
-    //                         {
-    //                             id: uuidv4(),
-    //                             type: IComponentType.TextComponent,
-    //                             x: { min: 0, max: 90 },
-    //                             y: { min: 0, max: 20 },
-    //                             details: {
-    //                                 text: "Hello",
-    //                                 style: {
-    //                                     fontSize: 20
-    //                                 }
-    //                             }
-    //                         }
-    //                     ]
-    //                 },
-    //                 {
-    //                     id: uuidv4(),
-    //                     type: IComponentType.Wrapper,
-    //                     x: { min: 50, max: 100 },
-    //                     y: { min: 0, max: 100 },
-    //                     details: {
-    //                         kind: IWrapperType.Horizontal
-    //                     }
-    //                 }
-    //             ]
-    //         }
-    //     ]
-    // },
     xMultiplier: 320,
     yMultiplier: 650,
     currentElement: null
@@ -292,7 +204,7 @@ export const viewTreeSlice = createSlice({
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
         },
-        deleteSelectedElementInViewTree: (state, action:PayloadAction<IView>) => {
+        deleteSelectedElementInViewTree: (state, action: PayloadAction<IView>) => {
             deleteElement(state.viewTree as IView, action.payload);
             state.currentElement = null
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
@@ -321,14 +233,14 @@ export const viewTreeSlice = createSlice({
     }
 })
 
-export const { 
-    setZoom, 
-    setViewTree, 
-    setViewTrees, 
-    fetchViewTree, 
-    addSubViewToViewTree, 
-    selectElementInViewTreeById, 
-    updateSelectedElementInViewTree, 
+export const {
+    setZoom,
+    setViewTree,
+    setViewTrees,
+    fetchViewTree,
+    addSubViewToViewTree,
+    selectElementInViewTreeById,
+    updateSelectedElementInViewTree,
     deleteSelectedElementInViewTree,
     deleteWrapper,
     applySplitToWrapper,

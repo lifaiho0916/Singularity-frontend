@@ -1,16 +1,16 @@
 export { Toolbar, ToolbarItem } from './toolbar'
-export { MainWorkSpace, SubScreen} from './MainWorkspace'
-export { DesignHeader} from './DesignHeader'
-export { 
+export { MainWorkSpace, SubScreen } from './MainWorkspace'
+export { DesignHeader } from './DesignHeader'
+export {
   ButtonComponentDialog,
-  ImageComponentDialog, 
-  LabelComponentDialog, 
+  ImageComponentDialog,
+  LabelComponentDialog,
   TextComponentDialog,
   AddScreenDialog,
-  ButtonComponent, 
-  ImageComponent, 
-  LabelComponent, 
-  TextComponent, 
+  ButtonComponent,
+  ImageComponent,
+  LabelComponent,
+  TextComponent,
   Element,
-  Wrapper 
+  Wrapper
 } from './draw'

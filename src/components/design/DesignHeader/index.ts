@@ -1,1 +1,1 @@
-export { default as DesignHeader} from './DesignHeader'
+export { default as DesignHeader } from './DesignHeader'
