@@ -254,6 +254,9 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
               onChange={(e) => onFontSizeChange(Number(e.value))}
             />
           </div>
+          
+        </div>
+        <div className="section-footer">
           <div
             style={{
               display: 'flex',

@@ -8,12 +8,18 @@ import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
 import { IView } from 'libs/types';
-import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './ButtonComponentDialog.scss';
+import { Button } from 'primereact/button';
 
 const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   const dispatch = useDispatch();
   const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
+
+  const onDelete = () => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(deleteSelectedElementInViewTree(currentElement));
+  }
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
@@ -305,7 +311,19 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
             />
           </div>
         </div>
-      </div>
+        <div className="section-footer">
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 5
+            }}
+          >
+            <Button label="Delete" severity="danger" onClick={onDelete}></Button>
+          </div>
+        </div>
+      </div>      
     </div>
   ) : null
 }
