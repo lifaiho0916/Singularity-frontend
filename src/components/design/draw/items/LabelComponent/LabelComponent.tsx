@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 import { LabelComponentProps } from "./LabelComponent.types";
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { setPreviewIndex } from 'store/slices/viewTreeSlice';
+import { setPreviewIndex } from 'store/slices/projectSlice';
 import './LabelComponent.scss';
 
 const LabelComponent: FC<LabelComponentProps> = ({ text, style, preview, link }) => {
   const dispatch = useDispatch();
-  const { zoom } = useSelector((state: RootState) => state.viewTree)
+  const { zoom } = useSelector((state: RootState) => state.project)
 
   return (
     <label

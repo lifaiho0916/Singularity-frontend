@@ -6,14 +6,14 @@ import { InputText } from 'primereact/inputtext'
 import { Divider } from 'primereact/divider'
 import { Button } from 'primereact/button'
 import { notify } from 'store/slices/toastSlice'
-import { setViewTrees } from 'store/slices/viewTreeSlice';
 import { AddScreenDialogProps } from './AddScreenDialog.types'
 import { v4 as uuidv4 } from 'uuid'
 import { IComponentType, IWrapperType } from 'libs/types';
 import type { RootState } from 'store';
+import { setViewTrees } from 'store/slices/projectSlice';
 
 const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIsOpenAddScreenModal }) => {
-  const { viewTrees } = useSelector((state: RootState) => state.viewTree)
+  const { viewTrees } = useSelector((state: RootState) => state.project)
   const dispatch = useDispatch();
   const [newScreenName, setNewscreenName] = useState('');
 

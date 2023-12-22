@@ -5,12 +5,12 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import { RootState } from "store";
 import { IWrapperType } from "libs/types";
-import { applySplitToWrapper, deleteWrapper } from "store/slices/viewTreeSlice";
+import { applySplitToWrapper, deleteWrapper } from "store/slices/projectSlice";
 import './Wrapper.scss';
 
 const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick, preview }) => {
   const dispatch = useDispatch();
-  const { currentElement } = useSelector((state: RootState) => state.viewTree);
+  const { currentElement } = useSelector((state: RootState) => state.project);
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
   const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);

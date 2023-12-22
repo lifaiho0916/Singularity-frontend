@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { useDispatch } from "react-redux";
 import { IComponentType, IWrapperType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
-import { selectElementInViewTreeById } from "store/slices/viewTreeSlice";
+import { selectElementInViewTreeById } from "store/slices/projectSlice";
 import { ElementProps } from "./Element.types";
 import './Element.scss';
 

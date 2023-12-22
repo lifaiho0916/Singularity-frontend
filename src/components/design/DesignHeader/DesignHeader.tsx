@@ -4,15 +4,15 @@ import { CascadeSelect } from 'primereact/cascadeselect';
 import { DesignHeaderProps } from './DesignHeader.types';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { setZoom } from 'store/slices/viewTreeSlice';
 import type { RootState } from 'store';
+import { setZoom } from 'store/slices/projectSlice';
 
 const DesignHeader: FC<DesignHeaderProps> = ({
   responsive,
   setResponsive,
 }) => {
   const dispatch = useDispatch();
-  const { zoom } = useSelector((state: RootState) => state.viewTree);
+  const { zoom } = useSelector((state: RootState) => state.project);
 
   return (
     <>

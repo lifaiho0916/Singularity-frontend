@@ -6,7 +6,7 @@ import type { RootState } from 'store';
 import './TextComponent.scss';
 
 const TextComponent: FC<TextComponentProps> = ({ text, style, preview }) => {
-  const { zoom } = useSelector((state: RootState) => state.viewTree)
+  const { zoom } = useSelector((state: RootState) => state.project)
 
   return (
     <InputTextarea

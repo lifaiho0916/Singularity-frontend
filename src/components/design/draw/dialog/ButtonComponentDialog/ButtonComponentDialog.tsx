@@ -9,12 +9,12 @@ import { ColorPicker } from 'primereact/colorpicker';
 import { Button } from 'primereact/button';
 import type { RootState } from 'store';
 import { IView } from 'libs/types';
-import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/projectSlice';
 import './ButtonComponentDialog.scss';
 
 const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.project)
 
   const onDelete = () => {
     if (!currentElement || !currentElement.details) return

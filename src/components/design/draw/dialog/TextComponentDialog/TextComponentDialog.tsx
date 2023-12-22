@@ -7,13 +7,13 @@ import { CascadeSelect } from 'primereact/cascadeselect';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
-import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/projectSlice';
 import './TextComponentDialog.scss';
 import { Button } from 'primereact/button';
 
 const TextComponentDialog: FC<TextComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement } = useSelector((state: RootState) => state.project)
 
   const onDelete = () => {
     if (!currentElement || !currentElement.details) return

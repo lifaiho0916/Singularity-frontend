@@ -3,11 +3,11 @@ import { useDispatch } from 'react-redux';
 import { ButtonComponentProps } from "./ButtonComponent.types";
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
-import { setPreviewIndex } from 'store/slices/viewTreeSlice';
+import { setPreviewIndex } from 'store/slices/projectSlice';
 import './ButtonComponent.scss';
 
 const ButtonComponent: FC<ButtonComponentProps> = ({ text, style, link, preview }) => {
-  const { zoom } = useSelector((state: RootState) => state.viewTree)
+  const { zoom } = useSelector((state: RootState) => state.project)
   const dispatch = useDispatch();
 
   return (

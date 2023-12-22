@@ -6,12 +6,12 @@ import { MainPreviewProps } from "./MainPreview.types";
 import { PreviewScreen } from "../PreviewScreen";
 import { CascadeSelect } from "primereact/cascadeselect";
 import { DEVICES } from "constants/";
-import { setMultiplayerSize } from "store/slices/viewTreeSlice";
+import { setMultiplayerSize } from "store/slices/projectSlice";
 import "./MainPreview.scss";
 
 const MainPreview: FC<MainPreviewProps> = ({ }) => {
     const dispatch = useDispatch();
-    const { viewTrees, xMultiplier, yMultiplier, previewIndex } = useSelector((state: RootState) => state.viewTree);
+    const { viewTrees, xMultiplier, yMultiplier, previewIndex } = useSelector((state: RootState) => state.project);
     const [deviceIndex, setDeviceIndex] = useState(0);
 
     useEffect(() => {

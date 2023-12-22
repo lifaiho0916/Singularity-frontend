@@ -4,7 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { PreviewHeaderProps } from "./PreviewHeader.types";
-import { setPreviewIndex } from "store/slices/viewTreeSlice";
+import { setPreviewIndex } from "store/slices/projectSlice";
 import "./PreviewHeader.scss";
 
 const PreviewHeader: FC<PreviewHeaderProps> = ({

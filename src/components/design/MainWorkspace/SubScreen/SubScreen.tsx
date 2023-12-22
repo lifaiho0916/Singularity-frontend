@@ -4,7 +4,7 @@ import { useMouse } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'components';
 import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
-import { addSubViewToViewTree, setViewTree } from 'store/slices/viewTreeSlice';
+import { addSubViewToViewTree, setViewTree } from 'store/slices/projectSlice';
 import { SubScreenProps } from './SubScreen.types';
 import type { RootState } from 'store';
 import './SubScreen.scss';
@@ -13,7 +13,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
   const { isToolItemSelected, currentToolId, view, setToolItemSelected, setMouseOut } = props;
   const dispatch = useDispatch();
   const { ref: newItemRef, x, y, reset } = useMouse();
-  const { zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.viewTree);
+  const { zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.project);
 
   const getCurrentComponentType = () => {
     return currentToolId === 0 ? IComponentType.ButtonComponent :

@@ -11,14 +11,14 @@ import {
   AddScreenDialog,
 } from 'components';
 import { IView, IComponentType } from 'libs/types';
-import { initCurrentElement } from 'store/slices/viewTreeSlice';
+import { initCurrentElement } from 'store/slices/projectSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
 import './MainWorkspace.scss';
 
 const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const dispatch = useDispatch();
-  const { viewTrees, currentElement } = useSelector((state: RootState) => state.viewTree);
+  const { viewTrees, currentElement } = useSelector((state: RootState) => state.project);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);

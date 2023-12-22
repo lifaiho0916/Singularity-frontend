@@ -2,7 +2,7 @@ import { type FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { ImageComponentProps } from "./ImageComponent.types";
 import defaultImage from "assets/images/default-image.png";
-import { setPreviewIndex } from 'store/slices/viewTreeSlice';
+import { setPreviewIndex } from 'store/slices/projectSlice';
 import './ImageComponent.scss';
 
 const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) => {

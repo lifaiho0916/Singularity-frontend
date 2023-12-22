@@ -7,7 +7,7 @@ import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import type { RootState } from 'store';
 import type { IView } from 'libs/types';
-import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/projectSlice';
 import { Button } from 'primereact/button';
 import { ImageChooseDialog } from '../ImageChooseDialog';
 import defaultImage from "assets/images/default-image.png";
@@ -17,7 +17,7 @@ import './ImageComponentDialog.scss';
 const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
   const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.project)
 
   const onDelete = () => {
     if (!currentElement || !currentElement.details) return
