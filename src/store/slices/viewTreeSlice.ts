@@ -31,6 +31,17 @@ function getViewFormatDataFromElement(element: INewlyInsertedElement): IView {
     }
 }
 
+function deleteElement(view: IView, element: IView): IView | null {
+    if (view.id == element.id) {
+        // Element found, delete it
+        return null;
+    } else if (view.subviews) {
+        // Traverse subviews recursively
+        view.subviews = view.subviews.filter(subview => deleteElement(subview, element));
+    }
+    return view;
+}
+
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // Check if the element fits within the current view
     if (isElementBelongInViewPanel(element)) {
@@ -270,6 +281,12 @@ export const viewTreeSlice = createSlice({
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
         },
+        deleteSelectedElementInViewTree: (state, action:PayloadAction<IView>) => {
+            deleteElement(state.viewTree as IView, action.payload);
+            state.currentElement = null
+            const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
+            state.viewTrees[index] = state.viewTree as IView;
+        },
         applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
             const { wrapperId, kind } = action.payload;
             // based on wrapperId & kind, need to add two wrappers.
@@ -291,6 +308,7 @@ export const {
     addSubViewToViewTree, 
     selectElementInViewTreeById, 
     updateSelectedElementInViewTree, 
+    deleteSelectedElementInViewTree,
     applySplitToWrapper,
     initCurrentElement
 } = viewTreeSlice.actions;

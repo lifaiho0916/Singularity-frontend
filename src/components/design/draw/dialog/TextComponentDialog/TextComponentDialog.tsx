@@ -7,12 +7,18 @@ import { CascadeSelect } from 'primereact/cascadeselect';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
-import { updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './TextComponentDialog.scss';
+import { Button } from 'primereact/button';
 
 const TextComponentDialog: FC<TextComponentDialogProps> = () => {
   const dispatch = useDispatch();
   const { currentElement } = useSelector((state: RootState) => state.viewTree)
+
+  const onDelete = () => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(deleteSelectedElementInViewTree(currentElement));
+  }
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
@@ -247,6 +253,16 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
               value={currentElement.details.style?.fontSize}
               onChange={(e) => onFontSizeChange(Number(e.value))}
             />
+          </div>
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 5
+            }}
+          >
+            <Button label="Delete" severity="danger" onClick={onDelete}></Button>
           </div>
         </div>
       </div>
