@@ -9,6 +9,39 @@ export const PROJECT_POSITIONS = [
     'Manager'
 ]
 
+export const DEVICES = [
+    {
+        name: 'iPhone SE',
+        width: 375,
+        height: 667
+    },
+    {
+        name: 'iPhone XR',
+        width: 414,
+        height: 896
+    },
+    {
+        name: 'iPhone 12 Pro',
+        width: 390,
+        height: 844
+    },
+    {
+        name: 'iPhone 14 Pro Max',
+        width: 430,
+        height: 932
+    },
+    {
+        name: 'Samsung Galaxy S8',
+        width: 360,
+        height: 740
+    },
+    {
+        name: 'Samsung Galaxy S20 Ultra',
+        width: 412,
+        height: 915
+    },
+]
+
 export const API_BASE_URL = 'http://localhost:8080'
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
 

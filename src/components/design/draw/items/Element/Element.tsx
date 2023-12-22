@@ -6,7 +6,7 @@ import { selectElementInViewTreeById } from "store/slices/viewTreeSlice";
 import { ElementProps } from "./Element.types";
 import './Element.scss';
 
-const Element: FC<ElementProps> = ({ item }) => {
+const Element: FC<ElementProps> = ({ item, preview }) => {
   const dispatch = useDispatch();
 
   const selectThisWrapperInViewTree = (id: string) => {
@@ -19,6 +19,7 @@ const Element: FC<ElementProps> = ({ item }) => {
       {item.type === IComponentType.Wrapper ?
         <Wrapper
           id={item.id}
+          preview={preview}
           hasWrapper={(item.subviews && item.subviews[0].type === IComponentType.Wrapper) ? true : false}
           style={{
             ...item.details?.style,
@@ -28,13 +29,14 @@ const Element: FC<ElementProps> = ({ item }) => {
           }}
         >
           {item.subviews && item.subviews.map((subView, index) => (
-            <Element item={subView} key={index} />
+            <Element item={subView} key={index} preview={preview} />
           ))}
         </Wrapper> :
         <Wrapper
           id={item.id}
+          preview={preview}
           hasWrapper={true}
-          onClick={() => { selectThisWrapperInViewTree(item.id) }}
+          onClick={() => { if (!preview) selectThisWrapperInViewTree(item.id) }}
           style={{
             width: `${item.x.max - item.x.min}%`,
             height: `${item.y.max - item.y.min}%`,
@@ -46,10 +48,32 @@ const Element: FC<ElementProps> = ({ item }) => {
           }}
         >
           {
-            item.type === IComponentType.ButtonComponent ? <ButtonComponent text={item.details?.text} style={item.details?.style} /> :
-              item.type === IComponentType.TextComponent ? <TextComponent text={item.details?.text} style={item.details?.style} /> :
-                item.type === IComponentType.LabelComponent ? <LabelComponent text={item.details?.text} style={item.details?.style} />
-                  : <ImageComponent imageData={item.details?.imageData} />
+            item.type === IComponentType.ButtonComponent ?
+              <ButtonComponent
+                text={item.details?.text}
+                style={item.details?.style}
+                preview={preview}
+                link={item.details?.link}
+              /> :
+              item.type === IComponentType.TextComponent ?
+                <TextComponent
+                  text={item.details?.text}
+                  style={item.details?.style}
+                  preview={preview}
+                /> :
+                item.type === IComponentType.LabelComponent ?
+                  <LabelComponent
+                    text={item.details?.text}
+                    style={item.details?.style}
+                    preview={preview}
+                    link={item.details?.link}
+                  />
+                  :
+                  <ImageComponent
+                    imageData={item.details?.imageData}
+                    preview={preview}
+                    link={item.details?.link}
+                  />
           }
         </Wrapper>
       }

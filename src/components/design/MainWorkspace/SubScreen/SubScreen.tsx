@@ -70,7 +70,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
         onMouseEnter={() => { setMouseOut(false) }}
         onMouseDown={() => onAddComponent(view)}
       >
-        <Element item={view} />
+        <Element item={view} preview={false} />
       </div>
     </div>
   )

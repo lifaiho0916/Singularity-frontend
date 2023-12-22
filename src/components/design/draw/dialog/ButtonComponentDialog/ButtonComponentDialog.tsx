@@ -6,11 +6,11 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
+import { Button } from 'primereact/button';
 import type { RootState } from 'store';
 import { IView } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './ButtonComponentDialog.scss';
-import { Button } from 'primereact/button';
 
 const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   const dispatch = useDispatch();
