@@ -14,7 +14,7 @@ const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) =
       src={imageData || defaultImage}
       alt="Image"
       onClick={() => {
-        if (preview && link) {
+        if (preview && link !== undefined) {
           dispatch(setPreviewIndex(link))
         }
       }}

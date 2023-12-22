@@ -18,9 +18,12 @@
         padding: 0 20px;
 
         .view-section {
-            margin: 0 10px 20px 10px;
+            margin: 20px 10px;
+            position: relative;
 
             .view-header {
+                margin-top: -40px;
+                position: absolute;
                 display: flex;
                 justify-content: space-between;
                 align-items: center;

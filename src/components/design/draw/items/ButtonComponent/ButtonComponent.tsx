@@ -14,7 +14,7 @@ const ButtonComponent: FC<ButtonComponentProps> = ({ text, style, link, preview 
     <div
       className="button-component"
       onClick={() => {
-        if (preview && link) {
+        if (preview && link !== undefined) {
           dispatch(setPreviewIndex(link))
         }
       }}

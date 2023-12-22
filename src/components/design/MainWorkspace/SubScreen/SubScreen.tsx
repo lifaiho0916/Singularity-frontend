@@ -7,7 +7,6 @@ import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
 import { addSubViewToViewTree, setViewTree } from 'store/slices/viewTreeSlice';
 import { SubScreenProps } from './SubScreen.types';
 import type { RootState } from 'store';
-
 import './SubScreen.scss';
 
 const SubScreen: FC<SubScreenProps> = (props) => {
