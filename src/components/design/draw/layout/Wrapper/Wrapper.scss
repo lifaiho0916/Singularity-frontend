@@ -32,6 +32,15 @@
     top: calc(50% - 24px);
   }
 
+  .delete-wrapper-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 1rem;
+    width: 1rem;
+    padding: 10px;
+  }
+
   .horizontal-view {
     height: 100%;
   }
