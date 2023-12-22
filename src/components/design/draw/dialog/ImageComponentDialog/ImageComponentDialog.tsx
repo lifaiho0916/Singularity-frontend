@@ -52,6 +52,17 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
     }));
   }
 
+  const onImageChange = (imageData: string) => {
+    if (!currentElement || !currentElement.details) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        imageData: imageData
+      }
+    }));
+  }
+
   return currentElement ? (
     <div className="image-component-dialog">
       <div className="image-header">
@@ -65,7 +76,7 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
             <div className="image-container">
               <Image
-                src={defaultImage}
+                src={currentElement.details?.imageData || defaultImage}
                 preview
               />
             </div>
@@ -149,10 +160,12 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           </div>
         </div>
       </div>
-      <ImageChooseDialog
-        isOpenModal={isOpenModal}
-        setIsOpenModal={setIsOpenModal}
-      />
+      {isOpenModal &&
+        <ImageChooseDialog
+          isOpenModal={isOpenModal}
+          setIsOpenModal={setIsOpenModal}
+          setComponentImage={onImageChange}
+        />}
     </div>
   ) : null
 }

@@ -3,11 +3,11 @@ import { ImageComponentProps } from "./ImageComponent.types";
 import defaultImage from "assets/images/default-image.png";
 import './ImageComponent.scss';
 
-const ImageComponent: FC<ImageComponentProps> = ({ imageUri }) => {
+const ImageComponent: FC<ImageComponentProps> = ({ imageData }) => {
   return (
     <img
       className='image-component'
-      src={imageUri || defaultImage}
+      src={imageData || defaultImage}
       alt="Image"
     />
   )

@@ -69,3 +69,23 @@ export const setOpenAtById = async (projectId: number): Promise<object | undefin
     }
     return undefined
 }
+
+export const uploadProjectImage = async (projectId: number, imageData: Uint8Array): Promise<object | undefined> => {
+    try {
+        const res = await API.post(`/v1/project/${projectId}/upload`, { imageData: imageData })
+        return res;
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}
+
+export const getProjectImage = async (projectId: number): Promise<object | undefined> => {
+    try {
+        const res = await API.get(`/v1/project/${projectId}/images`);
+        return res;
+    } catch (error) {
+        console.warn(error)
+    }
+    return undefined
+}

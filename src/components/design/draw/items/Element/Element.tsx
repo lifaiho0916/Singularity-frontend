@@ -49,7 +49,7 @@ const Element: FC<ElementProps> = ({ item }) => {
             item.type === IComponentType.ButtonComponent ? <ButtonComponent text={item.details?.text} style={item.details?.style} /> :
               item.type === IComponentType.TextComponent ? <TextComponent text={item.details?.text} style={item.details?.style} /> :
                 item.type === IComponentType.LabelComponent ? <LabelComponent text={item.details?.text} style={item.details?.style} />
-                  : <ImageComponent />
+                  : <ImageComponent imageData={item.details?.imageData} />
           }
         </Wrapper>
       }
