@@ -3,12 +3,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Button } from 'primereact/button';
 import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
-import { getProjectById, setOpenAtById } from 'libs/axios/api/project';
+import { getProjectById, setOpenAtById, getProjectImage } from 'libs/axios/api/project';
 import { setProject, setStructure } from 'store/slices/projectSlice';
 import { InviteMembersDialog } from 'components/dialog/InviteMembersDialog';
 import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 import type { IMember, IProject } from 'libs/types';
 import type { RootState } from 'store';
+import { saveDataInIndexDB } from 'libs/indexedDB';
 
 import DesignWorkspace from 'pages/App/Project/Design';
 import BackendWorkspace from 'pages/App/Project/Backend';
@@ -46,6 +47,13 @@ const Project = () => {
         }
     }
 
+    const GetProjectImages = async (projectId: number) => {
+        const res = await getProjectImage(projectId)
+        if (res) {
+            saveDataInIndexDB(res)
+        }
+    }
+
     const NavigateWorkspace = (index: number) => {
         switch (index) {
             case 0:
@@ -65,7 +73,8 @@ const Project = () => {
     React.useEffect(() => {
         if (projectId) {
             GetProjectById(Number(projectId));
-            setOpenAtById(Number(projectId))
+            setOpenAtById(Number(projectId));
+            GetProjectImages(Number(projectId));
         }
     }, [projectId]);
 

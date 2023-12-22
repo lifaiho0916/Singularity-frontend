@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { ImageComponentDialogProps } from "./ImageComponentDialog.types";
@@ -6,16 +6,18 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import type { RootState } from 'store';
-import type { IView } from 'libs/types';
+import type { IMedia, IView } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/projectSlice';
 import { Button } from 'primereact/button';
 import { ImageChooseDialog } from '../ImageChooseDialog';
+import { getDataFromIndexDB } from 'libs/indexedDB';
 import defaultImage from "assets/images/default-image.png";
 import { Image } from 'primereact/image';
 import './ImageComponentDialog.scss';
 
 const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
   const dispatch = useDispatch();
+  const [images, setImages] = useState<Array<IMedia>>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
   const { currentElement, viewTrees } = useSelector((state: RootState) => state.project)
 
@@ -57,16 +59,25 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
     }));
   }
 
-  const onImageChange = (imageData: string) => {
+  const onImageChange = (image: IMedia) => {
     if (!currentElement || !currentElement.details) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
       details: {
         ...currentElement.details,
-        imageData: imageData
+        image: image.id
       }
     }));
   }
+
+  const getDataFromDB = async () => {
+    const res = await getDataFromIndexDB();
+    setImages(res as Array<IMedia>);
+  }
+
+  useEffect(() => {
+    getDataFromDB();
+  }, [])
 
   return currentElement ? (
     <div className="image-component-dialog">
@@ -81,7 +92,9 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
             <div className="image-container">
               <Image
-                src={currentElement.details?.imageData || defaultImage}
+                src={(
+                  currentElement.details.image ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === currentElement.details.image)[0].imageData}`
+                    : defaultImage)}
                 preview
               />
             </div>

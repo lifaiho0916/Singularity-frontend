@@ -7,6 +7,11 @@ export interface IUser {
     avatar: string
 }
 
+export interface IMedia {
+    id: number
+    imageData: string
+}
+
 export interface IMember {
     email: string
     position: string

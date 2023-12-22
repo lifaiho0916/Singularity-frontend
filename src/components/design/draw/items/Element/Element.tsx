@@ -70,7 +70,7 @@ const Element: FC<ElementProps> = ({ item, preview }) => {
                   />
                   :
                   <ImageComponent
-                    imageData={item.details?.imageData}
+                    imageData={item.details?.image}
                     preview={preview}
                     link={item.details?.link}
                   />
