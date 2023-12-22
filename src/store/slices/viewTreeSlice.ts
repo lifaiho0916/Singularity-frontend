@@ -1,7 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit"
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IComponentType, IView, INewlyInsertedElement, IWrapperType, ISplitParameterPair } from "libs/types";
+import { IComponentType, IView, INewlyInsertedElement, IWrapperType, ISplitParameterPair, IProject } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
+// import { store } from "store";
+import { uploadProjectData } from "libs/axios/api/project";
 
 interface viewTreeSliceState {
     zoom: number,
@@ -181,6 +183,7 @@ export const viewTreeSlice = createSlice({
         },
         setViewTrees: (state, action: PayloadAction<Array<IView>>) => {
             state.viewTrees = action.payload
+            putViewTreesData(JSON.stringify(state.viewTrees));
         },
         fetchViewTree: (state, action: PayloadAction<IView>) => {
             state.viewTree = action.payload;
@@ -195,6 +198,7 @@ export const viewTreeSlice = createSlice({
             insertSubview(state.viewTree as IView, element);
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
+            putViewTreesData(JSON.stringify(state.viewTrees));
         },
         selectElementInViewTreeById: (state, action: PayloadAction<string>) => {
             const elementId = action.payload;
@@ -205,12 +209,14 @@ export const viewTreeSlice = createSlice({
             state.currentElement = findElementInViewById(state.viewTree as IView, action.payload.id);
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
+            putViewTreesData(JSON.stringify(state.viewTrees));
         },
         deleteSelectedElementInViewTree: (state, action: PayloadAction<IView>) => {
             deleteElement(state.viewTree as IView, action.payload);
             state.currentElement = null
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
+            putViewTreesData(JSON.stringify(state.viewTrees));
         },
         applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
             const { wrapperId, kind } = action.payload;
@@ -218,6 +224,7 @@ export const viewTreeSlice = createSlice({
             splitWrapper(state.viewTree as IView, wrapperId, kind);
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
+            putViewTreesData(JSON.stringify(state.viewTrees));
         },
         deleteWrapper: (state, action: PayloadAction<string>) => {
             const subview = findElementInViewById(state.viewTree as IView, action.payload);
@@ -228,6 +235,7 @@ export const viewTreeSlice = createSlice({
             deleteElement(state.viewTree as IView, subview);
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
+            putViewTreesData(JSON.stringify(state.viewTrees));
         },
         initCurrentElement: (state, action) => {
             state.currentElement = null
@@ -257,5 +265,28 @@ export const {
     setMultiplayerSize,
     setPreviewIndex
 } = viewTreeSlice.actions;
+
+const putViewTreesData = async (stringifiedViewTrees: string) => {
+    // Dispatch the action to update the viewTrees
+    debugger
+    // const project: IProject | null = getState().project.project;
+    // if (project) {
+    //     const res = await uploadProjectData(project.id, stringifiedViewTrees);
+    //     if (res) {
+    //         console.log(`${res}`);
+    //     } else {
+    //         console.log(`There was an issue to save data`);
+    //     }
+    // } else {
+    //     console.log(`There is no selected project`);
+    // }
+
+    const res = await uploadProjectData(1, stringifiedViewTrees);
+    if (res) {
+        console.log(`${res}`);
+    } else {
+        console.log(`There was an issue to save data`);
+    }
+};
 
 export default viewTreeSlice.reducer
