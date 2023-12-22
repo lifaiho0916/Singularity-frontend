@@ -1,8 +1,10 @@
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import { Button } from "primereact/button";
 import { Checkbox } from "primereact/checkbox";
 import { PreviewHeaderProps } from "./PreviewHeader.types";
+import { setPreviewIndex } from "store/slices/viewTreeSlice";
 import "./PreviewHeader.scss";
 
 const PreviewHeader: FC<PreviewHeaderProps> = ({
@@ -10,8 +12,13 @@ const PreviewHeader: FC<PreviewHeaderProps> = ({
     setResponsive,
 }) => {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { projectId } = useParams();
     const [showDevice, setShowDevice] = useState(false);
+
+    useEffect(() => {
+        dispatch(setPreviewIndex(0))
+    }, [])
 
     return (
         <div className="preview-header">

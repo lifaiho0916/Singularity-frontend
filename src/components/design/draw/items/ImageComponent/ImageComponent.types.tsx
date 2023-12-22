@@ -1,3 +1,5 @@
 export interface ImageComponentProps {
-    imageData?: string
+    imageData?: string,
+    preview: boolean,
+    link?: number
 }

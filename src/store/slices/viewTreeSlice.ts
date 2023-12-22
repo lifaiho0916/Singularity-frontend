@@ -9,7 +9,8 @@ interface viewTreeSliceState {
     viewTree: IView | null,
     xMultiplier: number,
     yMultiplier: number,
-    currentElement: IView | null
+    currentElement: IView | null,
+    previewIndex: number
 }
 
 function isElementBelongInViewPanel(element: INewlyInsertedElement): boolean {
@@ -164,7 +165,8 @@ const initialState: viewTreeSliceState = {
     viewTree: null,
     xMultiplier: 320,
     yMultiplier: 650,
-    currentElement: null
+    currentElement: null,
+    previewIndex: 0
 }
 
 export const viewTreeSlice = createSlice({
@@ -229,6 +231,13 @@ export const viewTreeSlice = createSlice({
         },
         initCurrentElement: (state, action) => {
             state.currentElement = null
+        },
+        setMultiplayerSize: (state, action: PayloadAction<{ width: number, height: number }>) => {
+            state.xMultiplier = action.payload.width;
+            state.yMultiplier = action.payload.height;
+        },
+        setPreviewIndex: (state, action: PayloadAction<number>) => {
+            state.previewIndex = action.payload
         }
     }
 })
@@ -244,7 +253,9 @@ export const {
     deleteSelectedElementInViewTree,
     deleteWrapper,
     applySplitToWrapper,
-    initCurrentElement
+    initCurrentElement,
+    setMultiplayerSize,
+    setPreviewIndex
 } = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer
