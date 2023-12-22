@@ -38,6 +38,9 @@ function deleteElement(view: IView, element: IView): IView | null {
     } else if (view.subviews) {
         // Traverse subviews recursively
         view.subviews = view.subviews.filter(subview => deleteElement(subview, element));
+        if (view.subviews.length == 0) {
+            delete view.subviews
+        }
     }
     return view;
 }
