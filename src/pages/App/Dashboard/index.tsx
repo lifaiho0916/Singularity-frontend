@@ -2,23 +2,22 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Button } from 'primereact/button';
-import { Dialog } from 'primereact/dialog';
-import { InputText } from 'primereact/inputtext';
-import { CascadeSelect } from 'primereact/cascadeselect';
 import { Avatar } from 'primereact/avatar';
 import { AvatarGroup } from 'primereact/avatargroup';
 import { Menu } from 'primereact/menu';
 import type { MenuItemCommandEvent } from 'primereact/menuitem';
 import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
-import {ProjectTemplate} from 'components';
+import { ProjectTemplate } from 'components';
 import { notify } from 'store/slices/toastSlice';
 import { setProject, setProjects, InitProject } from 'store/slices/projectSlice';
 import { setTemplates, setTemplate } from 'store/slices/templateSlice';
-import { PROJECT_POSITIONS } from "constants/";
 import type { RootState } from 'store';
 import type { IMember, IProject, IProjectMember, ITemplate } from 'libs/types';
-import { createProject, getProjectsByCreator, deleteProject, InviteMembersByProject } from 'libs/axios/api/project';
+import { getProjectsByCreator, deleteProject } from 'libs/axios/api/project';
 import { getAllTemplates } from 'libs/axios/api/template';
+import { CreateProjectDialog } from 'components/dialog/CreateProjectDialog';
+import { InviteMembersDialog } from 'components/dialog/InviteMembersDialog';
+import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 import "assets/styles/pages/app/dashboard.scss";
 
 interface ProjectRowProps {
@@ -54,9 +53,7 @@ const ProjectRow = ({ project, deleteProject, inviteMembers, NavigateWorkspace }
     }
 
     return (
-        <tr onClick={() => {
-            NavigateWorkspace(id)
-        }}>
+        <tr onClick={() => NavigateWorkspace(id)}>
             <td style={{ display: 'flex', alignItems: 'center' }}>
                 <div className="template"></div>
                 <span className='project-name'>{name}</span>
@@ -102,61 +99,12 @@ const Dashboard = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { currentUser } = useSelector((state: RootState) => state.auth);
-    const { projects, project } = useSelector((state: RootState) => state.project);
-    const { templates, template } = useSelector((state: RootState) => state.template);
+    const { projects } = useSelector((state: RootState) => state.project);
+    const { templates } = useSelector((state: RootState) => state.template);
     const [isOpenProjectModal, setIsOpenProjectModal] = React.useState(false);
     const [isOpenInviteModal, setIsOpenInviteModal] = React.useState(false);
     const [isOpenInvitationModal, setIsOpenInvitationModal] = React.useState(false);
     const [members, setMembers] = React.useState<IMember[]>([]);
-    const [isLoading, setIsLoading] = React.useState(false);
-
-    const CreateNewProject = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        setIsLoading(true);
-        const projectData = {
-            name: event.currentTarget["projectName"].value,
-            creator: currentUser,
-            templateId: template?.id
-        }
-        const res = await createProject(projectData) as IProject;
-        if (res) {
-            setIsOpenProjectModal(false);
-            navigate(`/app/project/${res.id}`)
-        }
-        setIsLoading(false);
-    }
-
-    const InitialMembers = () => {
-        const initialMembers: IMember[] = [];
-        initialMembers.push({ email: '', position: '' })
-        initialMembers.push({ email: '', position: '' })
-        initialMembers.push({ email: '', position: '' })
-        setMembers(initialMembers);
-    }
-
-    const InviteMembers = async () => {
-        setIsLoading(true);
-        const updatesMembes = members.filter(member => member.email !== '' && member.position !== '');
-        if (updatesMembes.length === 0) {
-            dispatch(notify({ type: 'error', title: '', content: 'Please provide the email addresses and positions of your teammates' }))
-            return
-        }
-
-        const res = await InviteMembersByProject(project?.id as number, updatesMembes)
-        if (res) {
-            dispatch(notify({ type: 'success', title: '', content: 'The invitation emails have been successfully delivered' }))
-            setIsOpenInviteModal(false);
-            setMembers(updatesMembes);
-            setIsOpenInvitationModal(true);
-        }
-        setIsLoading(false);
-    }
-
-    const addNewMember = () => {
-        const updatedMembers = [...members];
-        updatedMembers.push({ email: '', position: '' });
-        setMembers(updatedMembers);
-    }
 
     const GetProjectsByCreator = async () => {
         const res = await getProjectsByCreator(currentUser?.id as number);
@@ -235,7 +183,6 @@ const Dashboard = () => {
                                     deleteProject={deleteProjectConfirm}
                                     inviteMembers={(id: number) => {
                                         dispatch(setProject(projects.filter(project => project.id === id)[0]));
-                                        InitialMembers();
                                         setIsOpenInviteModal(true);
                                     }}
                                     NavigateWorkspace={(id: number) => {
@@ -257,97 +204,22 @@ const Dashboard = () => {
                 }
             </div>
             <ConfirmDialog />
-            <Dialog
-                header="Create new project"
-                visible={isOpenProjectModal}
-                style={{ width: 400 }}
-                onHide={() => setIsOpenProjectModal(false)}
-                draggable={false}
-            >
-                <form onSubmit={CreateNewProject}>
-                    <InputText
-                        name="projectName"
-                        placeholder="Project Name"
-                        style={{ width: '100%', marginBottom: 20 }}
-                        required
-                    />
-                    <Button severity="info" style={{ width: '100%' }} loading={isLoading}>
-                        <span style={{ textAlign: 'center', width: '100%' }}>Create new project</span>
-                    </Button>
-                </form>
-            </Dialog>
-            <Dialog
-                header="Invite members"
-                visible={isOpenInviteModal}
-                style={{ width: 450 }}
-                onHide={() => setIsOpenInviteModal(false)}
-                draggable={false}
-            >
-                {members.map((member, index) => (
-                    <div style={{ display: 'flex', margin: '10px 0px' }} key={index}>
-                        <InputText
-                            type='email'
-                            value={member.email}
-                            placeholder='Email'
-                            style={{ width: '60%' }}
-                            onChange={(e) => {
-                                const updatedMembers = [...members];
-                                updatedMembers[index].email = e.target.value;
-                                setMembers(updatedMembers);
-                            }}
-                        />
-                        <CascadeSelect
-                            value={member.position}
-                            style={{ width: '40%' }}
-                            onChange={(e) => {
-                                const updatedMembers = [...members];
-                                updatedMembers[index].position = e.value;
-                                setMembers(updatedMembers);
-                            }}
-                            options={PROJECT_POSITIONS}
-                            optionGroupChildren={[]}
-                            placeholder="Position"
-                        />
-                    </div>
-                ))}
-                <span onClick={addNewMember} style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer' }}>+ Add New</span>
-                <Button
-                    severity="info"
-                    style={{ width: '100%', margin: '10px 0px' }}
-                    onClick={InviteMembers}
-                    loading={isLoading}
-                >
-                    <span style={{ textAlign: 'center', width: '100%' }}>Send</span>
-                </Button>
-                <div style={{ textAlign: 'center' }}>
-                    <span onClick={() => {
-                        setIsOpenInviteModal(false)
-                        navigate('/app/project')
-                    }} style={{ fontWeight: 'bold', textDecoration: 'underline', cursor: 'pointer' }}>I don't want to invite members</span>
-                </div>
-            </Dialog>
-            <Dialog
-                header="Invitations sent"
-                visible={isOpenInvitationModal}
-                style={{ width: 430 }}
-                onHide={() => setIsOpenInvitationModal(false)}
-                draggable={false}
-            >
-                <h4 style={{ textAlign: 'center' }}>Invitation link was sent to your teammates</h4>
-                <div style={{ display: 'flex', justifyContent: 'center', margin: '15px 0px' }}>
-                    <AvatarGroup>
-                        {members.map((member, index) => (
-                            <Avatar
-                                label={member.email.substring(0, 1).toUpperCase()}
-                                style={{ backgroundColor: '#2196F3', color: '#ffffff' }}
-                                size="large"
-                                shape="circle"
-                                key={index}
-                            />
-                        ))}
-                    </AvatarGroup>
-                </div>
-            </Dialog>
+            <CreateProjectDialog
+                isOpenProjectModal={isOpenProjectModal}
+                setIsOpenProjectModal={setIsOpenProjectModal}
+            />
+            <InvitationSentDialog
+                isOpenInvitationModal={isOpenInvitationModal}
+                setIsOpenInvitationModal={setIsOpenInvitationModal}
+                members={members}
+            />
+            <InviteMembersDialog
+                isOpenInviteModal={isOpenInviteModal}
+                setIsOpenInviteModal={setIsOpenInviteModal}
+                members={members}
+                setMembers={setMembers}
+                setIsOpenInvitationModal={setIsOpenInvitationModal}
+            />
         </div>
     );
 }
