@@ -17,6 +17,8 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
 
   const onSplitButtonClickWith = (wrapperType: IWrapperType) => {
     dispatch(applySplitToWrapper({ wrapperId: id, kind: wrapperType }));
+    setIsShowHorizontalLine(false);
+    setIsShowVerticalLine(false);
   }
 
   const onDeleteButtonClick = () => {
@@ -62,23 +64,23 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
                 onClick={() => { onSplitButtonClickWith(IWrapperType.Horizontal) }}
               />
               <Button
-                style={{ 
+                style={{
                   zIndex: 10,
                   marginRight: '5px',
                   marginTop: '5px'
                 }}
                 className="delete-wrapper-button"
-                icon="pi pi-times" 
-                rounded 
-                outlined 
-                severity="danger" 
+                icon="pi pi-times"
+                rounded
+                outlined
+                severity="danger"
                 aria-label="Cancel"
                 onClick={() => { onDeleteButtonClick() }}
               />
             </React.Fragment>
             : null
           }
-          
+
         </React.Fragment>
       }
       {children}
