@@ -108,18 +108,32 @@ const Project = () => {
                         <TabPanel header="BACKEND" />
                         {/* <TabPanel header="ARCHITECTURE" /> */}
                     </TabView>
-                    <Button
+                    <div 
                         style={{
                             position: 'absolute',
                             top: 6,
                             right: 5
                         }}
-                        raised
-                        size="small"
-                        onClick={() => navigate(`/app/project/${projectId}/preview`)}
                     >
-                        <span>PREVIEW</span>
-                    </Button>
+                        <Button
+                            style={{
+                                marginRight: 5
+                            }}
+                            raised
+                            severity="success"
+                            size="small"
+                        >
+                            <span>Save</span>
+                        </Button>
+                        <Button
+                            raised
+                            size="small"
+                            onClick={() => navigate(`/app/project/${projectId}/preview`)}
+                        >
+                            <span>PREVIEW</span>
+                        </Button>
+                    </div>
+                    
                 </div>
             }
             <WorkspaceContent />
