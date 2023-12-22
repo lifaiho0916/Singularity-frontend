@@ -41,6 +41,14 @@ function deleteElement(view: IView, element: IView): IView | null {
         if (view.subviews.length == 0) {
             delete view.subviews
         }
+        else if (view.subviews.length == 1 && view.subviews[0].type == IComponentType.Wrapper) {
+            if (view.subviews[0].subviews) {
+                view.details = view.subviews[0].details;
+                view.subviews = JSON.parse(JSON.stringify(view.subviews[0].subviews));
+            } else {
+                delete view.subviews
+            }
+        }
     }
     return view;
 }
@@ -297,6 +305,16 @@ export const viewTreeSlice = createSlice({
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
         },
+        deleteWrapper: (state, action: PayloadAction<string>) => {
+            const subview = findElementInViewById(state.viewTree as IView, action.payload);
+            if (!subview) return
+            if (state.currentElement && findElementInViewById(subview, state.currentElement.id)) {
+                state.currentElement = null;
+            }
+            deleteElement(state.viewTree as IView, subview);
+            const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
+            state.viewTrees[index] = state.viewTree as IView;
+        },
         initCurrentElement: (state, action) => {
             state.currentElement = null
         }
@@ -312,6 +330,7 @@ export const {
     selectElementInViewTreeById, 
     updateSelectedElementInViewTree, 
     deleteSelectedElementInViewTree,
+    deleteWrapper,
     applySplitToWrapper,
     initCurrentElement
 } = viewTreeSlice.actions;

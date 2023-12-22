@@ -5,7 +5,7 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import { RootState } from "store";
 import { IWrapperType } from "libs/types";
-import { applySplitToWrapper } from "store/slices/viewTreeSlice";
+import { applySplitToWrapper, deleteWrapper } from "store/slices/viewTreeSlice";
 import './Wrapper.scss';
 
 const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick }) => {
@@ -17,6 +17,10 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
 
   const onSplitButtonClickWith = (wrapperType: IWrapperType) => {
     dispatch(applySplitToWrapper({ wrapperId: id, kind: wrapperType }));
+  }
+
+  const onDeleteButtonClick = () => {
+    dispatch(deleteWrapper(id));
   }
 
   return (
@@ -57,9 +61,24 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
                 onMouseLeave={() => { setIsShowHorizontalLine(false) }}
                 onClick={() => { onSplitButtonClickWith(IWrapperType.Horizontal) }}
               />
+              <Button
+                style={{ 
+                  zIndex: 10,
+                  marginRight: '5px',
+                  marginTop: '5px'
+                }}
+                className="delete-wrapper-button"
+                icon="pi pi-times" 
+                rounded 
+                outlined 
+                severity="danger" 
+                aria-label="Cancel"
+                onClick={() => { onDeleteButtonClick() }}
+              />
             </React.Fragment>
             : null
           }
+          
         </React.Fragment>
       }
       {children}
