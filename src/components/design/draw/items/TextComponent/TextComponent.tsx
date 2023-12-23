@@ -6,12 +6,12 @@ import type { RootState } from 'store';
 import './TextComponent.scss';
 
 const TextComponent: FC<TextComponentProps> = ({ text, style, preview }) => {
-  const { zoom } = useSelector((state: RootState) => state.project)
+  const { zoom } = useSelector((state: RootState) => state.project);
 
   return (
     <InputTextarea
       className="text-component"
-      style={{ ...style, transform: `scale(${zoom})` }}
+      style={{ ...style, fontSize: style?.fontSize ? style.fontSize * zoom : undefined }}
       value={preview ? undefined : text}
       defaultValue={preview ? text : undefined}
     />

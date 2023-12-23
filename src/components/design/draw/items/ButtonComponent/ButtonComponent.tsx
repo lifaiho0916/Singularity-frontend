@@ -8,7 +8,7 @@ import { setPreviewIndex } from 'store/slices/projectSlice';
 import './ButtonComponent.scss';
 
 const ButtonComponent: FC<ButtonComponentProps> = ({ text, style, link, preview }) => {
-  const { zoom, viewTrees } = useSelector((state: RootState) => state.project)
+  const { viewTrees, zoom } = useSelector((state: RootState) => state.project)
   const dispatch = useDispatch();
 
   return (
@@ -20,7 +20,7 @@ const ButtonComponent: FC<ButtonComponentProps> = ({ text, style, link, preview 
           if (index !== -1) dispatch(setPreviewIndex(index))
         }
       }}
-      style={{ ...style, transform: `scale(${zoom})` }}
+      style={{ ...style, fontSize: style?.fontSize ? style.fontSize * zoom : undefined }}
     >
       {text}
     </div>

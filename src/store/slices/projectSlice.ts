@@ -152,7 +152,7 @@ function replaceSubview(view: IView, updatedComponent: IView | null): IView | nu
     return null;
 }
 
-const putViewTreesData = async (project:IProject | null, stringifiedViewTrees: string) => {
+const putViewTreesData = async (project: IProject | null, stringifiedViewTrees: string) => {
     if (!project) return
     const res = await uploadProjectData(project.id, stringifiedViewTrees);
     if (res) {
@@ -222,8 +222,8 @@ export const projectSlice = createSlice({
         },
         addSubViewToViewTree: (state, action: PayloadAction<INewlyInsertedElement>) => {
             let element = action.payload;
-            element.x *= 100 / state.xMultiplier;
-            element.y *= 100 / state.yMultiplier;
+            element.x *= 100 / state.xMultiplier * state.zoom;
+            element.y *= 100 / state.yMultiplier * state.zoom;
             // element.width *= 100 / state.xMultiplier;
             // element.height *= 100 / state.yMultiplier;
 
@@ -282,10 +282,10 @@ export const projectSlice = createSlice({
     }
 })
 
-export const { 
-    setProject, 
-    setStructure, 
-    setProjects, 
+export const {
+    setProject,
+    setStructure,
+    setProjects,
     InitProject,
     setZoom,
     setViewTree,

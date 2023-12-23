@@ -9,12 +9,12 @@ import './LabelComponent.scss';
 
 const LabelComponent: FC<LabelComponentProps> = ({ text, style, preview, link }) => {
   const dispatch = useDispatch();
-  const { zoom, viewTrees } = useSelector((state: RootState) => state.project)
+  const { viewTrees, zoom } = useSelector((state: RootState) => state.project)
 
   return (
     <label
       className="label-component"
-      style={{ ...style, transform: `scale(${zoom})` }}
+      style={{ ...style, fontSize: style?.fontSize ? style.fontSize * zoom : undefined }}
       onClick={() => {
         if (preview && link !== undefined) {
           const index = viewTrees.findIndex((viewTree: IView) => viewTree.id === link)

@@ -1,13 +1,15 @@
 import { type FC } from 'react';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IComponentType, IWrapperType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 import { selectElementInViewTreeById } from "store/slices/projectSlice";
 import { ElementProps } from "./Element.types";
+import type { RootState } from 'store';
 import './Element.scss';
 
 const Element: FC<ElementProps> = ({ item, preview }) => {
   const dispatch = useDispatch();
+  const { xMultiplier, yMultiplier,zoom } = useSelector((state: RootState) => state.project)
 
   const selectThisWrapperInViewTree = (id: string) => {
     console.log(`wrapper ${id} selected`);

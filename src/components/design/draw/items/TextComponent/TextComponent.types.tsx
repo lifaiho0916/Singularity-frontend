@@ -1,5 +1,5 @@
 export interface TextComponentProps {
     text?: string,
-    style?: {},
+    style?: any,
     preview: boolean
 }

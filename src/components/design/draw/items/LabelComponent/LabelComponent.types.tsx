@@ -1,6 +1,6 @@
 export interface LabelComponentProps {
     text?: string,
-    style?: {},
+    style?: any,
     preview: boolean,
     link?: string
 }
