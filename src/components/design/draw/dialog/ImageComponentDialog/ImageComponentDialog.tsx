@@ -77,7 +77,7 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
 
   useEffect(() => {
     getDataFromDB();
-  }, [])
+  }, [currentElement])
 
   return currentElement ? (
     <div className="image-component-dialog">
@@ -93,7 +93,7 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
             <div className="image-container">
               <Image
                 src={(
-                  currentElement.details.image ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === currentElement.details.image)[0].imageData}`
+                  (currentElement.details.image && images.length > 0) ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === currentElement.details.image)[0].imageData}`
                     : defaultImage)}
                 preview
               />
