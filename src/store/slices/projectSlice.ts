@@ -222,8 +222,9 @@ export const projectSlice = createSlice({
         },
         addSubViewToViewTree: (state, action: PayloadAction<INewlyInsertedElement>) => {
             let element = action.payload;
-            element.x *= 100 / state.xMultiplier * state.zoom;
-            element.y *= 100 / state.yMultiplier * state.zoom;
+            // debugger
+            element.x *= 100 / (state.xMultiplier * state.zoom);
+            element.y *= 100 / (state.yMultiplier * state.zoom);
             // element.width *= 100 / state.xMultiplier;
             // element.height *= 100 / state.yMultiplier;
 
