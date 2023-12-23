@@ -28,6 +28,8 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
         if (thumbnail) {
             const res = await uploadProjectImage(Number(projectId), thumbnail.split("base64,")[1])
             if (res) {
+                const res1 = await GetProjectImages(Number(projectId));
+                saveDataInIndexDB(res1);
                 dispatch(notify({ title: '', type: 'success', content: 'Image uploaded successfully' }))
                 setThumbnail(undefined)
                 btnRef.current.clear();
