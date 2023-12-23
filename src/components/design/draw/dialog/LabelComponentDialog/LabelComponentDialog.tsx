@@ -14,7 +14,7 @@ import { Button } from 'primereact/button';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const { currentElement,viewTrees } = useSelector((state: RootState) => state.project)
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.project)
 
   const onDelete = () => {
     if (!currentElement || !currentElement.details) return
@@ -23,34 +23,34 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
 
   const onTextChange = (newText: string) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      details: { 
-        ...currentElement.details, 
-        text: newText 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      details: {
+        ...currentElement.details,
+        text: newText
+      }
     }));
   }
 
   const onWidthChange = (newWidth: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      x: { 
-        ...currentElement.x, 
-        max: newWidth 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      x: {
+        ...currentElement.x,
+        max: newWidth
+      }
     }));
   }
 
   const onHeightChange = (newHeight: number) => {
     if (!currentElement || !currentElement.details) return
-    dispatch(updateSelectedElementInViewTree({ 
-      ...currentElement, 
-      y: { 
-        ...currentElement.y, 
-        max: newHeight 
-      } 
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      y: {
+        ...currentElement.y,
+        max: newHeight
+      }
     }));
   }
 
@@ -138,7 +138,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
       ...currentElement,
       details: {
         ...currentElement.details,
-        link: viewTrees.findIndex((view: IView) => view?.name === newLink)
+        link: viewTrees.filter((view: IView) => view?.name === newLink)[0].id
       }
     }));
   }
@@ -167,7 +167,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
         </div>
         <div className="section-body">
           <CascadeSelect
-            value={viewTrees[currentElement.details.link]?.name}
+            value={viewTrees.filter((viewTree: IView) => viewTree.id === currentElement.details.link).length > 0 ? viewTrees.filter((viewTree: IView) => viewTree.id === currentElement.details.link)[0].name : ''}
             options={viewTrees.map((view: IView) => view?.name)}
             optionGroupChildren={[]}
             onChange={(e) => onLinkChange(e.value)}

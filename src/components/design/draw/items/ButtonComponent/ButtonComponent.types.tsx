@@ -3,5 +3,5 @@ export interface ButtonComponentProps {
     // onClick?: () => void,
     style?: {},
     preview: boolean,
-    link?: number
+    link?: string
 }

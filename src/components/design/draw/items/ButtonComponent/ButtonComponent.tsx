@@ -3,11 +3,12 @@ import { useDispatch } from 'react-redux';
 import { ButtonComponentProps } from "./ButtonComponent.types";
 import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
+import type { IView } from 'libs/types';
 import { setPreviewIndex } from 'store/slices/projectSlice';
 import './ButtonComponent.scss';
 
 const ButtonComponent: FC<ButtonComponentProps> = ({ text, style, link, preview }) => {
-  const { zoom } = useSelector((state: RootState) => state.project)
+  const { zoom, viewTrees } = useSelector((state: RootState) => state.project)
   const dispatch = useDispatch();
 
   return (
@@ -15,7 +16,8 @@ const ButtonComponent: FC<ButtonComponentProps> = ({ text, style, link, preview 
       className="button-component"
       onClick={() => {
         if (preview && link !== undefined) {
-          dispatch(setPreviewIndex(link))
+          const index = viewTrees.findIndex((viewTree: IView) => viewTree.id === link)
+          if (index !== -1) dispatch(setPreviewIndex(index))
         }
       }}
       style={{ ...style, transform: `scale(${zoom})` }}

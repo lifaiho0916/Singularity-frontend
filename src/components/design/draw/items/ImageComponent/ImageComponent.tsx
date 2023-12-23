@@ -1,13 +1,15 @@
 import { type FC, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { ImageComponentProps } from "./ImageComponent.types";
 import defaultImage from "assets/images/default-image.png";
 import { getDataFromIndexDB } from 'libs/indexedDB';
 import { setPreviewIndex } from 'store/slices/projectSlice';
-import type { IMedia } from 'libs/types';
+import type { IMedia, IView } from 'libs/types';
+import type { RootState } from 'store';
 import './ImageComponent.scss';
 
 const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) => {
+  const { viewTrees } = useSelector((state: RootState) => state.project);
   const dispatch = useDispatch();
   const [images, setImages] = useState<Array<IMedia>>([]);
 
@@ -18,7 +20,7 @@ const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) =
 
   useEffect(() => {
     getDataFromDB();
-  }, [])
+  }, [imageData])
 
   return (
     <img
@@ -27,7 +29,8 @@ const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) =
       alt="Image"
       onClick={() => {
         if (preview && link !== undefined) {
-          dispatch(setPreviewIndex(link))
+          const index = viewTrees.findIndex((viewTree: IView) => viewTree.id === link)
+          if (index !== -1) dispatch(setPreviewIndex(index))
         }
       }}
     />
