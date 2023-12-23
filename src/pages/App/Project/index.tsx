@@ -4,7 +4,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Button } from 'primereact/button';
 import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { getProjectById, setOpenAtById, getProjectImage } from 'libs/axios/api/project';
-import { initCurrentElement, setProject, setStructure } from 'store/slices/projectSlice';
+import { initCurrentElement, setProject, setStructure, setZoom } from 'store/slices/projectSlice';
 import { InviteMembersDialog } from 'components/dialog/InviteMembersDialog';
 import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 import type { IMember, IProject } from 'libs/types';
@@ -126,7 +126,10 @@ const Project = () => {
                         }}
                         raised
                         size="small"
-                        onClick={() => navigate(`/app/project/${projectId}/preview`)}
+                        onClick={() => {
+                            dispatch(setZoom(1));
+                            navigate(`/app/project/${projectId}/preview`)
+                        }}
                     >
                         <span>PREVIEW</span>
                     </Button>
