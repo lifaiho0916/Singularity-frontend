@@ -18,7 +18,7 @@ const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) =
 
   useEffect(() => {
     getDataFromDB();
-  }, [imageData])
+  }, [])
 
   return (
     <img

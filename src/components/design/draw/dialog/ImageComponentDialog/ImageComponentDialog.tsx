@@ -77,7 +77,7 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
 
   useEffect(() => {
     getDataFromDB();
-  }, [currentElement])
+  }, [])
 
   return currentElement ? (
     <div className="image-component-dialog">
