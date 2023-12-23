@@ -197,6 +197,9 @@ export const projectSlice = createSlice({
         },
         setProject: (state, action: PayloadAction<IProject | null>) => {
             state.project = action.payload
+            if (state.project && state.project.data) {
+                state.viewTrees = JSON.parse(state.project.data);
+            }
         },
         setStructure: (state, action: PayloadAction<IStructure>) => {
             state.structure = action.payload
