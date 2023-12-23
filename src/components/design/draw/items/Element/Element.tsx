@@ -20,7 +20,7 @@ const Element: FC<ElementProps> = ({ item, preview }) => {
         <Wrapper
           id={item.id}
           preview={preview}
-          hasWrapper={(item.subviews && item.subviews[0].type === IComponentType.Wrapper) ? true : false}
+          hasWrapper={(item.content && item.content[0].type === IComponentType.Wrapper) ? true : false}
           style={{
             ...item.details?.style,
             width: `${item.x.max - item.x.min}%`,
@@ -28,7 +28,7 @@ const Element: FC<ElementProps> = ({ item, preview }) => {
             display: item.details.kind === IWrapperType.Vertical ? 'flex' : undefined
           }}
         >
-          {item.subviews && item.subviews.map((subView, index) => (
+          {item.content && item.content.map((subView, index) => (
             <Element item={subView} key={index} preview={preview} />
           ))}
         </Wrapper> :

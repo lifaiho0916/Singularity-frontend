@@ -71,7 +71,7 @@ export interface IView {
     type: IComponentType
     x: IMinMaxPair
     y: IMinMaxPair
-    subviews?: IView[]
+    content?: IView[]
     details?: any
 }
 

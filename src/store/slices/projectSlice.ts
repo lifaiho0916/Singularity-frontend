@@ -40,18 +40,18 @@ function deleteElement(view: IView, element: IView): IView | null {
     if (view.id === element.id) {
         // Element found, delete it
         return null;
-    } else if (view.subviews) {
-        // Traverse subviews recursively
-        view.subviews = view.subviews.filter(subview => deleteElement(subview, element));
-        if (view.subviews.length === 0) {
-            delete view.subviews
+    } else if (view.content) {
+        // Traverse content recursively
+        view.content = view.content.filter(subview => deleteElement(subview, element));
+        if (view.content.length === 0) {
+            delete view.content
         }
-        else if (view.subviews.length === 1 && view.subviews[0].type === IComponentType.Wrapper) {
-            if (view.subviews[0].subviews) {
-                view.details = view.subviews[0].details;
-                view.subviews = JSON.parse(JSON.stringify(view.subviews[0].subviews));
+        else if (view.content.length === 1 && view.content[0].type === IComponentType.Wrapper) {
+            if (view.content[0].content) {
+                view.details = view.content[0].details;
+                view.content = JSON.parse(JSON.stringify(view.content[0].content));
             } else {
-                delete view.subviews
+                delete view.content
             }
         }
     }
@@ -61,9 +61,9 @@ function deleteElement(view: IView, element: IView): IView | null {
 function insertSubview(view: IView, element: INewlyInsertedElement): void {
     // Check if the element fits within the current view
     if (isElementBelongInViewPanel(element)) {
-        // If the view is a Wrapper and has subviews, check each subview
-        if (view.type === IComponentType.Wrapper && view.subviews && view.subviews.length > 0 && view.subviews[0].type === IComponentType.Wrapper) {
-            for (const childView of view.subviews) {
+        // If the view is a Wrapper and has content, check each subview
+        if (view.type === IComponentType.Wrapper && view.content && view.content.length > 0 && view.content[0].type === IComponentType.Wrapper) {
+            for (const childView of view.content) {
                 let elementClone = JSON.parse(JSON.stringify(element))
                 insertSubview(childView, {
                     ...elementClone,
@@ -74,11 +74,11 @@ function insertSubview(view: IView, element: INewlyInsertedElement): void {
                 });
             }
         } else {
-            // If the view is not a Wrapper or has no subviews, create a new subview
-            if (!view.subviews) {
-                view.subviews = [];
+            // If the view is not a Wrapper or has no content, create a new subview
+            if (!view.content) {
+                view.content = [];
             }
-            view.subviews.push(getViewFormatDataFromElement(element));
+            view.content.push(getViewFormatDataFromElement(element));
         }
     }
 }
@@ -87,9 +87,9 @@ function findElementInViewById(view: IView, id: string): IView | null {
     if (view.id === id) {
         return view;
     }
-    if (view.subviews) {
-        for (let i = 0; i < view.subviews.length; i++) {
-            const result = findElementInViewById(view.subviews[i], id);
+    if (view.content) {
+        for (let i = 0; i < view.content.length; i++) {
+            const result = findElementInViewById(view.content[i], id);
             if (result) return result;
         }
     }
@@ -117,18 +117,18 @@ function splitWrapper(view: IView, wrapperId: string, kind: IWrapperType) {
             }
         }
 
-        if (view.subviews) {
-            firstWrapper.subviews = view.subviews
+        if (view.content) {
+            firstWrapper.content = view.content
         }
-        view.subviews = [firstWrapper, secondWrapper]
+        view.content = [firstWrapper, secondWrapper]
         view.details = {
             ...view.details,
             kind
         }
     }
-    if (view.subviews && view.subviews.length > 0) {
-        for (let i = 0; i < view.subviews.length; i++) {
-            splitWrapper(view.subviews[i], wrapperId, kind)
+    if (view.content && view.content.length > 0) {
+        for (let i = 0; i < view.content.length; i++) {
+            splitWrapper(view.content[i], wrapperId, kind)
         }
     }
     return null;
@@ -140,11 +140,11 @@ function replaceSubview(view: IView, updatedComponent: IView | null): IView | nu
     if (view.id === updatedComponent.id) {
         return updatedComponent
     }
-    if (view.subviews && view.subviews.length > 0) {
-        for (let i = 0; i < view.subviews.length; i++) {
-            let updatedSubview = replaceSubview(view.subviews[i], updatedComponent)
+    if (view.content && view.content.length > 0) {
+        for (let i = 0; i < view.content.length; i++) {
+            let updatedSubview = replaceSubview(view.content[i], updatedComponent)
             if (updatedSubview) {
-                view.subviews[i] = updatedSubview
+                view.content[i] = updatedSubview
                 return view
             }
         }

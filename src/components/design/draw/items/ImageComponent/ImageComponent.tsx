@@ -25,7 +25,7 @@ const ImageComponent: FC<ImageComponentProps> = ({ imageData, preview, link }) =
   return (
     <img
       className='image-component'
-      src={((imageData && images.length > 0) ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === imageData)[0].imageData}` : defaultImage)}
+      src={((imageData && images.length > 0 && images.filter((image: IMedia) => image.id === imageData).length > 0) ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === imageData)[0].imageData}` : defaultImage)}
       alt="Image"
       onClick={() => {
         if (preview && link !== undefined) {

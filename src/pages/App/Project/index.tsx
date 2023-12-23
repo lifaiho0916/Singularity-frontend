@@ -4,7 +4,7 @@ import { TabView, TabPanel } from 'primereact/tabview';
 import { Button } from 'primereact/button';
 import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
 import { getProjectById, setOpenAtById, getProjectImage } from 'libs/axios/api/project';
-import { setProject, setStructure } from 'store/slices/projectSlice';
+import { initCurrentElement, setProject, setStructure } from 'store/slices/projectSlice';
 import { InviteMembersDialog } from 'components/dialog/InviteMembersDialog';
 import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 import type { IMember, IProject } from 'libs/types';
@@ -72,6 +72,7 @@ const Project = () => {
 
     React.useEffect(() => {
         if (projectId) {
+            dispatch(initCurrentElement(null));
             GetProjectById(Number(projectId));
             setOpenAtById(Number(projectId));
             GetProjectImages(Number(projectId));
@@ -109,8 +110,8 @@ const Project = () => {
         <div className="project-board">
             {location.pathname.indexOf('preview') === -1 &&
                 <div style={{ margin: 5, position: 'relative' }}>
-                    <TabView 
-                        activeIndex={activeTab} 
+                    <TabView
+                        activeIndex={activeTab}
                         onTabChange={(e) => NavigateWorkspace(e.index)}
                     >
                         <TabPanel header="DESIGN" />
