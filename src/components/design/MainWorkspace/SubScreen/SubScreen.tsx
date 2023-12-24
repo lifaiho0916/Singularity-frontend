@@ -1,4 +1,4 @@
-import { type FC, LegacyRef } from 'react'
+import { type FC, LegacyRef, useRef } from 'react'
 import { Button } from 'primereact/button';
 import { useMouse } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
@@ -8,11 +8,14 @@ import { addSubViewToViewTree, setViewTree } from 'store/slices/projectSlice';
 import { SubScreenProps } from './SubScreen.types';
 import type { RootState } from 'store';
 import './SubScreen.scss';
+import { Menu } from 'primereact/menu';
+import { MenuItemCommandEvent } from 'primereact/menuitem';
 
 const SubScreen: FC<SubScreenProps> = (props) => {
   const { isToolItemSelected, currentToolId, view, setToolItemSelected, setMouseOut } = props;
   const dispatch = useDispatch();
   const { ref: newItemRef, x, y, reset } = useMouse();
+  const menu = useRef<Menu | null>(null);
   const { zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.project);
 
   const getCurrentComponentType = () => {
@@ -49,18 +52,57 @@ const SubScreen: FC<SubScreenProps> = (props) => {
     }
   }
 
+  const items = [
+    {
+      label: 'Move Forward',
+      command: (event: MenuItemCommandEvent) => {
+        event.originalEvent.stopPropagation();
+        // MoveForward()
+      }
+    },
+    {
+      label: 'Move Backward',
+      command: (event: MenuItemCommandEvent) => {
+        event.originalEvent.stopPropagation();
+      }
+    },
+    {
+      label: 'Move to First',
+      command: (event: MenuItemCommandEvent) => {
+        event.originalEvent.stopPropagation();
+        // MoveForward()
+      }
+    },
+    {
+      label: 'Move to Last',
+      command: (event: MenuItemCommandEvent) => {
+        event.originalEvent.stopPropagation();
+      }
+    },
+    {
+      label: 'Delete',
+      command: (event: MenuItemCommandEvent) => {
+        event.originalEvent.stopPropagation();
+      }
+    },
+  ]
+
   return (
     <div className="view-section" style={{ width: (xMultiplier + 16) * zoom, height: (yMultiplier + 16) * zoom }}>
       <div className="view-header">
         <h4 className="view-name">{view?.name}</h4>
         <Button
-          onClick={() => { }}
+          onClick={(event) => {
+            event.stopPropagation();
+            menu.current && menu.current.toggle(event)
+          }}
           icon="pi pi-ellipsis-h"
           rounded text
           size="small"
           severity="secondary"
           aria-label="Cancel"
         />
+        <Menu model={items} popup ref={menu} popupAlignment="right" />
       </div>
       <div
         className="main-view"
