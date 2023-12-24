@@ -6,11 +6,11 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
+import { Button } from 'primereact/button';
 import type { RootState } from 'store';
 import type { IView } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/projectSlice';
 import './LabelComponentDialog.scss';
-import { Button } from 'primereact/button';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
   const dispatch = useDispatch();

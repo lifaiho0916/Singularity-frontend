@@ -33,11 +33,23 @@ const SubScreen: FC<SubScreenProps> = (props) => {
         }
       case IComponentType.LabelComponent:
         return {
-          text: 'Label'
+          text: 'Label',
+          style: {
+
+          }
         }
       case IComponentType.TextComponent:
         return {
-          text: 'Text'
+          text: 'Text',
+          style: {
+
+          }
+        }
+      default:
+        return {
+          style: {
+
+          }
         }
     }
   }
