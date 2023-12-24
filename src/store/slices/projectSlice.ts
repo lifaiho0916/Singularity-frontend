@@ -219,7 +219,7 @@ export const projectSlice = createSlice({
         },
         moveViewForwardInViewTrees: (state, action: PayloadAction<string>) => {
             const viewId = action.payload;
-            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id ===viewId);
             if (index > 0 && index < state.viewTrees.length) {
                 const temp = state.viewTrees[index];
                 state.viewTrees[index] = state.viewTrees[index - 1];
@@ -232,7 +232,7 @@ export const projectSlice = createSlice({
         },
         moveViewBackwardInViewTrees: (state, action: PayloadAction<string>) => {
             const viewId = action.payload;
-            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id === viewId);
             if (index >= 0 && index < state.viewTrees.length - 1) {
                 const temp = state.viewTrees[index];
                 state.viewTrees[index] = state.viewTrees[index + 1];
@@ -244,7 +244,7 @@ export const projectSlice = createSlice({
         },
         moveViewToFirstInViewTrees: (state, action: PayloadAction<string>) => {
             const viewId = action.payload;
-            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id === viewId);
             if (index > 0 && index < state.viewTrees.length) {
                 const removedViewTree = state.viewTrees.splice(index, 1)[0];
                 state.viewTrees.unshift(removedViewTree);
@@ -255,7 +255,7 @@ export const projectSlice = createSlice({
         },
         moveViewToLastInViewTrees: (state, action: PayloadAction<string>) => {
             const viewId = action.payload;
-            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id === viewId);
             if (index >= 0 && index < state.viewTrees.length - 1) {
                 const removedViewTree = state.viewTrees.splice(index, 1)[0];
                 state.viewTrees.push(removedViewTree);

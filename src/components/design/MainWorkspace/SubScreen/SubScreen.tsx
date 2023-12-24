@@ -1,6 +1,8 @@
 import { type FC, LegacyRef, useRef } from 'react'
 import { Button } from 'primereact/button';
 import { useMouse } from 'primereact/hooks';
+import { Menu } from 'primereact/menu';
+import { MenuItemCommandEvent } from 'primereact/menuitem';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'components';
 import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
@@ -8,8 +10,6 @@ import { addSubViewToViewTree, deleteViewFromViewTrees, moveViewBackwardInViewTr
 import { SubScreenProps } from './SubScreen.types';
 import type { RootState } from 'store';
 import './SubScreen.scss';
-import { Menu } from 'primereact/menu';
-import { MenuItemCommandEvent } from 'primereact/menuitem';
 
 const SubScreen: FC<SubScreenProps> = (props) => {
   const { isToolItemSelected, currentToolId, view, setToolItemSelected, setMouseOut } = props;
