@@ -4,7 +4,7 @@ import { useMouse } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'components';
 import { INewlyInsertedElement, IView, IComponentType } from 'libs/types';
-import { addSubViewToViewTree, setViewTree } from 'store/slices/projectSlice';
+import { addSubViewToViewTree, deleteViewFromViewTrees, moveViewBackwardInViewTrees, moveViewForwardInViewTrees, moveViewToFirstInViewTrees, moveViewToLastInViewTrees, setViewTree } from 'store/slices/projectSlice';
 import { SubScreenProps } from './SubScreen.types';
 import type { RootState } from 'store';
 import './SubScreen.scss';
@@ -17,6 +17,26 @@ const SubScreen: FC<SubScreenProps> = (props) => {
   const { ref: newItemRef, x, y, reset } = useMouse();
   const menu = useRef<Menu | null>(null);
   const { zoom, xMultiplier, yMultiplier } = useSelector((state: RootState) => state.project);
+
+  const MoveForward = () => {
+    dispatch(moveViewForwardInViewTrees(view.id))
+  }
+
+  const MoveBackward = () => {
+    dispatch(moveViewBackwardInViewTrees(view.id))
+  }
+
+  const MoveToFirst = () => {
+    dispatch(moveViewToFirstInViewTrees(view.id))
+  }
+
+  const MoveToLast = () => {
+    dispatch(moveViewToLastInViewTrees(view.id))
+  }
+
+  const RemoveView = () => {
+    dispatch(deleteViewFromViewTrees(view.id));
+  }
 
   const getCurrentComponentType = () => {
     return currentToolId === 0 ? IComponentType.ButtonComponent :
@@ -81,32 +101,35 @@ const SubScreen: FC<SubScreenProps> = (props) => {
       label: 'Move Forward',
       command: (event: MenuItemCommandEvent) => {
         event.originalEvent.stopPropagation();
-        // MoveForward()
+        MoveForward()
       }
     },
     {
       label: 'Move Backward',
       command: (event: MenuItemCommandEvent) => {
         event.originalEvent.stopPropagation();
+        MoveBackward()
       }
     },
     {
       label: 'Move to First',
       command: (event: MenuItemCommandEvent) => {
         event.originalEvent.stopPropagation();
-        // MoveForward()
+        MoveToFirst()
       }
     },
     {
       label: 'Move to Last',
       command: (event: MenuItemCommandEvent) => {
         event.originalEvent.stopPropagation();
+        MoveToLast()
       }
     },
     {
       label: 'Delete',
       command: (event: MenuItemCommandEvent) => {
         event.originalEvent.stopPropagation();
+        RemoveView();
       }
     },
   ]

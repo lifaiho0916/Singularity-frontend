@@ -217,6 +217,57 @@ export const projectSlice = createSlice({
             state.viewTrees = action.payload
             putViewTreesData(state.project, JSON.stringify(state.viewTrees));
         },
+        moveViewForwardInViewTrees: (state, action: PayloadAction<string>) => {
+            const viewId = action.payload;
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            if (index > 0 && index < state.viewTrees.length) {
+                const temp = state.viewTrees[index];
+                state.viewTrees[index] = state.viewTrees[index - 1];
+                state.viewTrees[index - 1] = temp;
+                putViewTreesData(state.project, JSON.stringify(state.viewTrees));
+                console.log('Swapped viewTree with its previous viewTree');
+              } else {
+                console.log('Unable to swap viewTree with its previous viewTree');
+              }
+        },
+        moveViewBackwardInViewTrees: (state, action: PayloadAction<string>) => {
+            const viewId = action.payload;
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            if (index >= 0 && index < state.viewTrees.length - 1) {
+                const temp = state.viewTrees[index];
+                state.viewTrees[index] = state.viewTrees[index + 1];
+                state.viewTrees[index + 1] = temp;
+                putViewTreesData(state.project, JSON.stringify(state.viewTrees));
+              } else {
+                console.log('Unable to swap viewTree with its next viewTree');
+              }
+        },
+        moveViewToFirstInViewTrees: (state, action: PayloadAction<string>) => {
+            const viewId = action.payload;
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            if (index > 0 && index < state.viewTrees.length) {
+                const removedViewTree = state.viewTrees.splice(index, 1)[0];
+                state.viewTrees.unshift(removedViewTree);
+                putViewTreesData(state.project, JSON.stringify(state.viewTrees));
+              } else {
+                console.log('Unable to move viewTree to the first position');
+              }
+        },
+        moveViewToLastInViewTrees: (state, action: PayloadAction<string>) => {
+            const viewId = action.payload;
+            const index = state.viewTrees.findIndex((viewTree) => viewTree.id == viewId);
+            if (index >= 0 && index < state.viewTrees.length - 1) {
+                const removedViewTree = state.viewTrees.splice(index, 1)[0];
+                state.viewTrees.push(removedViewTree);
+                putViewTreesData(state.project, JSON.stringify(state.viewTrees));
+              } else {
+                console.log('Unable to move viewTree to the first position');
+              }
+        },
+        deleteViewFromViewTrees: (state, action: PayloadAction<string>) => {
+            state.viewTrees = state.viewTrees.filter(viewTree => viewTree.id !== action.payload);
+            putViewTreesData(state.project, JSON.stringify(state.viewTrees));
+        },
         fetchViewTree: (state, action: PayloadAction<IView>) => {
             state.viewTree = action.payload;
         },
@@ -300,7 +351,12 @@ export const {
     applySplitToWrapper,
     initCurrentElement,
     setMultiplayerSize,
-    setPreviewIndex
+    setPreviewIndex,
+    moveViewForwardInViewTrees,
+    moveViewBackwardInViewTrees,
+    moveViewToFirstInViewTrees,
+    moveViewToLastInViewTrees,
+    deleteViewFromViewTrees
 } = projectSlice.actions
 
 export default projectSlice.reducer
