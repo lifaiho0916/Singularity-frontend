@@ -18,7 +18,7 @@ const DesignHeader: FC<DesignHeaderProps> = ({
     <>
       <div className='workspace-header'>
         <div className='responsive-tool'>
-          <Button
+          {/* <Button
             icon="pi pi-desktop" text
             raised={responsive === 'desktop'}
             onClick={() => setResponsive('desktop')}
@@ -32,7 +32,7 @@ const DesignHeader: FC<DesignHeaderProps> = ({
             icon="pi pi-mobile" text
             raised={responsive === 'mobile'}
             onClick={() => setResponsive('mobile')}
-          />
+          /> */}
         </div>
         <div className='view-tool'>
           <CascadeSelect

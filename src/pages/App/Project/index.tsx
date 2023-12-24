@@ -1,10 +1,8 @@
 import * as React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TabView, TabPanel } from 'primereact/tabview';
-import { Button } from 'primereact/button';
-import { useNavigate, useParams, Navigate, Routes, Route, useLocation } from 'react-router-dom';
+import { useParams, Navigate, Routes, Route } from 'react-router-dom';
 import { getProjectById, setOpenAtById, getProjectImage } from 'libs/axios/api/project';
-import { initCurrentElement, setProject, setStructure, setZoom } from 'store/slices/projectSlice';
+import { initCurrentElement, setProject, setStructure } from 'store/slices/projectSlice';
 import { InviteMembersDialog } from 'components/dialog/InviteMembersDialog';
 import { InvitationSentDialog } from 'components/dialog/InvitationSentDialog';
 import type { IMember, IProject } from 'libs/types';
@@ -31,13 +29,10 @@ const WorkspaceContent = () => {
 
 const Project = () => {
     const { projectId } = useParams();
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-    const location = useLocation();
     const [isOpenInviteModal, setIsOpenInviteModal] = React.useState(false);
     const [isOpenInvitationModal, setIsOpenInvitationModal] = React.useState(false);
     const [members, setMembers] = React.useState<IMember[]>([]);
-    const [activeTab, setActiveTab] = React.useState(0);
     const { project } = useSelector((state: RootState) => state.project);
 
     const GetProjectById = async (projectId: number) => {
@@ -51,22 +46,6 @@ const Project = () => {
         const res = await getProjectImage(projectId)
         if (res) {
             saveDataInIndexDB(res)
-        }
-    }
-
-    const NavigateWorkspace = (index: number) => {
-        switch (index) {
-            case 0:
-                navigate(`/app/project/${projectId}/design-workspace`);
-                break;
-            case 1:
-                navigate(`/app/project/${projectId}/backend-workspace`);
-                break;
-            case 2:
-                navigate(`/app/project/${projectId}/architecture-workspace`);
-                break;
-            default:
-                break;
         }
     }
 
@@ -88,53 +67,8 @@ const Project = () => {
         }
     }, [project, projectId]);
 
-    React.useEffect(() => {
-        if (projectId) {
-            switch (location.pathname) {
-                case `/app/project/${projectId}/design-workspace`:
-                    setActiveTab(0)
-                    break;
-                case `/app/project/${projectId}/backend-workspace`:
-                    setActiveTab(1)
-                    break;
-                case `/app/project/${projectId}/architecture-workspace`:
-                    setActiveTab(2)
-                    break;
-                default:
-                    break;
-            }
-        }
-    }, [location, projectId])
-
     return (
         <div className="project-board">
-            {location.pathname.indexOf('preview') === -1 &&
-                <div style={{ margin: 5, position: 'relative' }}>
-                    <TabView
-                        activeIndex={activeTab}
-                        onTabChange={(e) => NavigateWorkspace(e.index)}
-                    >
-                        <TabPanel header="DESIGN" />
-                        <TabPanel header="BACKEND" />
-                        {/* <TabPanel header="ARCHITECTURE" /> */}
-                    </TabView>
-                    <Button
-                        style={{
-                            position: 'absolute',
-                            top: 6,
-                            right: 5
-                        }}
-                        raised
-                        size="small"
-                        onClick={() => {
-                            dispatch(setZoom(1));
-                            navigate(`/app/project/${projectId}/preview`)
-                        }}
-                    >
-                        <span>PREVIEW</span>
-                    </Button>
-                </div>
-            }
             <WorkspaceContent />
             <InviteMembersDialog
                 isOpenInviteModal={isOpenInviteModal}
