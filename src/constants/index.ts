@@ -9,6 +9,27 @@ export const PROJECT_POSITIONS = [
     'Manager'
 ]
 
+export const COLORS = [
+    'primary',
+    'secondary',
+    'success',
+    'error',
+    'warning',
+    'info'
+]
+
+export const BUTTON_TYPES = [
+    'contained',
+    'outlined',
+    'text'
+]
+
+export const BUTTON_SIZES = [
+    'small',
+    'medium',
+    'large'
+]
+
 export const DEVICES = [
     {
         name: 'iPhone SE',
