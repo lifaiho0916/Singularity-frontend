@@ -22,9 +22,31 @@ const SubScreen: FC<SubScreenProps> = (props) => {
           IComponentType.ImageComponent;
   }
 
+  const getDetails = (type: string) => {
+    switch (type) {
+      case IComponentType.ButtonComponent:
+        return {
+          color: 'primary',
+          text: 'Button',
+          type: 'contained',
+          size: 'medium'
+        }
+      case IComponentType.LabelComponent:
+        return {
+          text: 'Label'
+        }
+      case IComponentType.TextComponent:
+        return {
+          text: 'Text'
+        }
+    }
+  }
+
   const onAddComponent = (view: IView) => {
     dispatch(setViewTree(view))
     const item = getCurrentComponentType();
+    const details = getDetails(item);
+
     if (isToolItemSelected) {
       {
         const newElement: INewlyInsertedElement = {
@@ -33,15 +55,17 @@ const SubScreen: FC<SubScreenProps> = (props) => {
           type: item,
           width: 100,
           height: 30,
-          details: {
-            text: item === IComponentType.ButtonComponent ? 'Button' :
-              item === IComponentType.LabelComponent ? 'Label' :
-                item === IComponentType.TextComponent ? 'Text' :
-                  'Image',
-            style: {
-              fontSize: 20
-            }
-          }
+          details: details
+          // {
+          // text: item === IComponentType.ButtonComponent ? 'Button' :
+          //   item === IComponentType.LabelComponent ? 'Label' :
+          //     item === IComponentType.TextComponent ? 'Text' :
+          //       'Image',
+          // style: {
+          //   fontSize: 20
+          // },
+          // color: 'primary'
+          // }
         }
         dispatch(addSubViewToViewTree(newElement));
         setToolItemSelected(false);

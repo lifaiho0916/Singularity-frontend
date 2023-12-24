@@ -3,5 +3,8 @@ export interface ButtonComponentProps {
     // onClick?: () => void,
     style?: any,
     preview: boolean,
-    link?: string
+    link?: string,
+    type: "text" | "outlined" | "contained" | undefined,
+    size: "small" | "medium" | "large" | undefined,
+    color: "inherit" | "primary" | "secondary" | "success" | "error" | "info" | "warning" | undefined
 }

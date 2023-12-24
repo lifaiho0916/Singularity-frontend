@@ -1,5 +1,4 @@
 import { type FC } from 'react'
-import { Button } from 'primereact/button';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { DesignHeaderProps } from './DesignHeader.types';
 import { useSelector } from 'react-redux';

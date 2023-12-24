@@ -9,7 +9,7 @@ import './Element.scss';
 
 const Element: FC<ElementProps> = ({ item, preview }) => {
   const dispatch = useDispatch();
-  const { xMultiplier, yMultiplier,zoom } = useSelector((state: RootState) => state.project)
+  const { xMultiplier, yMultiplier, zoom } = useSelector((state: RootState) => state.project)
 
   const selectThisWrapperInViewTree = (id: string) => {
     console.log(`wrapper ${id} selected`);
@@ -53,7 +53,9 @@ const Element: FC<ElementProps> = ({ item, preview }) => {
             item.type === IComponentType.ButtonComponent ?
               <ButtonComponent
                 text={item.details?.text}
-                style={item.details?.style}
+                color={item.details.color}
+                type={item.details.type}
+                size={item.details.size}
                 preview={preview}
                 link={item.details?.link}
               /> :
