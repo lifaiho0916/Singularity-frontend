@@ -106,7 +106,7 @@ const Project = () => {
                     >
                         <TabPanel header="DESIGN" />
                         <TabPanel header="BACKEND" />
-                        {/* <TabPanel header="ARCHITECTURE" /> */}
+                        <TabPanel header="ARCHITECTURE" disabled/>
                     </TabView>
                     <Button
                         style={{

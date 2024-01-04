@@ -96,3 +96,7 @@ export enum IWrapperType {
     Horizontal = 'Horizontal',
     Vertical = 'Vertical'
 }
+export interface IPosition {
+    x: number,
+    y: number
+}
