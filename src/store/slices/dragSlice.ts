@@ -44,7 +44,8 @@ export const dragSlice = createSlice({
 
 export const {
     dragStarted,
-    drawDraggedElement
+    drawDraggedElement,
+    dragEnded
 } = dragSlice.actions;
 
 export default dragSlice.reducer

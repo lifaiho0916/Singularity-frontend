@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IComponentType, IView, INewlyInsertedElement, IWrapperType, ISplitParameterPair } from "libs/types";
+import { IComponentType, IView, INewlyInsertedElement, IWrapperType, ISplitParameterPair, IPosition } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
 
 interface viewTreeSliceState {
@@ -183,9 +183,6 @@ export const viewTreeSlice = createSlice({
             let element = action.payload;
             element.x *= 100 / state.xMultiplier;
             element.y *= 100 / state.yMultiplier;
-            // element.width *= 100 / state.xMultiplier;
-            // element.height *= 100 / state.yMultiplier;
-
             insertSubview(state.viewTree as IView, element);
             const index = state.viewTrees.findIndex((view: IView) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IView;
