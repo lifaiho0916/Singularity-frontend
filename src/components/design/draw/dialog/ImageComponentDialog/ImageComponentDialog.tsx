@@ -1,4 +1,4 @@
-import { useState, useEffect, type FC } from 'react';
+import { useState, type FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { ImageComponentDialogProps } from "./ImageComponentDialog.types";
@@ -6,78 +6,61 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import type { RootState } from 'store';
-import type { IMedia, IView } from 'libs/types';
-import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/projectSlice';
+import type { IElement } from 'libs/types';
+import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import { Button } from 'primereact/button';
 import { ImageChooseDialog } from '../ImageChooseDialog';
-import { getDataFromIndexDB } from 'libs/indexedDB';
 import defaultImage from "assets/images/default-image.png";
 import { Image } from 'primereact/image';
 import './ImageComponentDialog.scss';
 
 const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
   const dispatch = useDispatch();
-  const [images, setImages] = useState<Array<IMedia>>([]);
   const [isOpenModal, setIsOpenModal] = useState(false);
-  const { currentElement, viewTrees } = useSelector((state: RootState) => state.project)
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onDelete = () => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(deleteSelectedElementInViewTree(currentElement));
   }
 
   const onWidthChange = (newWidth: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      x: {
-        ...currentElement.x,
-        max: newWidth
+      size: {
+        ...currentElement.size,
+        width: newWidth
       }
     }));
   }
 
   const onHeightChange = (newHeight: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      y: {
-        ...currentElement.y,
-        max: newHeight
+      size: {
+        ...currentElement.size,
+        height: newHeight
       }
     }));
   }
 
   const onLinkChange = (newLink: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        link: viewTrees.filter((view: IView) => view?.name === newLink)[0].id
-      }
+      link: newLink
     }));
   }
 
-  const onImageChange = (image: IMedia) => {
-    if (!currentElement || !currentElement.details) return
+  const onImageChange = (imageData: string) => {
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        image: image.id
-      }
+      content: imageData
     }));
   }
-
-  const getDataFromDB = async () => {
-    const res = await getDataFromIndexDB();
-    setImages(res as Array<IMedia>);
-  }
-
-  useEffect(() => {
-    getDataFromDB();
-  }, [isOpenModal])
 
   return currentElement ? (
     <div className="image-component-dialog">
@@ -92,9 +75,7 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
             <div className="image-container">
               <Image
-                src={(
-                  (currentElement.details.image && images.length > 0 && images.filter((image: IMedia) => image.id === currentElement.details.image).length > 0) ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === currentElement.details.image)[0].imageData}`
-                    : defaultImage)}
+                src={currentElement.content || defaultImage}
                 preview
               />
             </div>
@@ -117,8 +98,8 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
         </div>
         <div className="section-body">
           <CascadeSelect
-            value={viewTrees.filter((viewTree: IView) => viewTree.id === currentElement.details.link).length > 0 ? viewTrees.filter((viewTree: IView) => viewTree.id === currentElement.details.link)[0].name : ''}
-            options={viewTrees.map((view: IView) => view?.name)}
+            value={currentElement.link}
+            options={viewTrees.map((view: IElement) => view?.id)}
             optionGroupChildren={[]}
             onChange={(e) => onLinkChange(e.value)}
             className='input-text'
@@ -149,11 +130,10 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                prefix="%"
-                value={currentElement.x.max}
+                suffix="px"
+                value={currentElement.size.width}
                 onChange={(e) => onWidthChange(Number(e.value))}
                 min={0}
-                max={100}
               />
             </div>
             <div
@@ -168,11 +148,10 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                prefix="%"
-                value={currentElement.y.max}
+                suffix="px"
+                value={currentElement.size.height}
                 onChange={(e) => onHeightChange(Number(e.value))}
                 min={0}
-                max={100}
               />
             </div>
           </div>

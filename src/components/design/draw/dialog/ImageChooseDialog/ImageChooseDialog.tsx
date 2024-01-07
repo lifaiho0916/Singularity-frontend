@@ -1,4 +1,4 @@
-import { type FC, useState, useEffect, useRef, useMemo } from 'react'
+import { type FC, useState, useEffect, useRef } from 'react'
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router-dom';
 import { Dialog } from 'primereact/dialog'
@@ -10,8 +10,6 @@ import { Galleria } from 'primereact/galleria';
 import { Button } from 'primereact/button';
 import { FileUpload, FileUploadHandlerEvent, FileUploadSelectEvent } from 'primereact/fileupload';
 import { getProjectImage, uploadProjectImage } from 'libs/axios/api/project';
-import { saveDataInIndexDB, getDataFromIndexDB } from 'libs/indexedDB';
-import type { IMedia } from 'libs/types';
 import "./imageChooseDialog.scss";
 
 const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenModal, setComponentImage }) => {
@@ -20,7 +18,7 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
     const galleria = useRef<any>(null);
     const { projectId } = useParams();
     const [thumbnail, setThumbnail] = useState<any>(undefined);
-    const [images, setImages] = useState<Array<IMedia>>([]);
+    const [images, setImages] = useState<Array<string>>([]);
     const [index, setIndex] = useState(0);
     const [activeIndex, setActiveIndex] = useState(0);
 
@@ -28,8 +26,6 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
         if (thumbnail) {
             const res = await uploadProjectImage(Number(projectId), thumbnail.split("base64,")[1])
             if (res) {
-                const res1 = await GetProjectImages(Number(projectId));
-                saveDataInIndexDB(res1);
                 dispatch(notify({ title: '', type: 'success', content: 'Image uploaded successfully' }))
                 setThumbnail(undefined)
                 btnRef.current.clear();
@@ -48,24 +44,19 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
         };
     }
 
-    const GetProjectImages = async (projectId: number) => {
-        const res = await getProjectImage(projectId)
+    const GetProjectImages = async () => {
+        const res = await getProjectImage(Number(projectId))
         if (res) {
-            saveDataInIndexDB(res)
+            setImages(res as Array<string>);
         }
     }
 
-    const itemTemplate = (item: IMedia) => {
-        return <img src={`data:image/jpeg;charset=utf-8;base64,${item.imageData}`} alt="Image" style={{ width: '100%', display: 'block' }} />;
+    const itemTemplate = (item: string) => {
+        return <img src={`data:image/jpeg;charset=utf-8;base64,${item}`} alt="Image" style={{ width: '100%', display: 'block' }} />;
     }
 
-    const thumbnailTemplate = (item: IMedia) => {
-        return <img src={`data:image/jpeg;charset=utf-8;base64,${item.imageData}`} alt="Image" style={{ display: 'block' }} />;
-    }
-
-    const getDataFromDB = async () => {
-        const res = await getDataFromIndexDB();
-        setImages(res as Array<IMedia>);
+    const thumbnailTemplate = (item: string) => {
+        return <img src={`data:image/jpeg;charset=utf-8;base64,${item}`} alt="Image" style={{ display: 'block' }} />;
     }
 
     useEffect(() => {
@@ -76,8 +67,7 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
 
     useEffect(() => {
         if (index === 0) {
-            GetProjectImages(Number(projectId))
-            getDataFromDB();
+            GetProjectImages()
         }
     }, [index])
 
@@ -98,10 +88,10 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
                         activeIndex={activeIndex} onItemChange={(e) => setActiveIndex(e.index)}
                         circular fullScreen showItemNavigators showThumbnails={false} item={itemTemplate} thumbnail={thumbnailTemplate} />
                     <div className="image-container">
-                        {images && images.map((image: IMedia) => (
-                            <div key={image.id} className="image-view">
+                        {images && images.map((image, index) => (
+                            <div key={index} className="image-view">
                                 <img
-                                    src={`data:image/jpeg;charset=utf-8;base64,${image.imageData}`}
+                                    src={`data:image/jpeg;charset=utf-8;base64,${image}`}
                                     width={'150px'}
                                     height={'120px'}
                                     onClick={
@@ -113,7 +103,7 @@ const ImageChooseDialog: FC<ImageChooseDialogProps> = ({ isOpenModal, setIsOpenM
                                     size='small'
                                     raised style={{ marginTop: 5 }}
                                     onClick={() => {
-                                        setComponentImage(image)
+                                        setComponentImage(`data:image/jpeg;charset=utf-8;base64,${image}`)
                                         setIsOpenModal(false);
                                     }}
                                 >Select</Button>

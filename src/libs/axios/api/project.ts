@@ -80,18 +80,6 @@ export const uploadProjectImage = async (projectId: number, imageData: Uint8Arra
     return undefined
 }
 
-export const uploadProjectData = async (projectId: number, jsonData: string): Promise<object | undefined> => {
-    try {
-        const res = await API.put(`/v1/project/${projectId}`, {
-            data: jsonData
-        })
-        return res;
-    } catch (error) {
-        console.warn(error)
-    }
-    return undefined
-}
-
 export const getProjectImage = async (projectId: number): Promise<object | undefined> => {
     try {
         const res = await API.get(`/v1/project/${projectId}/images`);

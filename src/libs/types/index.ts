@@ -7,11 +7,6 @@ export interface IUser {
     avatar: string
 }
 
-export interface IMedia {
-    id: number
-    imageData: string
-}
-
 export interface IMember {
     email: string
     position: string
@@ -52,36 +47,24 @@ export interface IStructure {
 
 export interface IElement {
     id: string
-    parent: string
     name: string
+    parent: string
     style: React.CSSProperties
     child: Array<IElement>
     type: IComponentType
-    action: () => void
-}
-
-export interface IMinMaxPair {
-    min: number
-    max: number
-}
-
-export interface IView {
-    id: string,
-    name?: string,
-    type: IComponentType
-    x: IMinMaxPair
-    y: IMinMaxPair
-    content?: IView[]
-    details?: any
+    position: IPosition
+    size: ISize
+    content: string
+    link: string
+    action?: () => void
 }
 
 export interface INewlyInsertedElement {
     x: number
     y: number
     type: IComponentType
-    width: number
-    height: number
-    details?: any
+    content: string
+    style: React.CSSProperties
 }
 
 export interface ISplitParameterPair {
@@ -100,4 +83,13 @@ export enum IComponentType {
 export enum IWrapperType {
     Horizontal = 'Horizontal',
     Vertical = 'Vertical'
+}
+export interface IPosition {
+    x: number,
+    y: number
+}
+
+export interface ISize {
+    width: number,
+    height: number
 }

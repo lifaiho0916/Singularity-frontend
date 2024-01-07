@@ -1,5 +1,4 @@
 .app-header {
-    width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -8,24 +7,5 @@
 
     .logo {
         cursor: pointer;
-    }
-
-    .design-navigation {
-        display: flex;
-        justify-content: center;
-
-        button {
-            margin: 0 5px;
-        }
-    }
-
-    .profile {
-        display: flex;
-        justify-content: flex-end;
-        align-items: center;
-
-        button {
-            margin-right: 10px;
-        }
     }
 }

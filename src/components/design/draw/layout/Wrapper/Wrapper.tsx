@@ -5,12 +5,12 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import { RootState } from "store";
 import { IWrapperType } from "libs/types";
-import { applySplitToWrapper, deleteWrapper } from "store/slices/projectSlice";
+import { applySplitToWrapper, deleteWrapper } from "store/slices/viewTreeSlice";
 import './Wrapper.scss';
 
-const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick, preview }) => {
+const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick }) => {
   const dispatch = useDispatch();
-  const { currentElement } = useSelector((state: RootState) => state.project);
+  const { currentElement } = useSelector((state: RootState) => state.viewTree);
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
   const [isShowVerticalLine, setIsShowVerticalLine] = React.useState(false);
   const [isShowHorizontalLine, setIsShowHorizontalLine] = React.useState(false);
@@ -29,16 +29,12 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick, p
     <div
       id={id}
       className="view-box"
-      style={{
-        ...style,
-        border:
-          preview ? 'none' : currentElement && currentElement.id === id ? '2px dashed' : hasWrapper ? 'none' : undefined
-      }}
+      style={{ ...style, border: currentElement && currentElement.id === id ? '2px dashed' : hasWrapper ? 'none' : undefined }}
       onMouseEnter={() => { setIsShowSpliter(true) }}
       onMouseLeave={() => { setIsShowSpliter(false) }}
       onClick={onClick}
     >
-      {(!hasWrapper && !preview) &&
+      {!hasWrapper &&
         <React.Fragment>
           {isShowSpliter ?
             <React.Fragment>

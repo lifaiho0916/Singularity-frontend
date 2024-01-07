@@ -10,15 +10,15 @@ import {
   ImageComponentDialog,
   AddScreenDialog,
 } from 'components';
-import { IView, IComponentType } from 'libs/types';
-import { initCurrentElement } from 'store/slices/projectSlice';
+import { IElement, IComponentType } from 'libs/types';
+import { initCurrentElement } from 'store/slices/viewTreeSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
 import './MainWorkspace.scss';
 
 const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const dispatch = useDispatch();
-  const { viewTrees, currentElement } = useSelector((state: RootState) => state.project);
+  const { viewTrees, currentElement } = useSelector((state: RootState) => state.viewTree);
 
   const [currentToolId, selectTool] = useState(0);
   const [isToolItemSelected, setToolItemSelected] = useState(false);
@@ -56,7 +56,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
         <Toolbar items={toolBarItems} onClicked={toolSelected} />
       </div>
       <div className="main-workspace">
-        {viewTrees.map((view: IView, index) => (
+        {viewTrees.map((view: IElement, index) => (
           <SubScreen 
             key={index}
             isToolItemSelected={isToolItemSelected}

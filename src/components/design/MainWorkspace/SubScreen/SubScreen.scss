@@ -1,0 +1,36 @@
+.view-section {
+    margin-bottom: 50px;
+    margin-left: 20px;
+
+    .view-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 100%;
+
+        .view-name {
+            width: calc(100% - 48px);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-left: 10px;
+        }
+    }
+
+    .main-view {
+        box-shadow: 0px 2px 2px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .5), 0px 1px 4px rgba(0, 0, 0, .08);
+        padding: 8px;
+        width: 100%;
+        height: 100%;
+        position: relative;
+
+        .element-tool {
+            margin-top: -8px;
+            margin-left: -30px;
+            position: absolute;
+            width: 20px;
+            height: 100px;
+            // box-shadow: 0px 2px 2px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .5), 0px 1px 4px rgba(0, 0, 0, .08);
+        }
+    }
+}

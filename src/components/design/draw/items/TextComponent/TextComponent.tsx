@@ -5,15 +5,14 @@ import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import './TextComponent.scss';
 
-const TextComponent: FC<TextComponentProps> = ({ text, style, preview }) => {
-  const { zoom } = useSelector((state: RootState) => state.project);
+const TextComponent: FC<TextComponentProps> = ({ text, style }) => {
+  const { zoom } = useSelector((state: RootState) => state.viewTree)
 
   return (
     <InputTextarea
       className="text-component"
-      style={{ ...style, fontSize: style?.fontSize ? style.fontSize * zoom : undefined }}
-      value={preview ? undefined : text}
-      defaultValue={preview ? text : undefined}
+      style={{ ...style, transform: `scale(${zoom})` }}
+      value={text}
     />
   )
 }

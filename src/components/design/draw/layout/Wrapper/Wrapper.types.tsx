@@ -5,6 +5,5 @@ export interface WrapperProps extends PropsWithChildren {
     style: {}
     onHorizontalSplit?: () => void
     onVerticalSplit?: () => void
-    onClick?: () => void,
-    preview?: boolean
+    onClick?: () => void
 }

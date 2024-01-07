@@ -1,31 +1,18 @@
 import { type FC } from 'react';
-import { useDispatch } from 'react-redux';
 import { ButtonComponentProps } from "./ButtonComponent.types";
 import { useSelector } from 'react-redux';
+import Button from '@mui/material/Button';
 import type { RootState } from 'store';
-import { Button } from '@mui/material';
-import type { IView } from 'libs/types';
-import { setPreviewIndex } from 'store/slices/projectSlice';
 import './ButtonComponent.scss';
 
-const ButtonComponent: FC<ButtonComponentProps> = ({ text, color, link, preview, type, size }) => {
-  const { viewTrees, zoom } = useSelector((state: RootState) => state.project)
-  const dispatch = useDispatch();
+const ButtonComponent: FC<ButtonComponentProps> = ({ text, onClick, style }) => {
+  const { zoom } = useSelector((state: RootState) => state.viewTree)
 
   return (
     <Button
-      color={color}
-      variant={type}
-      size={size}
-      style={{
-        transform: `scale(${zoom})`
-      }}
-      onClick={() => {
-        if (preview && link !== undefined) {
-          const index = viewTrees.findIndex((viewTree: IView) => viewTree.id === link)
-          if (index !== -1) dispatch(setPreviewIndex(index))
-        }
-      }}
+      className="button-component"
+      onClick={onClick}
+      style={{ ...style, transform: `scale(${zoom})` }}
     >
       {text}
     </Button>
