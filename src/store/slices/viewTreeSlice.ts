@@ -1,8 +1,9 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IComponentType, INewlyInsertedElement, ISplitParameterPair, IElement } from "libs/types";
+import { IComponentType, INewlyInsertedElement, ISplitParameterPair, IElement, IWrapperType } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
 import { IPosition } from '../../libs/types/index';
+import { Column } from "primereact/column";
 
 interface viewTreeSliceState {
     zoom: number,
@@ -26,8 +27,7 @@ const initialState: viewTreeSliceState = {
             parent: 'root1',
             type: IComponentType.Wrapper,
             style: {
-                display: "block",
-                position: "relative",
+                display: "flex",
                 minHeight: "30px",
                 fontSize: 16
             },
@@ -151,15 +151,20 @@ function findElementInViewById(view: IElement, id: string): IElement {
     };
 }
 
-function splitWrapper(view: IElement, wrapperId: string, id: number) {
+function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
     if (view.id === wrapperId && view.type === IComponentType.Wrapper) {
+        view.style = {
+            ...view.style,
+            display: "flex",
+            flexWrap: kind === IWrapperType.Vertical ? "wrap" : 'nowrap'
+        }
         let firstWrapper: IElement = {
             id: uuidv4(),
             name:`wrapper ${id+1}`,
             parent: view.id,
             type: IComponentType.Wrapper,
             style: {
-                position: "absolute"
+                position: "relative"
             },
             position: { x:0, y: 0},
             size: { width: view.size.width, height: 30 },
@@ -173,7 +178,7 @@ function splitWrapper(view: IElement, wrapperId: string, id: number) {
             name:`wrapper ${id+2}`,
             type: IComponentType.Wrapper,
             style: {
-                position: "absolute"
+                position: "relative"
             },
             position: { x:0, y: 0},
             size: { width: view.size.width, height: 30 },
@@ -187,7 +192,7 @@ function splitWrapper(view: IElement, wrapperId: string, id: number) {
     }
     else if (view.child && view.child.length > 0) {
         for (let i = 0; i < view.child.length; i++) {
-            splitWrapper(view.child[i], wrapperId, id)
+            splitWrapper(view.child[i], wrapperId, id, kind)
         }
     }
     return null;
@@ -274,9 +279,9 @@ export const viewTreeSlice = createSlice({
             state.viewTrees[index] = state.viewTree as IElement;
         },
         applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
-            const { wrapperId } = action.payload;
+            const { wrapperId, kind } = action.payload;
             // based on wrapperId & kind, need to add two wrappers.
-            splitWrapper(state.viewTree as IElement, wrapperId, state.wrapper_count);
+            splitWrapper(state.viewTree as IElement, wrapperId, state.wrapper_count, kind);
             state.wrapper_count+=2;
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
@@ -301,19 +306,19 @@ export const viewTreeSlice = createSlice({
             {
                 case 'desktop': 
                     newWidth = 1024;
-                    newHeight = 650;
+                    newHeight = 30;
                     break;
                 case 'tablet': 
                     newWidth = 600;
-                    newHeight = 650;
+                    newHeight = 30;
                     break;
                 case 'mobile': 
                     newWidth = 320;
-                    newHeight = 650;
+                    newHeight = 30;
                     break;
                 default: 
                     newWidth = 320;
-                    newHeight = 650;
+                    newHeight = 30;
                     break;
             }
             console.log("change width , height", newWidth, newHeight);

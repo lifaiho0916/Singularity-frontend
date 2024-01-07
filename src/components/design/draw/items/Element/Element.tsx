@@ -22,8 +22,8 @@ const Element: FC<ElementProps> = ({ item }) => {
           hasWrapper={(item.child && item.child[0]?.type === IComponentType.Wrapper) ? true : false}
           style={{
             ...item.style,
-            width: item.size.width,
-            height: item.size.height,
+            // width: item.size.width,
+            // height: item.size.height,
             display: item.type === IComponentType.Wrapper ? 'flex' : undefined
           }}
         >
