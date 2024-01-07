@@ -10,7 +10,7 @@ import {
   ImageComponentDialog,
   AddScreenDialog,
 } from 'components';
-import { IView, IComponentType } from 'libs/types';
+import { IElement, IComponentType } from 'libs/types';
 import { initCurrentElement } from 'store/slices/viewTreeSlice';
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
@@ -56,7 +56,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
         <Toolbar items={toolBarItems} onClicked={toolSelected} />
       </div>
       <div className="main-workspace">
-        {viewTrees.map((view: IView, index) => (
+        {viewTrees.map((view: IElement, index) => (
           <SubScreen 
             key={index}
             isToolItemSelected={isToolItemSelected}

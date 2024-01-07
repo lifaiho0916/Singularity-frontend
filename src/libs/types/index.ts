@@ -47,36 +47,24 @@ export interface IStructure {
 
 export interface IElement {
     id: string
-    parent: string
     name: string
+    parent: string
     style: React.CSSProperties
     child: Array<IElement>
     type: IComponentType
-    action: () => void
-}
-
-export interface IMinMaxPair {
-    min: number
-    max: number
-}
-
-export interface IView {
-    id: string,
-    name?: string,
-    type: IComponentType
-    x: IMinMaxPair
-    y: IMinMaxPair
-    subviews?: IView[]
-    details?: any
+    position: IPosition
+    size: ISize
+    content: string
+    link: string
+    action?: () => void
 }
 
 export interface INewlyInsertedElement {
     x: number
     y: number
     type: IComponentType
-    width: number
-    height: number
-    details?: any
+    content: string
+    style: React.CSSProperties
 }
 
 export interface ISplitParameterPair {
@@ -99,4 +87,9 @@ export enum IWrapperType {
 export interface IPosition {
     x: number,
     y: number
+}
+
+export interface ISize {
+    width: number,
+    height: number
 }

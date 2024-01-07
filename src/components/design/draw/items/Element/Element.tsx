@@ -1,6 +1,6 @@
 import { type FC } from 'react';
 import { useDispatch } from "react-redux";
-import { IComponentType, IWrapperType } from 'libs/types';
+import { IComponentType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 import { selectElementInViewTreeById } from "store/slices/viewTreeSlice";
 import { ElementProps } from "./Element.types";
@@ -19,15 +19,15 @@ const Element: FC<ElementProps> = ({ item }) => {
       {item.type === IComponentType.Wrapper ?
         <Wrapper
           id={item.id}
-          hasWrapper={(item.subviews && item.subviews[0].type === IComponentType.Wrapper) ? true : false}
+          hasWrapper={(item.child && item.child[0]?.type === IComponentType.Wrapper) ? true : false}
           style={{
-            ...item.details?.style,
-            width: `${item.x.max - item.x.min}%`,
-            height: `${item.y.max - item.y.min}%`,
-            display: item.details.kind === IWrapperType.Vertical ? 'flex' : undefined
+            ...item.style,
+            width: item.size.width,
+            height: item.size.height,
+            display: item.type === IComponentType.Wrapper ? 'flex' : undefined
           }}
         >
-          {item.subviews && item.subviews.map((subView, index) => (
+          {item.child && item.child.map((subView, index) => (
             <Element item={subView} key={index} />
           ))}
         </Wrapper> :
@@ -35,21 +35,13 @@ const Element: FC<ElementProps> = ({ item }) => {
           id={item.id}
           hasWrapper={true}
           onClick={() => { selectThisWrapperInViewTree(item.id) }}
-          style={{
-            width: `${item.x.max - item.x.min}%`,
-            height: `${item.y.max - item.y.min}%`,
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            margin: 'auto',
-            overflow: 'hidden'
-          }}
+          style={item.style}
         >
           {
-            item.type === IComponentType.ButtonComponent ? <ButtonComponent text={item.details?.text} style={item.details?.style} /> :
-              item.type === IComponentType.TextComponent ? <TextComponent text={item.details?.text} style={item.details?.style} /> :
-                item.type === IComponentType.LabelComponent ? <LabelComponent text={item.details?.text} style={item.details?.style} />
-                  : <ImageComponent imageData={item.details?.imageData} />
+            item.type === IComponentType.ButtonComponent ? <ButtonComponent text={item.content} style={item.style} /> :
+              item.type === IComponentType.TextComponent ? <TextComponent text={item.content} style={item.style} /> :
+                item.type === IComponentType.LabelComponent ? <LabelComponent text={item.content} style={item.style} />
+                  : <ImageComponent imageData={item.content} />
           }
         </Wrapper>
       }

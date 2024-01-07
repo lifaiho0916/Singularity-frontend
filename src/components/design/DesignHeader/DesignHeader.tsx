@@ -2,17 +2,13 @@ import { type FC } from 'react'
 import { Button } from 'primereact/button';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { DesignHeaderProps } from './DesignHeader.types';
-import { useSelector } from 'react-redux';
-import { useDispatch } from 'react-redux';
-import { setZoom } from 'store/slices/viewTreeSlice';
+import { useSelector, useDispatch } from 'react-redux';
+import { setZoom, setResponsive } from 'store/slices/viewTreeSlice';
 import type { RootState } from 'store';
 
-const DesignHeader: FC<DesignHeaderProps> = ({
-  responsive,
-  setResponsive,
-}) => {
+const DesignHeader: FC<DesignHeaderProps> = () => {
   const dispatch = useDispatch();
-  const { zoom } = useSelector((state: RootState) => state.viewTree);
+  const { zoom, responsive } = useSelector((state: RootState) => state.viewTree);
 
   return (
     <>
@@ -21,17 +17,17 @@ const DesignHeader: FC<DesignHeaderProps> = ({
           <Button
             icon="pi pi-desktop" text
             raised={responsive === 'desktop'}
-            onClick={() => setResponsive('desktop')}
+            onClick={() => dispatch(setResponsive('desktop'))}
           />
           <Button
             icon="pi pi-tablet" text
             raised={responsive === 'tablet'}
-            onClick={() => setResponsive('tablet')}
+            onClick={() => dispatch(setResponsive('tablet'))}
           />
           <Button
             icon="pi pi-mobile" text
             raised={responsive === 'mobile'}
-            onClick={() => setResponsive('mobile')}
+            onClick={() => dispatch(setResponsive('mobile'))}
           />
         </div>
         <div className='view-tool'>

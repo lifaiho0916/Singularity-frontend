@@ -1,5 +1,5 @@
-import { IView } from "libs/types";
+import { IElement } from "libs/types";
 
 export interface ElementProps {
-    item: IView    
+    item: IElement    
 }

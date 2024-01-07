@@ -7,7 +7,7 @@ import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
-import { IView } from 'libs/types';
+import { IElement } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './ButtonComponentDialog.scss';
 import { Button } from 'primereact/button';
@@ -17,117 +17,98 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onDelete = () => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(deleteSelectedElementInViewTree(currentElement));
   }
 
   const onTextChange = (newText: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        text: newText
-      }
-    }));
-  }
-
+      content: newText
+  }));
+}
   const onWidthChange = (newWidth: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      x: {
-        ...currentElement.x,
-        max: newWidth
+      size: {
+        ...currentElement.size,
+        width: newWidth
       }
     }));
   }
 
   const onHeightChange = (newHeight: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      y: {
-        ...currentElement.y,
-        max: newHeight
+      size: {
+        ...currentElement.size,
+        height: newHeight
       }
     }));
   }
 
   const onFontSizeChange = (newFontSize: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        style: {
-          ...currentElement.details.style,
-          fontSize: newFontSize
-        }
+      style: {
+        ...currentElement.style,
+        fontSize: newFontSize
       }
     }));
   }
 
   const onFontFamilyChange = (newFontFamily: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        style: {
-          ...currentElement.details.style,
-          fontFamily: newFontFamily
-        }
+      style: {
+        ...currentElement.style,
+        fontFamily: newFontFamily
       }
     }));
   }
 
   const onFontWeightChange = (newFontWeight: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        style: {
-          ...currentElement.details.style,
-          fontWeight: fontWeightNumber(newFontWeight)
-        }
+      style: {
+        ...currentElement.style,
+        fontWeight: fontWeightNumber(newFontWeight)
       }
     }));
   }
 
   const onFontColorChange = (newFontColor: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        style: {
-          ...currentElement.details.style,
-          color: '#' + newFontColor
-        }
+      style: {
+        ...currentElement.style,
+        color: '#' + newFontColor
       }
     }));
   }
 
   const onBackGroundColorChange = (newColor: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        style: {
-          ...currentElement.details.style,
-          backgroundColor: '#' + newColor
-        }
+      style: {
+        ...currentElement.style,
+        backgroundColor: '#' + newColor
       }
     }));
   }
 
   const fontWeight = useMemo(() => {
     if (currentElement) {
-      if (currentElement.details.style.fontWeight) {
-        switch (currentElement.details.style.fontWeight) {
+      if (currentElement.style.fontWeight) {
+        switch (currentElement.style.fontWeight) {
           case 200: return 'Light';
           case 400: return 'Normal';
           case 600: return 'Semi-Bold';
@@ -147,16 +128,12 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   }
 
   const onLinkChange = (newLink: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        link: viewTrees.findIndex((view: IView) => view?.name === newLink)
-      }
-    }));
-  }
-
+      link: newLink
+  }));
+}
   return currentElement ? (
     <div className="button-component-dialog">
       <div className="button-header">
@@ -170,7 +147,7 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
           <InputText
             type='text'
             className='input-text'
-            value={currentElement.details?.text}
+            value={currentElement.content}
             onChange={(e) => onTextChange(e.target.value)}
           />
         </div>
@@ -181,8 +158,8 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
         </div>
         <div className="section-body">
           <CascadeSelect
-            value={viewTrees[currentElement.details.link]?.name}
-            options={viewTrees.map((view: IView) => view?.name)}
+            value={currentElement.link}
+            options={viewTrees.map((view: IElement) => view?.id)}
             optionGroupChildren={[]}
             onChange={(e) => onLinkChange(e.value)}
             className='input-text'
@@ -213,11 +190,10 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                prefix="%"
-                value={currentElement.x.max}
+                suffix='px'
+                value={currentElement.size.width}
                 onChange={(e) => onWidthChange(Number(e.value))}
                 min={0}
-                max={100}
               />
             </div>
             <div
@@ -232,11 +208,10 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                prefix="%"
-                value={currentElement.y.max}
+                suffix="px"
+                value={currentElement.size.height}
                 onChange={(e) => onHeightChange(Number(e.value))}
                 min={0}
-                max={100}
               />
             </div>
           </div>
@@ -254,7 +229,7 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
           <h4 style={{ marginRight: 10 }}>Color:</h4>
           <ColorPicker
             format="hex"
-            value={currentElement.details.style.backgroundColor ? currentElement.details.style.backgroundColor.substring(1) : '000000'}
+            value={currentElement.style.backgroundColor ? currentElement.style.backgroundColor.substring(1) : '000000'}
             onChange={(e) => onBackGroundColorChange(e.value as string)}
           />
         </div>
@@ -265,7 +240,7 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
         </div>
         <div className="section-body">
           <CascadeSelect
-            value={currentElement.details.style.fontFamily ? currentElement.details.style.fontFamily : 'Default'}
+            value={currentElement.style.fontFamily ? currentElement.style.fontFamily : 'Default'}
             options={['Default', 'Arial', 'Times New Roman', 'Calibri']}
             optionGroupChildren={[]}
             className='input-text'
@@ -287,7 +262,7 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
             />
             <ColorPicker
               format="hex"
-              value={currentElement.details.style.color ? currentElement.details.style.color.substring(1) : '000000'}
+              value={currentElement.style.color ? currentElement.style.color.substring(1) : '000000'}
               style={{ marginLeft: 5 }}
               onChange={(e) => onFontColorChange(e.value as string)}
             />
@@ -306,7 +281,7 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
                 height: 32
               }}
               min={0}
-              value={currentElement.details.style?.fontSize}
+              value={Number(currentElement.style.fontSize) || 10}
               onChange={(e) => onFontSizeChange(Number(e.value))}
             />
           </div>

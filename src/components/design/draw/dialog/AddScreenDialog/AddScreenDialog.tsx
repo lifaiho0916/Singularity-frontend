@@ -6,14 +6,14 @@ import { InputText } from 'primereact/inputtext'
 import { Divider } from 'primereact/divider'
 import { Button } from 'primereact/button'
 import { notify } from 'store/slices/toastSlice'
-import { setViewTrees } from 'store/slices/viewTreeSlice';
+import { addViewTrees } from 'store/slices/viewTreeSlice';
 import { AddScreenDialogProps } from './AddScreenDialog.types'
 import { v4 as uuidv4 } from 'uuid'
-import { IComponentType, IWrapperType } from 'libs/types';
+import { IComponentType, IElement } from 'libs/types';
 import type { RootState } from 'store';
 
 const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIsOpenAddScreenModal }) => {
-  const { viewTrees } = useSelector((state: RootState) => state.viewTree)
+  const { viewTrees, responsive } = useSelector((state: RootState) => state.viewTree)
   const dispatch = useDispatch();
   const [newScreenName, setNewscreenName] = useState('');
 
@@ -26,20 +26,23 @@ const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIs
       }))
       return
     }
-    const updatedViewTrees = [
-      ...viewTrees,
-      {
+    const updatedViewTrees : IElement = {
         id: uuidv4(),
         name: newScreenName,
+        parent: `root${viewTrees.length+1}`,
+        style: {
+          display: 'flex',
+          position: "absolute",
+          minHeight: "30px"
+        },
+        child: [],
         type: IComponentType.Wrapper,
-        x: { min: 0, max: 100 },
-        y: { min: 0, max: 100 },
-        details: {
-          kind: IWrapperType.Horizontal
-        }
-      }
-    ]
-    dispatch(setViewTrees(updatedViewTrees))
+        position: { x:0, y:0 },
+        size: { width: responsive === 'desktop' ? 1024 : responsive === 'tablet' ? 600 : 320 , height: 650 },
+        content: '',
+        link: ''
+    };
+    dispatch(addViewTrees(updatedViewTrees))
     setIsOpenAddScreenModal(false);
   }
 

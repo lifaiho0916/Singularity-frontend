@@ -6,7 +6,7 @@ import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
 import type { RootState } from 'store';
-import type { IView } from 'libs/types';
+import type { IElement } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import { Button } from 'primereact/button';
 import { ImageChooseDialog } from '../ImageChooseDialog';
@@ -20,51 +20,45 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
   const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onDelete = () => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(deleteSelectedElementInViewTree(currentElement));
   }
 
   const onWidthChange = (newWidth: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      x: {
-        ...currentElement.x,
-        max: newWidth
+      size: {
+        ...currentElement.size,
+        width: newWidth
       }
     }));
   }
 
   const onHeightChange = (newHeight: number) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      y: {
-        ...currentElement.y,
-        max: newHeight
+      size: {
+        ...currentElement.size,
+        height: newHeight
       }
     }));
   }
 
   const onLinkChange = (newLink: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        link: viewTrees.findIndex((view: IView) => view?.name === newLink)
-      }
+      link: newLink
     }));
   }
 
   const onImageChange = (imageData: string) => {
-    if (!currentElement || !currentElement.details) return
+    if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      details: {
-        ...currentElement.details,
-        imageData: imageData
-      }
+      content: imageData
     }));
   }
 
@@ -81,7 +75,7 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
             <div className="image-container">
               <Image
-                src={currentElement.details?.imageData || defaultImage}
+                src={currentElement.content || defaultImage}
                 preview
               />
             </div>
@@ -104,8 +98,8 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
         </div>
         <div className="section-body">
           <CascadeSelect
-            value={viewTrees[currentElement.details.link]?.name}
-            options={viewTrees.map((view: IView) => view?.name)}
+            value={currentElement.link}
+            options={viewTrees.map((view: IElement) => view?.id)}
             optionGroupChildren={[]}
             onChange={(e) => onLinkChange(e.value)}
             className='input-text'
@@ -136,11 +130,10 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                prefix="%"
-                value={currentElement.x.max}
+                suffix="px"
+                value={currentElement.size.width}
                 onChange={(e) => onWidthChange(Number(e.value))}
                 min={0}
-                max={100}
               />
             </div>
             <div
@@ -155,11 +148,10 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                prefix="%"
-                value={currentElement.y.max}
+                suffix="px"
+                value={currentElement.size.height}
                 onChange={(e) => onHeightChange(Number(e.value))}
                 min={0}
-                max={100}
               />
             </div>
           </div>
