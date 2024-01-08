@@ -1,90 +1,60 @@
-import { type FC, LegacyRef } from 'react'
+import { type FC } from 'react'
 import { Button } from 'primereact/button';
-import { useMouse } from 'primereact/hooks';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'components';
-import { INewlyInsertedElement, IElement, IComponentType, IPosition } from 'libs/types';
 import { addSubViewToViewTree, setViewTree } from 'store/slices/viewTreeSlice';
-import { dragStarted, drawDraggedElement, dragEnded } from 'store/slices/dragSlice';
 import { SubScreenProps } from './SubScreen.types';
+import { IComponentType, INewlyInsertedElement } from 'libs/types';
 import type { RootState } from 'store';
 
 import './SubScreen.scss';
-import { Image } from 'primereact/image';
+import { unselectToolBarComponent } from 'store/slices/toolbarSlice';
 
 const SubScreen: FC<SubScreenProps> = (props) => {
-  const { isToolItemSelected, currentToolId, view, setToolItemSelected, setMouseOut } = props;
+  const { view, setMouseOut } = props;
   const dispatch = useDispatch();
-  const { ref: newItemRef, x, y, reset } = useMouse();
-  const { zoom, currentElement } = useSelector((state: RootState) => state.viewTree);
-  const { dragFlagOn, startPos_x, startPos_y, dragPos_x, dragPos_y } = useSelector((state: RootState) => state.drag);
+  const { zoom } = useSelector((state: RootState) => state.viewTree);
+
+  const { newToolSelected, ToolComponentID } = useSelector((state: RootState) => state.toolbar);
 
   const getCurrentComponentType = () => {
-    return currentToolId === 0 ? IComponentType.ButtonComponent :
-      currentToolId === 1 ? IComponentType.TextComponent :
-      currentToolId === 2 ? IComponentType.LabelComponent :
-      currentToolId === 3 ? IComponentType.ImageComponent :
+    return ToolComponentID === 0 ? IComponentType.ButtonComponent :
+      ToolComponentID === 1 ? IComponentType.TextComponent :
+      ToolComponentID === 2 ? IComponentType.LabelComponent :
+      ToolComponentID === 3 ? IComponentType.ImageComponent :
       IComponentType.Wrapper;
       
   }
 
   const onAddComponent = () => {
-    const item = getCurrentComponentType();
+    if(!newToolSelected) return;
+    const newItem = getCurrentComponentType();
     const newElement: INewlyInsertedElement = {
-      x: x,
-      y: y,
-      type: item,
-      content: item === IComponentType.ButtonComponent ? 'Button' :
-        item === IComponentType.LabelComponent ? 'Label' :
-        item === IComponentType.TextComponent ? 'Text' : 
-        item === IComponentType.ImageComponent ? 'Image' :
+      type: newItem,
+      content: newItem === IComponentType.ButtonComponent ? 'Button' :
+        newItem === IComponentType.LabelComponent ? 'Label' :
+        newItem === IComponentType.TextComponent ? 'Text' : 
+        newItem === IComponentType.ImageComponent ? 'Image' :
         '',
       style: { 
         fontSize: 20,
       }
     }
-    if(item === IComponentType.Wrapper) {
+    if(newItem === IComponentType.Wrapper) {
       newElement.style = {
         ...newElement.style,
         display: "flex",
-        flexDirection: currentToolId === 4 ? "row" : "column",
-        height: 30,
+        flexDirection: ToolComponentID === 4 ? "row" : "column",
         border: 1,
-        width: 100,
-        color: "#ff0000",
+        color: "#AAA",
       }
     }
-    dispatch(addSubViewToViewTree(newElement));
-    setToolItemSelected(false);
-  }
-
-  const mouseDownEvent = () => {
-    dispatch(setViewTree(view))
-    if(isToolItemSelected) onAddComponent();
-    else {
-      let position: IPosition = {
-        x: x,
-        y: y
-      }
-      dispatch(dragStarted(position));
-      console.log("current Selected Element is : ", currentElement?.name);
+    let payload = { 
+      parent : view,
+      newElement : newElement
     }
-  }
-
-  const mouseMoveEvent = () => {
-    if(dragFlagOn) {
-      let position : IPosition = {
-        x: x,
-        y: y
-      }
-      console.log("dragPosition : ", position);
-      dispatch(drawDraggedElement(position));
-    }
-  }
-
-  const mouseUpEvent = () => {
-    console.log("drag Finished : ");
-    if(dragFlagOn) dispatch(dragEnded());
+    dispatch(addSubViewToViewTree(payload));
+    dispatch(unselectToolBarComponent());
   }
 
   return (
@@ -102,12 +72,9 @@ const SubScreen: FC<SubScreenProps> = (props) => {
       </div>
       <div
         className="main-view"
-        ref={newItemRef as LegacyRef<HTMLDivElement>}
-        onMouseLeave={() => { reset(); setMouseOut(true) }}
-        onMouseEnter={() => { setMouseOut(false) }}
-        onMouseDown={ mouseDownEvent }
-        onMouseMove={ mouseMoveEvent }
-        onMouseUp={ mouseUpEvent }
+        onMouseLeave={() => { setMouseOut(true) }}
+        onMouseEnter={() => { dispatch(setViewTree(view)); setMouseOut(false) }}
+        onClick={ onAddComponent }
       >
         <Element item={view} />
       </div>
