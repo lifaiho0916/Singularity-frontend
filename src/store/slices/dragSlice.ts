@@ -1,20 +1,15 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { IPosition } from "libs/types"
 
 interface DragSliceState {
-    startPos_x: number,
-    startPos_y: number,
-    dragPos_x: number,
-    dragPos_y: number,
+    dragStartElementID : string
+    dragEndElementID : string
     dragFlagOn: boolean
 }
 
 const initialState: DragSliceState = {
-    startPos_x: 0,
-    startPos_y: 0,
-    dragPos_x: 0,
-    dragPos_y: 0,
+    dragEndElementID: '',
+    dragStartElementID: '',
     dragFlagOn: false
 }
 
@@ -24,27 +19,23 @@ export const dragSlice = createSlice({
     name: "drag",
     initialState,
     reducers: {
-        dragStarted(state, action : PayloadAction<IPosition>) {
+        dragStarted(state, action : PayloadAction<string>) {
+            state.dragStartElementID = state.dragEndElementID = action.payload;
             state.dragFlagOn = true;
-            state.startPos_x = action.payload.x;
-            state.startPos_y = action.payload.y;
         },
-        drawDraggedElement(state, action : PayloadAction<IPosition>) {
-            if(state.dragFlagOn) {
-                state.dragPos_x = action.payload.x;
-                state.dragPos_y = action.payload.y;
-            }
-        },
-        dragEnded(state) {
+        dragEnded(state, action : PayloadAction<string>) {
             state.dragFlagOn = false;
-            state.startPos_x = state.startPos_y = state.dragPos_x = state.dragPos_y = 0;
+            state.dragEndElementID = action.payload;
         },
+        dragElementChanged(state, action: PayloadAction<string>) {
+            state.dragEndElementID = action.payload;
+        }
     }
 })
 
 export const {
     dragStarted,
-    drawDraggedElement,
+    dragElementChanged,
     dragEnded
 } = dragSlice.actions;
 

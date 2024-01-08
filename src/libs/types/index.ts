@@ -52,7 +52,6 @@ export interface IElement {
     style: React.CSSProperties
     child: Array<IElement>
     type: IComponentType
-    position: IPosition
     size: ISize
     content: string
     link: string
@@ -60,8 +59,6 @@ export interface IElement {
 }
 
 export interface INewlyInsertedElement {
-    x: number
-    y: number
     type: IComponentType
     content: string
     style: React.CSSProperties
@@ -84,12 +81,18 @@ export enum IWrapperType {
     Horizontal = 'Horizontal',
     Vertical = 'Vertical'
 }
-export interface IPosition {
-    x: number,
-    y: number
-}
 
 export interface ISize {
     width: number,
     height: number
+}
+
+export interface IDragDropInfo { 
+    startElementID : string, 
+    endElementID : string
+}
+
+export interface IAddNewComponentInfo { 
+    parent : IElement,
+    newElement : INewlyInsertedElement
 }

@@ -12,6 +12,7 @@ import {
 } from 'components';
 import { IElement, IComponentType } from 'libs/types';
 import { initCurrentElement } from 'store/slices/viewTreeSlice';
+import { setToolbarComponentSelected } from "store/slices/toolbarSlice";
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
 import './MainWorkspace.scss';
@@ -20,15 +21,12 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const dispatch = useDispatch();
   const { viewTrees, currentElement } = useSelector((state: RootState) => state.viewTree);
 
-  const [currentToolId, selectTool] = useState(0);
-  const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
   const [mouseOut, setMouseOut] = useState(true);
   const toolBarItems = ["Button", "Text", "Label", "Image", "H-Wrapper", "V-Wrapper"];
 
   const toolSelected = (value: number) => {
-    setToolItemSelected(true)
-    selectTool(value)
+    dispatch(setToolbarComponentSelected(value));
   }
 
   const getPropertyDialogForCurrentElement = () => {
@@ -59,10 +57,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
         {viewTrees.map((view: IElement, index) => (
           <SubScreen 
             key={index}
-            isToolItemSelected={isToolItemSelected}
-            setToolItemSelected={setToolItemSelected}
             setMouseOut={setMouseOut}
-            currentToolId={currentToolId}
             view={view}
           />
         ))}
