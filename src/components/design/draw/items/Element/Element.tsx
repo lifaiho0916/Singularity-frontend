@@ -42,6 +42,7 @@ const Element: FC<ElementProps> = ({ item }) => {
         display: "flex",
         flexDirection: ToolComponentID === 4 ? "row" : "column",
         border: 1,
+        minHeight: 30,
         color: "#AAA",
       }
     }

@@ -280,27 +280,28 @@ export const viewTreeSlice = createSlice({
             {
                 case 'desktop': 
                     newWidth = 1024;
-                    newHeight = 30;
+                    newHeight = 650;
                     break;
                 case 'tablet': 
                     newWidth = 600;
-                    newHeight = 30;
+                    newHeight = 650;
                     break;
                 case 'mobile': 
                     newWidth = 320;
-                    newHeight = 30;
+                    newHeight = 650;
                     break;
                 default: 
                     newWidth = 320;
-                    newHeight = 30;
+                    newHeight = 650;
                     break;
             }
+            
             console.log("change width , height", newWidth, newHeight);
 
             state.viewTrees.forEach((viewTree)=> {
                 viewTree.size = {
-                    width: newWidth,
-                    height: newHeight
+                    width: (newWidth + 16) * state.zoom,
+                    height: (newHeight + 16) * state.zoom
                 }
             })
         },
