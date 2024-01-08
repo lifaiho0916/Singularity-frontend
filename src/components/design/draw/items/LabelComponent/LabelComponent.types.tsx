@@ -1,4 +1,5 @@
 export interface LabelComponentProps {
     text?: string,
-    style?: {}
+    style?: {},
+    id: string
 }

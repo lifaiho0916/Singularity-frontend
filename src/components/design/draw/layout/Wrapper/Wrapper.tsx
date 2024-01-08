@@ -5,10 +5,10 @@ import { Button } from "primereact/button";
 import { WrapperProps } from "./Wrapper.types";
 import { RootState } from "store";
 import { IWrapperType } from "libs/types";
-import { applySplitToWrapper, deleteWrapper } from "store/slices/viewTreeSlice";
+import { selectElementInViewTreeById, applySplitToWrapper, deleteWrapper } from "store/slices/viewTreeSlice";
 import './Wrapper.scss';
 
-const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick }) => {
+const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper }) => {
   const dispatch = useDispatch();
   const { currentElement } = useSelector((state: RootState) => state.viewTree);
   const [isShowSpliter, setIsShowSpliter] = React.useState(false);
@@ -25,6 +25,13 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
     dispatch(deleteWrapper(id));
   }
 
+  const setCurrentWrapper = (e : React.MouseEvent<HTMLElement>, id: string) => {
+    e.stopPropagation();
+    console.log(`${id} selected`);
+    dispatch(selectElementInViewTreeById(id));
+  }
+
+
   return (
     <div
       id={id}
@@ -32,7 +39,7 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper, onClick })
       style={{ ...style, border: currentElement && currentElement.id === id ? '2px dashed' : hasWrapper ? 'none' : undefined }}
       onMouseEnter={() => { setIsShowSpliter(true) }}
       onMouseLeave={() => { setIsShowSpliter(false) }}
-      onClick={onClick}
+      onClick={(e)=>setCurrentWrapper(e,id)}
     >
       {!hasWrapper &&
         <React.Fragment>

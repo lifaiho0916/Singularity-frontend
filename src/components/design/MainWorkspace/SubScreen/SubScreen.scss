@@ -11,7 +11,7 @@
         .view-name {
             width: calc(100% - 48px);
             white-space: nowrap;
-            overflow: hidden;
+            overflow: wrap;
             text-overflow: ellipsis;
             margin-left: 10px;
         }

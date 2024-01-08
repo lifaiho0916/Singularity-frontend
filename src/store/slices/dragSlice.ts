@@ -38,7 +38,7 @@ export const dragSlice = createSlice({
         dragEnded(state) {
             state.dragFlagOn = false;
             state.startPos_x = state.startPos_y = state.dragPos_x = state.dragPos_y = 0;
-        }
+        },
     }
 })
 

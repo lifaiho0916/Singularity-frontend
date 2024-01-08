@@ -1,4 +1,5 @@
-import { combineReducers, configureStore } from '@reduxjs/toolkit';
+import { combineReducers, configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import logger from 'redux-logger'
 
 import authReducer from 'store/slices/authSlice';
 import toastReducer from 'store/slices/toastSlice';
@@ -6,6 +7,8 @@ import projectReducer from 'store/slices/projectSlice';
 import templateReducer from 'store/slices/templateSlice';
 import viewTreeReducer from 'store/slices/viewTreeSlice';
 import dragSliceReducer from './slices/dragSlice';
+
+const middleware = [...getDefaultMiddleware(), logger];
 
 export const rootReducer = combineReducers({
     auth: authReducer,
@@ -17,7 +20,8 @@ export const rootReducer = combineReducers({
 })
 
 export const store = configureStore({
-    reducer: rootReducer
+    reducer: rootReducer,
+    middleware: middleware 
 })
 
 export type RootState = ReturnType<typeof store.getState>;
