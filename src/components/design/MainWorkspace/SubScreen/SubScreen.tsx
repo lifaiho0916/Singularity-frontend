@@ -28,7 +28,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
       
   }
 
-  const onAddComponent = (view: IElement) => {
+  const onAddComponent = () => {
     const item = getCurrentComponentType();
     const newElement: INewlyInsertedElement = {
       x: x,
@@ -39,7 +39,20 @@ const SubScreen: FC<SubScreenProps> = (props) => {
         item === IComponentType.TextComponent ? 'Text' : 
         item === IComponentType.ImageComponent ? 'Image' :
         '',
-      style: { fontSize: 20 }
+      style: { 
+        fontSize: 20,
+      }
+    }
+    if(item === IComponentType.Wrapper) {
+      newElement.style = {
+        ...newElement.style,
+        display: "flex",
+        flexDirection: currentToolId === 4 ? "row" : "column",
+        height: 30,
+        border: 1,
+        width: 100,
+        color: "#ff0000",
+      }
     }
     dispatch(addSubViewToViewTree(newElement));
     setToolItemSelected(false);
@@ -47,7 +60,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
 
   const mouseDownEvent = () => {
     dispatch(setViewTree(view))
-    if(isToolItemSelected) onAddComponent(view);
+    if(isToolItemSelected) onAddComponent();
     else {
       let position: IPosition = {
         x: x,

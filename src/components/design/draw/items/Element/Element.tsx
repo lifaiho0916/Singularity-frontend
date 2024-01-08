@@ -2,17 +2,10 @@ import { type FC } from 'react';
 import { useDispatch } from "react-redux";
 import { IComponentType } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
-import { selectElementInViewTreeById, setViewTree } from "store/slices/viewTreeSlice";
 import { ElementProps } from "./Element.types";
 import './Element.scss';
 
 const Element: FC<ElementProps> = ({ item }) => {
-  const dispatch = useDispatch();
-
-  const setCurrentWrapper = (id: string) => {
-    console.log(`${id} selected`);
-    dispatch(selectElementInViewTreeById(id));
-  }
 
   return (
     <>
@@ -23,7 +16,6 @@ const Element: FC<ElementProps> = ({ item }) => {
           style={{
             ...item.style,
           }}
-          onClick={ ()=>setCurrentWrapper(item.id) }
         >
           {item.child && item.child.map((subView, index) => (
             <Element item={subView} key={index} />

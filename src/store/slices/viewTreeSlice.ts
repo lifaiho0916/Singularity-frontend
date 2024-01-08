@@ -57,13 +57,15 @@ const initialState: viewTreeSliceState = {
 
 function deleteElement(view: IElement, element: IElement) {
     // if element is root element delete all childs
-    if(element.parent.startsWith('root')) element.child.slice(0, element.child.length)
+    if(element.parent.startsWith('root')) element.child.splice(0, element.child.length)
     else {
         // delete the component from parent
         const parentElement:IElement = findElementInViewById(view, element.parent)!;
         parentElement.child = parentElement.child.filter(item=> item.id !== element.id)
         // if element is wrapper element move child to it's parent's child array
-        if(element.type === IComponentType.Wrapper)  element.child.forEach(item => parentElement.child.push(item));
+        // if(element.type === IComponentType.Wrapper)  {
+        //     element.child.forEach(item => parentElement.child.push(item));
+        // }
     }
 }
 
@@ -108,10 +110,7 @@ function insertSubview(view: IElement, element: INewlyInsertedElement, name: str
         parent: closestWrapper.id,
         type: element.type,
         style: {
-            display: "block",
-            position: element.type === IComponentType.Wrapper ? "relative" : 'static',
-            top: element.x - closestWrapper.position.x,
-            left: element.y - closestWrapper.position.y
+            ...element.style,
         },
         child: [],
         position: {
@@ -127,13 +126,13 @@ function insertSubview(view: IElement, element: INewlyInsertedElement, name: str
     })
 }
 
-function findElementInViewById(view: IElement, id: string): IElement {
-    if (view.id === id) {
-        console.log("changed Element : ", view);
-        return view;
+function findElementInViewById(view: IElement, id: string): IElement | null {
+    if (view.id === id) return view;
+    for (const item of view.child) {
+        const result = findElementInViewById(item, id);
+        if (result) return result;
     }
-    view.child.forEach((item)=>findElementInViewById(item, id));
-    return view;
+    return null;
 }
 
 function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
@@ -171,7 +170,7 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
             content: '',
             link: ''
         }
-        view.child.slice(0, view.child.length)
+        view.child = []
         view.child.push(firstWrapper)
         view.child.push(secondWrapper)
     }
@@ -309,12 +308,9 @@ export const viewTreeSlice = createSlice({
             console.log("change width , height", newWidth, newHeight);
 
             state.viewTrees.forEach((viewTree)=> {
-                viewTree = {
-                    ...viewTree,
-                    size: {
-                        width: newWidth,
-                        height: newHeight
-                    }
+                viewTree.size = {
+                    width: newWidth,
+                    height: newHeight
                 }
             })
         }
