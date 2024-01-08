@@ -1,8 +1,11 @@
 .view-box {
   cursor: pointer;
-  border: 1px #AAA;
-  border-style: dashed;
   position: relative;
+
+  &:hover {
+    border: 1px #AAA;
+    border-style: dashed;
+  }
 
   .vertical-line {
     position: absolute;

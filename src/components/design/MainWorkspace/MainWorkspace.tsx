@@ -24,7 +24,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const [isToolItemSelected, setToolItemSelected] = useState(false);
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
   const [mouseOut, setMouseOut] = useState(true);
-  const toolBarItems = ["Button", "Text", "Label", "Image"];
+  const toolBarItems = ["Button", "Text", "Label", "Image", "H-Wrapper", "V-Wrapper"];
 
   const toolSelected = (value: number) => {
     setToolItemSelected(true)

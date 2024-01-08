@@ -1,4 +1,5 @@
 export interface TextComponentProps {
     text?: string,
-    style?: {}
+    style?: {},
+    id: string,
 }

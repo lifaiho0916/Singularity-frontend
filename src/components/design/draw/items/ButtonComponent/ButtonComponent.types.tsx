@@ -1,5 +1,5 @@
 export interface ButtonComponentProps {
     text?: string,
-    onClick?: () => void,
+    id: string,
     style?: {}
 }

@@ -28,6 +28,7 @@ const initialState: viewTreeSliceState = {
             type: IComponentType.Wrapper,
             style: {
                 display: "flex",
+                flexDirection: "column",
                 minHeight: "30px",
                 fontSize: 16
             },
@@ -56,10 +57,10 @@ const initialState: viewTreeSliceState = {
 
 function deleteElement(view: IElement, element: IElement) {
     // if element is root element delete all childs
-    if(element.parent === 'root') element.child.slice(0, element.child.length)
+    if(element.parent.startsWith('root')) element.child.slice(0, element.child.length)
     else {
         // delete the component from parent
-        const parentElement:IElement = findElementInViewById(view, element.parent);
+        const parentElement:IElement = findElementInViewById(view, element.parent)!;
         parentElement.child = parentElement.child.filter(item=> item.id !== element.id)
         // if element is wrapper element move child to it's parent's child array
         if(element.type === IComponentType.Wrapper)  element.child.forEach(item => parentElement.child.push(item));
@@ -109,7 +110,6 @@ function insertSubview(view: IElement, element: INewlyInsertedElement, name: str
         style: {
             display: "block",
             position: element.type === IComponentType.Wrapper ? "relative" : 'static',
-            minHeight: "30px",
             top: element.x - closestWrapper.position.x,
             left: element.y - closestWrapper.position.y
         },
@@ -129,26 +129,11 @@ function insertSubview(view: IElement, element: INewlyInsertedElement, name: str
 
 function findElementInViewById(view: IElement, id: string): IElement {
     if (view.id === id) {
+        console.log("changed Element : ", view);
         return view;
     }
-    if (view.child) {
-        for (let i = 0; i < view.child.length; i++) {
-            const result = findElementInViewById(view.child[i], id);
-            if (result) return result;
-        }
-    }
-    return {
-        id: '',
-        name: '',
-        parent: '',
-        style: {},
-        child: [],
-        type: IComponentType.ButtonComponent,
-        position: {x:0, y:0},
-        size: {width:0, height:0},
-        content: '',
-        link: '',
-    };
+    view.child.forEach((item)=>findElementInViewById(item, id));
+    return view;
 }
 
 function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
