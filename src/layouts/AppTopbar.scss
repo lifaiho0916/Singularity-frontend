@@ -13,4 +13,62 @@
     .logo {
         cursor: pointer;
     }
+
+    .tab-board {
+        display: flex;
+        justify-content: center;
+        width: 90%;
+    
+        .navigate-board {
+            display: flex;
+            gap: 10px;
+        }
+    }
+
+    .nav-button {
+        background-color: white;
+        color: black;
+        padding: 10px 25px;
+
+        &:hover {
+            background-color: black;
+            color: white;
+        }
+
+        &:disabled {
+            color: black;
+            opacity: 0.7;
+        }
+    }
+
+    .nav-button-active {
+        background-color: black;
+        color: white;
+        padding: 10px 25px;
+
+        &:hover {
+            background-color: gray;
+            color: white;
+        }
+
+        &:disabled {
+            color: black;
+            opacity: 0.7;
+        }
+    }
+
+
+    .nav-button-preivew {
+        background-color: black;
+        color: white;
+        padding: 10px 25px;
+        position: absolute;
+        right: 60px;
+        
+        &:hover {
+            background-color: gray;
+            color: white;
+        }
+    }
+
 }
