@@ -38,7 +38,8 @@ const initialState: viewTreeSliceState = {
                 display: "flex",
                 flexDirection: "column",
                 minHeight: "30px",
-                fontSize: 16
+                fontSize: 16,
+                height: 650
             },
             child: [],
             size: {

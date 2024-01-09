@@ -32,8 +32,8 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      size: {
-        ...currentElement.size,
+      style: {
+        ...currentElement.style,
         width: newWidth
       }
     }));
@@ -43,8 +43,8 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      size: {
-        ...currentElement.size,
+      style: {
+        ...currentElement.style,
         height: newHeight
       }
     }));

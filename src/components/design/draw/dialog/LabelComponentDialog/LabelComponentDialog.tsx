@@ -33,8 +33,8 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({ 
       ...currentElement, 
-      size: { 
-        ...currentElement.size, 
+      style: { 
+        ...currentElement.style, 
         width: newWidth 
       } 
     }));
@@ -44,8 +44,8 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({ 
       ...currentElement, 
-      size: { 
-        ...currentElement.size, 
+      style: { 
+        ...currentElement.style, 
         height: newHeight 
       } 
     }));
