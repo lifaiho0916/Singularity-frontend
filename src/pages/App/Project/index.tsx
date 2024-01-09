@@ -99,7 +99,7 @@ const Project = () => {
     return (
         <div className="project-board">
             {location.pathname.indexOf('preview') === -1 &&
-                <div style={{ margin: 5, position: 'relative' }}>
+                <div className='tab-board'>
                     <TabView 
                         activeIndex={activeTab} 
                         onTabChange={(e) => NavigateWorkspace(e.index)}
