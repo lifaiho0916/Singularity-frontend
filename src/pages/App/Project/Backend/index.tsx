@@ -1,6 +1,6 @@
 const BackendWorkspace = () => {
     return (
-        <div>
+        <div className="project-board">
             Backend workspace
         </div>
     )

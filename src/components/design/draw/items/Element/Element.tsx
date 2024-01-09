@@ -54,12 +54,6 @@ const Element: FC<ElementProps> = ({ item }) => {
     dispatch(unselectToolBarComponent());
   }
 
-  const setCurrentElement = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    console.log(`${item.id} selected`);
-    dispatch(selectElementInViewTreeById(item.id));
-  }
-
   const mouseDownEvent = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     if(newToolSelected) onAddComponent();
@@ -88,7 +82,6 @@ const Element: FC<ElementProps> = ({ item }) => {
 
   return (
     <div
-      onClick={ (e)=>setCurrentElement(e) }
       onMouseEnter={ (e)=>checkDragging(e) }
       onMouseDown={ (e)=>mouseDownEvent(e) }
       onMouseUp={ (e)=>checkDragFinished(e) }

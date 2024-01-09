@@ -252,6 +252,30 @@ export const viewTreeSlice = createSlice({
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
         },
+        deleteSelectedViewInViewTree: (state, action: PayloadAction<IElement>) => {
+            state.currentElement = null
+            let selectedView : IElement = action.payload;
+            state.viewTrees = state.viewTrees.filter((view)=> view.id !== selectedView.id)
+            if(state.viewTrees.length === 0 ) state.viewTrees.push({
+                id: uuidv4(),
+                name: 'Screen1',
+                parent: 'root1',
+                type: IComponentType.Wrapper,
+                style: {
+                    display: "flex",
+                    flexDirection: "column",
+                    minHeight: "30px",
+                    fontSize: 16
+                },
+                child: [],
+                size: {
+                    width: 320,
+                    height: 650
+                },
+                content: '',
+                link: ''
+            });
+        },
         applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
             const { wrapperId, kind } = action.payload;
             // based on wrapperId & kind, need to add two wrappers.
@@ -325,6 +349,7 @@ export const {
     selectElementInViewTreeById,
     updateSelectedElementInViewTree,
     deleteSelectedElementInViewTree,
+    deleteSelectedViewInViewTree,
     deleteWrapper,
     applySplitToWrapper,
     initCurrentElement,

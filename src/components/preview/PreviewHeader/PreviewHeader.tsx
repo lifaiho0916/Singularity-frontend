@@ -55,6 +55,7 @@ const PreviewHeader: FC<PreviewHeaderProps> = ({
                     style={{ marginLeft: 5 }}
                     size="small"
                     raised
+                    disabled
                 >
                     <span>DEPLOY</span>
                 </Button>
