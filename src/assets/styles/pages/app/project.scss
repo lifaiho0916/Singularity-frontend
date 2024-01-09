@@ -1,5 +1,5 @@
 .project-board {
-    padding-top: 60px;
+    padding-top: 55px;
 
     .tab-board {
         margin: 5px;
@@ -9,6 +9,7 @@
         width: 100%;
         background-color: white;
         z-index: 1;
+        box-shadow: 0px 3px 5px rgba(0,0,0,.02), 0px 0px 2px rgba(0,0,0,.05), 0px 1px 4px rgba(0,0,0,.08);
     }
     .p-tabview-panels {
         display: none;
@@ -20,8 +21,8 @@
             margin: 0 5px;
             display: flex;
             justify-content: space-between;
-            padding: 5px;
-            box-shadow: 0px 3px 5px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .05), 0px 1px 4px rgba(0, 0, 0, .08);
+            padding: 8px;
+            // box-shadow: 0px 3px 5px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .05), 0px 1px 4px rgba(0, 0, 0, .08);
             z-index: 1;
 
             .responsive-tool {

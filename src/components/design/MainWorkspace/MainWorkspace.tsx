@@ -79,7 +79,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
     const positionStyle: CSSProperties = {
       position: 'absolute',
       left: `${x}px`,
-      top: `${y}px`,
+      top: `${y+50}px`,
       minHeight: 30,
       minWidth: 100,
       border: 1,
