@@ -37,7 +37,8 @@ const initialState: viewTreeSliceState = {
                 backgroundColor: "lightgray",
                 fontSize: 16,
                 minHeight: 650,
-                minWidth: 320
+                minWidth: 320,
+                zIndex: -1
             },
             detail: {},
             child: [],
@@ -111,6 +112,7 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
           border: 1,
           minHeight: 30,
           color: "#AAA",
+          zIndex: -1
         }
       default:
         return {}
