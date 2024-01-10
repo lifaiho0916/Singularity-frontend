@@ -38,7 +38,7 @@ const initialState: viewTreeSliceState = {
                 fontSize: 16,
                 minHeight: 650,
                 minWidth: 320,
-                zIndex: -1
+                zIndex: 0
             },
             detail: {},
             child: [],
@@ -78,6 +78,7 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
       textAlign: "start",
       alignItems: "normal",
       fontSize: 16,
+      zIndex: 1
     }
     switch (type) {
       case IComponentType.ButtonComponent:
