@@ -19,7 +19,7 @@ const CreateProjectDialog: FC<CreateProjectDialogProps> = ({
     const { template } = useSelector((state: RootState) => state.template);
 
     const CreateNewProject = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
+        event.stopPropagation();
         setIsLoading(true);
         const projectData = {
             name: event.currentTarget["projectName"].value,

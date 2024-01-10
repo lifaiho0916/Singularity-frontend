@@ -26,19 +26,21 @@ const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIs
       }))
       return
     }
+    let sizeInfo = { width: responsive === 'desktop' ? 1024 : responsive === 'tablet' ? 600 : 320 , height: 650 }
     const updatedViewTrees : IElement = {
         id: uuidv4(),
         name: newScreenName,
         parent: `root${viewTrees.length+1}`,
         style: {
           display: 'flex',
-          position: "absolute",
-          minHeight: "30px"
+          flexDirection: "column",
+          width: sizeInfo.width,
+          height: sizeInfo.height
         },
         detail: {},
         child: [],
         type: IComponentType.Wrapper,
-        size: { width: responsive === 'desktop' ? 1024 : responsive === 'tablet' ? 600 : 320 , height: 650 },
+        size: sizeInfo,
         content: '',
         link: ''
     };

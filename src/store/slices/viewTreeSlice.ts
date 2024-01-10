@@ -10,8 +10,6 @@ import {
     IAddNewComponentInfo
 } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
-import { Column } from "primereact/column";
-import { wrap } from "module";
 
 interface viewTreeSliceState {
     zoom: number,
@@ -37,9 +35,9 @@ const initialState: viewTreeSliceState = {
             style: {
                 display: "flex",
                 flexDirection: "column",
-                minHeight: "30px",
                 fontSize: 16,
-                height: 650
+                minHeight: 650,
+                minWidth: 320
             },
             detail: {},
             child: [],
@@ -108,11 +106,11 @@ function findElementInViewById(view: IElement, id: string): IElement | null {
 }
 
 function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
+    console.log("split wrapper parameters : ", view.id, wrapperId);
     let wrapperElement: IElement = findElementInViewById(view, wrapperId)!;
-    wrapperElement.style = {
-        ...wrapperElement.style,
-        display: "flex",
-        flexDirection: kind === IWrapperType.Vertical ? "column" : 'row'
+    let sizeInfo = {
+        width: wrapperElement.size.width,
+        height: wrapperElement.size.height
     }
     let firstWrapper: IElement = {
         id: uuidv4(),
@@ -120,17 +118,22 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         parent: wrapperElement.id,
         type: IComponentType.Wrapper,
         style: {
-            display: "flex",
-            height: 30,
-            border: 1,
-            color: "#AAA",
+            ...wrapperElement.style,
+            flexDirection: 'column',
+            minWidth: kind === IWrapperType.Vertical ? sizeInfo.width / 2: sizeInfo.width,
+            minHeight: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
         },
         detail: {},
-        size: { width: wrapperElement.size.width, height: 30 },
+        size: {
+            width: kind === IWrapperType.Vertical ? sizeInfo.width / 2 : sizeInfo.width,
+            height: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
+        },
         child: wrapperElement.child,
         content: '',
         link: ''
     }
+
+    firstWrapper.child.forEach( (item)=> item.parent = firstWrapper.id )
 
     let secondWrapper: IElement = {
         id: uuidv4(),
@@ -138,18 +141,27 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         name: `wrapper ${id + 2}`,
         type: IComponentType.Wrapper,
         style: {
-            position: "relative"
+            ...wrapperElement.style,
+            flexDirection: 'column',
+            minWidth: kind === IWrapperType.Vertical ? sizeInfo.width /2 : sizeInfo.width,
+            minHeight: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
         },
         detail: {},
-        size: { width: wrapperElement.size.width, height: 30 },
+        size: {
+            width: kind === IWrapperType.Vertical ? sizeInfo.width /2 : sizeInfo.width,
+            height: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
+        },
         child: [],
         content: '',
         link: ''
     }
+    wrapperElement.style = {
+        ...wrapperElement.style,
+        flexDirection: kind === IWrapperType.Vertical ? "row" : 'column'
+    }
     wrapperElement.child = []
     wrapperElement.child.push(firstWrapper)
     wrapperElement.child.push(secondWrapper)
-    return null;
 }
 
 function replaceSubview(view: IElement, updatedComponent: IElement | null): IElement | null {
@@ -261,23 +273,21 @@ export const viewTreeSlice = createSlice({
             state.currentElement = null
             let selectedView: IElement = action.payload;
             state.viewTrees = state.viewTrees.filter((view) => view.id !== selectedView.id)
+            let sizeInfo = { width: state.responsive === 'desktop' ? 1024 : state.responsive === 'tablet' ? 600 : 320 , height: 650 }
             if (state.viewTrees.length === 0) state.viewTrees.push({
                 id: uuidv4(),
                 name: 'Screen1',
                 parent: 'root1',
                 type: IComponentType.Wrapper,
                 style: {
-                    display: "flex",
+                    display: 'flex',
                     flexDirection: "column",
-                    minHeight: "30px",
-                    fontSize: 16
+                    width: sizeInfo.width,
+                    height: sizeInfo.height
                 },
                 detail: {},
                 child: [],
-                size: {
-                    width: 320,
-                    height: 650
-                },
+                size: sizeInfo,
                 content: '',
                 link: ''
             });

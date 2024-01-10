@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IComponentType, IDragDropInfo, INewlyInsertedElement } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 import { selectElementInViewTreeById, addSubViewToViewTree, setViewTree, dragDropElement } from "store/slices/viewTreeSlice";
-import { dragStarted, dragElementChanged, dragEnded } from 'store/slices/dragSlice';
+import { dragStarted, dragEnded } from 'store/slices/dragSlice';
 import { unselectToolBarComponent } from 'store/slices/toolbarSlice';
 import type { RootState } from 'store';
 import { ElementProps } from "./Element.types";
@@ -11,7 +11,7 @@ import './Element.scss';
 
 const Element: FC<ElementProps> = ({ item }) => {
   const dispatch = useDispatch();
-  const { dragFlagOn, dragStartElementID, dragEndElementID } = useSelector((state: RootState) => state.drag);
+  const { dragFlagOn, dragStartElementID } = useSelector((state: RootState) => state.drag);
   const { newToolSelected, ToolComponentID } = useSelector((state: RootState) => state.toolbar);
 
   const getCurrentComponentType = () => {
@@ -87,21 +87,17 @@ const Element: FC<ElementProps> = ({ item }) => {
     else dispatch(dragStarted(item.id))
   }
 
-  const checkDragging = (e: React.MouseEvent<HTMLElement>) => {
-    e.stopPropagation();
-    dragFlagOn && dispatch(dragElementChanged(item.id));
-  }
 
   const checkDragFinished = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
     if (dragFlagOn) {
       dispatch(dragEnded(item.id));
-      if (dragStartElementID && dragEndElementID) {
+      if (dragStartElementID && item.id) {
         let payload: IDragDropInfo = {
           startElementID: dragStartElementID,
-          endElementID: dragEndElementID
+          endElementID: item.id
         }
-        dragStartElementID !== dragEndElementID && dispatch(dragDropElement(payload));
+        dragStartElementID !== item.id && dispatch(dragDropElement(payload));
       }
     }
   }
@@ -109,7 +105,6 @@ const Element: FC<ElementProps> = ({ item }) => {
   return (
     <div
       onClick={(e) => setCurrentElement(e)}
-      onMouseEnter={(e) => checkDragging(e)}
       onMouseDown={(e) => mouseDownEvent(e)}
       onMouseUp={(e) => checkDragFinished(e)}
     >
