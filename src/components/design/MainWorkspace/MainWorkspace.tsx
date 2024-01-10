@@ -83,6 +83,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       minHeight: 30,
       minWidth: 100,
       border: 1,
+      zIndex: 1,
       opacity: 0.7,
     }
     if(ToolComponentID === 4 || ToolComponentID === 5) positionStyle =  {

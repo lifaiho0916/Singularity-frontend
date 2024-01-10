@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IComponentType, IDragDropInfo } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
 import { selectElementInViewTreeById, addSubViewToViewTree, dragDropElement } from "store/slices/viewTreeSlice";
+import { DragDropContext, DropResult } from 'react-beautiful-dnd'
 import { dragStarted, dragEnded } from 'store/slices/dragSlice';
 import { unselectToolBarComponent } from 'store/slices/toolbarSlice';
 import type { RootState } from 'store';
@@ -50,47 +51,53 @@ const Element: FC<ElementProps> = ({ item }) => {
     if (newToolSelected) onAddComponent();
     else if (dragFlagOn) {
       dispatch(dragEnded(item.id));
-      if (dragStartElementID && item.id) {
-        let payload: IDragDropInfo = {
-          startElementID: dragStartElementID,
-          endElementID: item.id
-        }
-        dragStartElementID !== item.id && dispatch(dragDropElement(payload));
-      }
+      onDragEnd()
     }    
   }
 
-  return (
-    <div
-      onClick={(e) => setCurrentElement(e)}
-      onMouseDown={(e) => mouseDownEvent(e)}
-      onMouseUp={(e) => checkDragFinished(e)}
-    >
-      {item.type === IComponentType.Wrapper ?
-        <Wrapper
-          id={item.id}
-          hasWrapper={(item.child && item.child[0]?.type === IComponentType.Wrapper) ? true : false}
-          style={{
-            ...item.style,
-          }}
-        >
-          {item.child && item.child.map((subView, index) => (
-            <Element item={subView} key={index} />
-          ))}
-        </Wrapper> :
-        item.type === IComponentType.ButtonComponent ?
-          <ButtonComponent
-            text={item.content}
-            style={item.style}
-            color={item.detail.color}
-            type={item.detail.type}
-            size={item.detail.size}
-          /> :
-          item.type === IComponentType.TextComponent ? <TextComponent text={item.content} style={item.style} /> :
-          item.type === IComponentType.LabelComponent ? <LabelComponent text={item.content} style={item.style} /> :
-          <ImageComponent imageData={item.detail?.image} />
+  const onDragEnd = () => {
+    if (dragStartElementID && item.id) {
+      let payload: IDragDropInfo = {
+        startElementID: dragStartElementID,
+        endElementID: item.id
       }
-    </div>
+      dragStartElementID !== item.id && dispatch(dragDropElement(payload));
+    }
+  }
+
+  return (
+    <DragDropContext onDragEnd={onDragEnd}>
+      <div
+        onClick={(e) => setCurrentElement(e)}
+        onMouseDown={(e) => mouseDownEvent(e)}
+        onMouseUp={(e) => checkDragFinished(e)}
+      >
+        {item.type === IComponentType.Wrapper ?
+          <Wrapper
+            id={item.id}
+            hasWrapper={(item.child && item.child[0]?.type === IComponentType.Wrapper) ? true : false}
+            style={{
+              ...item.style,
+            }}
+          >
+            {item.child && item.child.map((subView, index) => (
+              <Element item={subView} key={index} />
+            ))}
+          </Wrapper> :
+          item.type === IComponentType.ButtonComponent ?
+            <ButtonComponent
+              text={item.content}
+              style={item.style}
+              color={item.detail.color}
+              type={item.detail.type}
+              size={item.detail.size}
+            /> :
+            item.type === IComponentType.TextComponent ? <TextComponent text={item.content} style={item.style} /> :
+            item.type === IComponentType.LabelComponent ? <LabelComponent text={item.content} style={item.style} /> :
+            <ImageComponent imageData={item.detail?.image} />
+        }
+      </div>
+    </DragDropContext>
   )
 }
 
