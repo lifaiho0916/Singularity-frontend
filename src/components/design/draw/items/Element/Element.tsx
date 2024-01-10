@@ -135,7 +135,7 @@ const Element: FC<ElementProps> = ({ item }) => {
           /> :
           item.type === IComponentType.TextComponent ? <TextComponent text={item.content} style={item.style} /> :
             item.type === IComponentType.LabelComponent ? <LabelComponent text={item.content} style={item.style} /> :
-              <ImageComponent imageData={item.content} />
+              <ImageComponent imageData={item.detail?.image} />
       }
     </div>
   )

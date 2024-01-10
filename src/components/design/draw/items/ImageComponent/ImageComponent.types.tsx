@@ -1,3 +1,3 @@
 export interface ImageComponentProps {
-    imageData?: string
+    imageData?: number
 }

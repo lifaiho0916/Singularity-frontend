@@ -31,7 +31,6 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper }) => {
     dispatch(selectElementInViewTreeById(id));
   }
 
-
   return (
     <div
       id={id}
@@ -87,7 +86,6 @@ const Wrapper: FC<WrapperProps> = ({ id, style, children, hasWrapper }) => {
             </React.Fragment>
             : null
           }
-
         </React.Fragment>
       }
       {children}

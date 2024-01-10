@@ -1,4 +1,4 @@
-import { useState, type FC } from 'react';
+import { useState, useEffect, type FC } from 'react';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { ImageComponentDialogProps } from "./ImageComponentDialog.types";
@@ -9,7 +9,9 @@ import type { RootState } from 'store';
 import type { IElement } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import { Button } from 'primereact/button';
+import type { IMedia } from 'libs/types';
 import { ImageChooseDialog } from '../ImageChooseDialog';
+import { getDataFromIndexDB } from 'libs/indexedDB';
 import defaultImage from "assets/images/default-image.png";
 import { Image } from 'primereact/image';
 import './ImageComponentDialog.scss';
@@ -17,6 +19,7 @@ import './ImageComponentDialog.scss';
 const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
   const dispatch = useDispatch();
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [images, setImages] = useState<Array<IMedia>>([]);
   const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onDelete = () => {
@@ -54,13 +57,25 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
     }));
   }
 
-  const onImageChange = (imageData: string) => {
+  const onImageChange = (image: IMedia) => {
+    console.log(image)
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      content: imageData
+      detail: {
+        image: image.id
+      }
     }));
   }
+
+  const getDataFromDB = async () => {
+    const res = await getDataFromIndexDB();
+    setImages(res as Array<IMedia>);
+  }
+
+  useEffect(() => {
+    getDataFromDB();
+  }, [isOpenModal])
 
   return currentElement ? (
     <div className="image-component-dialog">
@@ -75,7 +90,8 @@ const ImageComponentDialog: FC<ImageComponentDialogProps> = () => {
           <div style={{ display: 'flex', justifyContent: 'space-evenly', alignItems: 'center' }}>
             <div className="image-container">
               <Image
-                src={currentElement.content || defaultImage}
+                src={((currentElement.detail.image && images.length > 0 && images.filter((image: IMedia) => image.id === currentElement.detail.image).length > 0) ? `data:image/jpeg;charset=utf-8;base64,${images.filter((image: IMedia) => image.id === currentElement.detail.image)[0].imageData}`
+                : defaultImage)}
                 preview
               />
             </div>

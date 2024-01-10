@@ -17,6 +17,12 @@ export interface IProjectMember {
     position: string
 }
 
+export interface IMedia {
+    id: number
+    imageData: string
+}
+
+
 export interface IProject {
     id: number
     name: string
