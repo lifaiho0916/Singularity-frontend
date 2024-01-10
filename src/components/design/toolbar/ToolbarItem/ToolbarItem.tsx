@@ -4,7 +4,6 @@ import { ToolbarItemProps } from "./ToolbarItem.types";
 import './ToolbarItem.scss';
 
 const ToolbarItem:FC<ToolbarItemProps> = ({index, item, onClicked}) => {
-  const [ selected, setSelect ] = useState(false)
 
   return (
     <Button 
@@ -12,10 +11,8 @@ const ToolbarItem:FC<ToolbarItemProps> = ({index, item, onClicked}) => {
       label={item} 
       severity='secondary'
       size="small"
-      raised 
-      onClick={()=>{ 
+      onMouseDown={()=>{ 
         onClicked(index); 
-        setSelect(!selected)
       }}
       // icon={`pi ${selected?'pi-check':''}`}
     />

@@ -17,7 +17,7 @@ import {
 } from 'components';
 import { IElement, IComponentType } from 'libs/types';
 import { initCurrentElement } from 'store/slices/viewTreeSlice';
-import { setToolbarComponentSelected } from "store/slices/toolbarSlice";
+import { setToolbarComponentSelected, unselectToolBarComponent } from "store/slices/toolbarSlice";
 import { MainWorkspaceProps } from './MainWorkspace.types';
 import type { RootState } from 'store';
 import './MainWorkspace.scss';
@@ -92,6 +92,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       ref={newItemRef as LegacyRef<HTMLDivElement>}
       className="workspace-body"
       onClick={selectionCheck}
+      onMouseUp={()=>{dispatch(unselectToolBarComponent())}}
     >
       {newToolSelected && getCurrentComponent()}
       <div className="screen-view">

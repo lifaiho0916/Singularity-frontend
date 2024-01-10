@@ -119,7 +119,6 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         type: IComponentType.Wrapper,
         style: {
             ...wrapperElement.style,
-            flexDirection: 'column',
             minWidth: kind === IWrapperType.Vertical ? sizeInfo.width / 2: sizeInfo.width,
             minHeight: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
         },
@@ -142,7 +141,6 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         type: IComponentType.Wrapper,
         style: {
             ...wrapperElement.style,
-            flexDirection: 'column',
             minWidth: kind === IWrapperType.Vertical ? sizeInfo.width /2 : sizeInfo.width,
             minHeight: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
         },
@@ -282,8 +280,8 @@ export const viewTreeSlice = createSlice({
                 style: {
                     display: 'flex',
                     flexDirection: "column",
-                    width: sizeInfo.width,
-                    height: sizeInfo.height
+                    width: sizeInfo.width * state.zoom,
+                    height: sizeInfo.height * state.zoom
                 },
                 detail: {},
                 child: [],

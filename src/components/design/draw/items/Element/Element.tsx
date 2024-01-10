@@ -76,9 +76,7 @@ const Element: FC<ElementProps> = ({ item }) => {
 
   const setCurrentElement = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    console.log(`${item.id} selected`);
-    if (newToolSelected) onAddComponent();
-    else dispatch(selectElementInViewTreeById(item.id));
+    dispatch(selectElementInViewTreeById(item.id));
   }
 
   const mouseDownEvent = (e: React.MouseEvent<HTMLElement>) => {
@@ -90,7 +88,8 @@ const Element: FC<ElementProps> = ({ item }) => {
 
   const checkDragFinished = (e: React.MouseEvent<HTMLElement>) => {
     e.stopPropagation();
-    if (dragFlagOn) {
+    if (newToolSelected) onAddComponent();
+    else if (dragFlagOn) {
       dispatch(dragEnded(item.id));
       if (dragStartElementID && item.id) {
         let payload: IDragDropInfo = {
@@ -99,7 +98,7 @@ const Element: FC<ElementProps> = ({ item }) => {
         }
         dragStartElementID !== item.id && dispatch(dragDropElement(payload));
       }
-    }
+    }    
   }
 
   return (
