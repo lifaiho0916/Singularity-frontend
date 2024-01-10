@@ -35,6 +35,7 @@ const AddScreenDialog: FC<AddScreenDialogProps> = ({ isOpenAddScreenModal, setIs
           position: "absolute",
           minHeight: "30px"
         },
+        detail: {},
         child: [],
         type: IComponentType.Wrapper,
         size: { width: responsive === 'desktop' ? 1024 : responsive === 'tablet' ? 600 : 320 , height: 650 },

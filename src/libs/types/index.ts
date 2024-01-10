@@ -53,6 +53,7 @@ export interface IElement {
     child: Array<IElement>
     type: IComponentType
     size: ISize
+    detail: any
     content: string
     link: string
     action?: () => void
@@ -61,7 +62,8 @@ export interface IElement {
 export interface INewlyInsertedElement {
     type: IComponentType
     content: string
-    style: React.CSSProperties
+    style: React.CSSProperties,
+    detail: any
 }
 
 export interface ISplitParameterPair {

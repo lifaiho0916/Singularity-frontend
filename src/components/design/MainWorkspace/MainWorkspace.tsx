@@ -14,7 +14,6 @@ import {
   TextComponent,
   LabelComponent,
   ImageComponent,
-  Wrapper,
 } from 'components';
 import { IElement, IComponentType } from 'libs/types';
 import { initCurrentElement } from 'store/slices/viewTreeSlice';
@@ -67,11 +66,11 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
 
   const getToolComponent = () => {
     switch (ToolComponentID) {
-      case 0: return <ButtonComponent text="button"/>;
+      case 0: return <ButtonComponent text="button" type={'contained'} color={'primary'} size={'medium'} />;
       case 1: return <TextComponent />;
       case 2: return <LabelComponent text="label" />;
       case 3: return <ImageComponent />;
-      default: return <div/>;
+      default: return <div />;
     }
   }
 
@@ -79,7 +78,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
     const positionStyle: CSSProperties = {
       position: 'absolute',
       left: `${x}px`,
-      top: `${y+50}px`,
+      top: `${y + 50}px`,
       minHeight: 30,
       minWidth: 100,
       border: 1,
@@ -89,9 +88,9 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   };
 
   return (
-    <div 
+    <div
       ref={newItemRef as LegacyRef<HTMLDivElement>}
-      className="workspace-body" 
+      className="workspace-body"
       onClick={selectionCheck}
     >
       {newToolSelected && getCurrentComponent()}
@@ -101,17 +100,17 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       </div>
       <div className="main-workspace">
         {viewTrees.map((view: IElement, index) => (
-          <SubScreen 
+          <SubScreen
             key={index}
             setMouseOut={setMouseOut}
             view={view}
           />
         ))}
       </div>
-      <div 
+      <div
         className="property"
-        onMouseEnter={()=>setMouseOut(false)}
-        onMouseLeave={()=>setMouseOut(true)}
+        onMouseEnter={() => setMouseOut(false)}
+        onMouseLeave={() => setMouseOut(true)}
       >
         {getPropertyDialogForCurrentElement()}
       </div>

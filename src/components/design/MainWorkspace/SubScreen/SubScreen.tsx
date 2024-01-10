@@ -7,9 +7,8 @@ import { addSubViewToViewTree, deleteSelectedViewInViewTree, setViewTree } from 
 import { SubScreenProps } from './SubScreen.types';
 import { IComponentType, INewlyInsertedElement } from 'libs/types';
 import type { RootState } from 'store';
-
-import './SubScreen.scss';
 import { unselectToolBarComponent } from 'store/slices/toolbarSlice';
+import './SubScreen.scss';
 
 const SubScreen: FC<SubScreenProps> = (props) => {
   const { view, setMouseOut } = props;
@@ -27,9 +26,28 @@ const SubScreen: FC<SubScreenProps> = (props) => {
       
   }
 
+  const getDetails = (type: string) => {
+    switch (type) {
+      case IComponentType.ButtonComponent:
+        return {
+          color: 'primary',
+          type: 'contained',
+          size: 'medium'
+        }
+      case IComponentType.LabelComponent:
+        return {}
+      case IComponentType.TextComponent:
+        return {}
+      case IComponentType.ImageComponent:
+        return {}
+    }
+  }
+
   const onAddComponent = () => {
     if(!newToolSelected) return;
     const newItem = getCurrentComponentType();
+    const detail = getDetails(newItem);
+
     const newElement: INewlyInsertedElement = {
       type: newItem,
       content: newItem === IComponentType.ButtonComponent ? 'Button' :
@@ -37,6 +55,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
         newItem === IComponentType.TextComponent ? 'Text' : 
         newItem === IComponentType.ImageComponent ? 'Image' :
         '',
+      detail: detail,
       style: { 
         fontSize: 20,
       }

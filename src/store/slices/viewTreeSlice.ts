@@ -1,11 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
-import { 
-    IComponentType, 
-    INewlyInsertedElement, 
-    ISplitParameterPair, 
-    IElement, 
-    IWrapperType, 
+import {
+    IComponentType,
+    INewlyInsertedElement,
+    ISplitParameterPair,
+    IElement,
+    IWrapperType,
     IDragDropInfo,
     IAddNewComponentInfo
 } from "libs/types";
@@ -41,6 +41,7 @@ const initialState: viewTreeSliceState = {
                 fontSize: 16,
                 height: 650
             },
+            detail: {},
             child: [],
             size: {
                 width: 320,
@@ -62,11 +63,11 @@ const initialState: viewTreeSliceState = {
 
 function deleteElement(view: IElement, element: IElement) {
     // if element is root element delete all childs
-    if(element.parent.startsWith('root')) element.child.splice(0, element.child.length)
+    if (element.parent.startsWith('root')) element.child.splice(0, element.child.length)
     else {
         // delete the component from parent
-        const parentElement:IElement = findElementInViewById(view, element.parent)!;
-        parentElement.child = parentElement.child.filter(item=> item.id !== element.id)
+        const parentElement: IElement = findElementInViewById(view, element.parent)!;
+        parentElement.child = parentElement.child.filter(item => item.id !== element.id)
         // if element is wrapper element move child to it's parent's child array
         // if(element.type === IComponentType.Wrapper)  {
         //     element.child.forEach(item => parentElement.child.push(item));
@@ -75,11 +76,12 @@ function deleteElement(view: IElement, element: IElement) {
 }
 
 function insertSubview(view: IElement, parent: IElement, element: INewlyInsertedElement, name: string): void {
-    let insertElement : IElement = {
+    let insertElement: IElement = {
         id: uuidv4(),
         name: name,
         parent: parent.id,
         type: element.type,
+        detail: element.detail,
         style: {
             ...element.style,
         },
@@ -96,7 +98,7 @@ function insertSubview(view: IElement, parent: IElement, element: INewlyInserted
 }
 
 function findElementInViewById(view: IElement, id: string): IElement | null {
-    if(id.startsWith("root")) return view;      // In case of we are looking for a parent element
+    if (id.startsWith("root")) return view;      // In case of we are looking for a parent element
     if (view.id === id) return view;
     for (const item of view.child) {
         const result = findElementInViewById(item, id);
@@ -106,7 +108,7 @@ function findElementInViewById(view: IElement, id: string): IElement | null {
 }
 
 function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
-    let wrapperElement : IElement = findElementInViewById(view,wrapperId)!;
+    let wrapperElement: IElement = findElementInViewById(view, wrapperId)!;
     wrapperElement.style = {
         ...wrapperElement.style,
         display: "flex",
@@ -114,29 +116,31 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
     }
     let firstWrapper: IElement = {
         id: uuidv4(),
-        name:`wrapper ${id+1}`,
+        name: `wrapper ${id + 1}`,
         parent: wrapperElement.id,
         type: IComponentType.Wrapper,
         style: {
             display: "flex",
             height: 30,
             border: 1,
-            color: "#AAA",    
+            color: "#AAA",
         },
+        detail: {},
         size: { width: wrapperElement.size.width, height: 30 },
         child: wrapperElement.child,
         content: '',
         link: ''
     }
-    
+
     let secondWrapper: IElement = {
         id: uuidv4(),
         parent: wrapperElement.id,
-        name:`wrapper ${id+2}`,
+        name: `wrapper ${id + 2}`,
         type: IComponentType.Wrapper,
         style: {
             position: "relative"
         },
+        detail: {},
         size: { width: wrapperElement.size.width, height: 30 },
         child: [],
         content: '',
@@ -166,7 +170,7 @@ function replaceSubview(view: IElement, updatedComponent: IElement | null): IEle
     return null;
 }
 
-function dropElement(view: IElement, deliverElement : IElement, destinationElement: IElement) {
+function dropElement(view: IElement, deliverElement: IElement, destinationElement: IElement) {
     // Remove deliverElement from its parent
     let deliverElementParent: IElement | null = findElementInViewById(view, deliverElement.parent);
     if (deliverElementParent) {
@@ -209,27 +213,27 @@ export const viewTreeSlice = createSlice({
         },
         addSubViewToViewTree: (state, action: PayloadAction<IAddNewComponentInfo>) => {
             const { parent, newElement } = action.payload;
+            console.log("new Element", newElement)
             let name;
-            switch(newElement.type)
-            {
+            switch (newElement.type) {
                 case IComponentType.ButtonComponent:
-                    name = `button ${state.button_count+1}`
+                    name = `button ${state.button_count + 1}`
                     state.button_count++;
                     break;
                 case IComponentType.TextComponent:
-                    name = `text ${state.text_count+1}`
+                    name = `text ${state.text_count + 1}`
                     state.text_count++;
                     break;
                 case IComponentType.LabelComponent:
-                    name = `label ${state.label_count+1}`
+                    name = `label ${state.label_count + 1}`
                     state.label_count++;
                     break;
                 case IComponentType.ImageComponent:
-                    name = `image ${state.image_count+1}`
+                    name = `image ${state.image_count + 1}`
                     state.image_count++;
                     break;
                 case IComponentType.Wrapper:
-                    name = `wrapper ${state.wrapper_count+1}`
+                    name = `wrapper ${state.wrapper_count + 1}`
                     state.wrapper_count++;
                     break;
             }
@@ -255,9 +259,9 @@ export const viewTreeSlice = createSlice({
         },
         deleteSelectedViewInViewTree: (state, action: PayloadAction<IElement>) => {
             state.currentElement = null
-            let selectedView : IElement = action.payload;
-            state.viewTrees = state.viewTrees.filter((view)=> view.id !== selectedView.id)
-            if(state.viewTrees.length === 0 ) state.viewTrees.push({
+            let selectedView: IElement = action.payload;
+            state.viewTrees = state.viewTrees.filter((view) => view.id !== selectedView.id)
+            if (state.viewTrees.length === 0) state.viewTrees.push({
                 id: uuidv4(),
                 name: 'Screen1',
                 parent: 'root1',
@@ -268,6 +272,7 @@ export const viewTreeSlice = createSlice({
                     minHeight: "30px",
                     fontSize: 16
                 },
+                detail: {},
                 child: [],
                 size: {
                     width: 320,
@@ -281,7 +286,7 @@ export const viewTreeSlice = createSlice({
             const { wrapperId, kind } = action.payload;
             // based on wrapperId & kind, need to add two wrappers.
             splitWrapper(state.viewTree as IElement, wrapperId, state.wrapper_count, kind);
-            state.wrapper_count+=2;
+            state.wrapper_count += 2;
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
         },
@@ -300,30 +305,29 @@ export const viewTreeSlice = createSlice({
         },
         setResponsive: (state, action: PayloadAction<string>) => {
             state.responsive = action.payload;
-            let newWidth : number, newHeight : number;
-            switch(action.payload)
-            {
-                case 'desktop': 
+            let newWidth: number, newHeight: number;
+            switch (action.payload) {
+                case 'desktop':
                     newWidth = 1024;
                     newHeight = 650;
                     break;
-                case 'tablet': 
+                case 'tablet':
                     newWidth = 600;
                     newHeight = 650;
                     break;
-                case 'mobile': 
+                case 'mobile':
                     newWidth = 320;
                     newHeight = 650;
                     break;
-                default: 
+                default:
                     newWidth = 320;
                     newHeight = 650;
                     break;
             }
-            
+
             console.log("change width , height", newWidth, newHeight);
 
-            state.viewTrees.forEach((viewTree)=> {
+            state.viewTrees.forEach((viewTree) => {
                 viewTree.size = {
                     width: (newWidth + 16) * state.zoom,
                     height: (newHeight + 16) * state.zoom
@@ -332,8 +336,8 @@ export const viewTreeSlice = createSlice({
         },
         dragDropElement: (state, action: PayloadAction<IDragDropInfo>) => {
             let { startElementID, endElementID } = action.payload;
-            let deliverElement : IElement = findElementInViewById(state.viewTree as IElement, startElementID)!;
-            let destinationElement : IElement = findElementInViewById(state.viewTree as IElement, endElementID)!;
+            let deliverElement: IElement = findElementInViewById(state.viewTree as IElement, startElementID)!;
+            let destinationElement: IElement = findElementInViewById(state.viewTree as IElement, endElementID)!;
             dropElement(state.viewTree as IElement, deliverElement, destinationElement);
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;

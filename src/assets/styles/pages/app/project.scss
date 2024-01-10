@@ -6,11 +6,9 @@
 
     .design-workspace {
         .workspace-header {
-            position: fixed;
-            margin: 0 5px;
             display: flex;
             justify-content: space-between;
-            padding: 8px;
+            padding: 5px;
             background-color: white;
             box-shadow: 0px 3px 5px rgba(0, 0, 0, .02), 0px 0px 2px rgba(0, 0, 0, .05), 0px 1px 4px rgba(0, 0, 0, .08);
             width: 100%;
@@ -22,7 +20,6 @@
 
             .view-tool {
                 display: flex;
-
             }
         }
     }

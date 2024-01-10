@@ -9,6 +9,28 @@ export const PROJECT_POSITIONS = [
     'Manager'
 ]
 
+export const COLORS = [
+    'primary',
+    'secondary',
+    'success',
+    'error',
+    'warning',
+    'info'
+]
+
+export const BUTTON_TYPES = [
+    'contained',
+    'outlined',
+    'text'
+]
+
+export const BUTTON_SIZES = [
+    'small',
+    'medium',
+    'large'
+]
+
+
 export const API_BASE_URL = 'http://localhost:8080'
 export const OAUTH2_REDIRECT_URI = 'http://localhost:3000/oauth2/redirect'
 

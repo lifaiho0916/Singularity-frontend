@@ -15,7 +15,7 @@ import "./AppTopbar.scss";
 
 const AppTopbar = () => {
   const { isLogged, currentUser } = useSelector((state: RootState) => state.auth);
-  const [ activeTab, setActiveTab ] = React.useState(0);
+  const [activeTab, setActiveTab] = React.useState(0);
   const location = useLocation();
   const { projectId } = useParams();
   const dispatch = useDispatch();
@@ -31,37 +31,37 @@ const AppTopbar = () => {
       }
     },
     {
-        label: 'Settings',
-        icon: 'pi pi-fw pi-cog',
-        command: () => {
+      label: 'Settings',
+      icon: 'pi pi-fw pi-cog',
+      command: () => {
 
-        }
+      }
     },
     { separator: true },
     {
-        label: 'Log out',
-        icon: 'pi pi-fw pi-sign-out',
-        command: () => Logout()
+      label: 'Log out',
+      icon: 'pi pi-fw pi-sign-out',
+      command: () => Logout()
     }
   ];
 
   const Logout = () => {
-      dispatch(logout());
-      dispatch(notify({ type: 'success', content: 'See you again soon!', title: '' }));
-      navigate(AUTH_LOGIN_PATH);
+    dispatch(logout());
+    dispatch(notify({ type: 'success', content: 'See you again soon!', title: '' }));
+    navigate(AUTH_LOGIN_PATH);
   }
 
   const GetCurrentUser = async () => {
-      const res = await getCurrentUser();
-      if (res) {
-          dispatch(setCurrentUser(res as IUser));
-      }
+    const res = await getCurrentUser();
+    if (res) {
+      dispatch(setCurrentUser(res as IUser));
+    }
   }
 
   React.useEffect(() => {
-      if (isLogged) {
-          GetCurrentUser()
-      }
+    if (isLogged) {
+      GetCurrentUser()
+    }
   }, [isLogged])
 
   React.useEffect(() => {
@@ -99,24 +99,33 @@ const AppTopbar = () => {
     }
   }
 
+  const isWorkspace = React.useMemo(() => {
+    if (location.pathname.indexOf('design-workspace') !== -1 || location.pathname.indexOf('backend-workspace') !== -1 || location.pathname.indexOf('architecture-workspace') !== -1) {
+      return true;
+    } return false;
+  }, [location])
+
   return (
     <div className="app-header">
-      <div className="logo" onClick={ ()=>navigate('/app') }>
+      <div className="logo" onClick={() => navigate('/app')}>
         <h2>SINGULARITY</h2>
       </div>
-      {location.pathname.indexOf('preview') === -1 &&
-          <div className='tab-board'>
-            <div className="navigate-board">
-              <Button className={`nav-button${activeTab == 0 ? '-active' : ''}`} onClick={()=>{NavigateWorkspace(0)}} > DESIGN </Button>
-              <Button className={`nav-button${activeTab == 1 ? '-active' : ''}`} onClick={()=>{NavigateWorkspace(1)}}> BACK-END </Button>
-              <Button className={`nav-button`} disabled> ARCHITECTURE </Button>
-            </div>
-            <Button className="nav-button-preivew" size="small" onClick={() => navigate(`/app/project/${projectId}/preview`)}>
-              <span>PREVIEW</span>
-            </Button>
+      {isWorkspace &&
+        <div className="design-navigation">
+          <Button className={`nav-button${activeTab === 0 ? '-active' : ''}`} size="large" onClick={() => { NavigateWorkspace(0) }} >DESIGN</Button>
+          <Button className={`nav-button${activeTab === 1 ? '-active' : ''}`} size="large" onClick={() => { NavigateWorkspace(1) }}>BACK-END</Button>
+          {/* <Button className={`nav-button`} size="large" disabled>ARCHITECTURE</Button> */}
+        </div>
+      }
+      <div className="profile">
+        {isWorkspace &&
+          <Button className="nav-button" size="large" onClick={() => navigate(`/app/project/${projectId}/preview`)}>PREVIEW</Button>
+        }
+        {location.pathname.indexOf('preview') !== -1 &&
+          <div>
+            <Button className="nav-button" size="large" onClick={() => navigate(`/app/project/${projectId}/design-workspace`)}>BACK TO EDITOR</Button>
           </div>
         }
-      <div className="profile">
         <Avatar
           shape="circle"
           image={currentUser?.avatar}
