@@ -132,7 +132,9 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         link: ''
     }
 
-    firstWrapper.child.forEach( (item)=> item.parent = firstWrapper.id )
+    firstWrapper.child.forEach( (item)=> {
+        item.parent = firstWrapper.id 
+    })
 
     let secondWrapper: IElement = {
         id: uuidv4(),
@@ -205,12 +207,29 @@ function dropElement(view: IElement, deliverElement: IElement, destinationElemen
     }
 }
 
+function updateSizeOfAllElements(viewTrees : Array<IElement>,zoom: number)
+{
+    viewTrees.forEach((viewTree) => {
+        if(viewTree.child.length > 0) {
+            updateSizeOfAllElements(viewTree.child, zoom)    
+        }
+        else {
+            viewTree.style = { 
+                ...viewTree.style,
+                minWidth: viewTree.size.width * zoom,
+                minHeight: viewTree.size.height * zoom
+            }
+        }
+    })
+}
+
 export const viewTreeSlice = createSlice({
     name: "viewtree",
     initialState,
     reducers: {
         setZoom: (state, action: PayloadAction<number>) => {
             state.zoom = action.payload
+            updateSizeOfAllElements(state.viewTrees,state.zoom);
         },
         setViewTree: (state, action: PayloadAction<IElement>) => {
             state.viewTree = action.payload
@@ -280,8 +299,8 @@ export const viewTreeSlice = createSlice({
                 style: {
                     display: 'flex',
                     flexDirection: "column",
-                    width: sizeInfo.width * state.zoom,
-                    height: sizeInfo.height * state.zoom
+                    minWidth: sizeInfo.width * state.zoom,
+                    minHeight: sizeInfo.height * state.zoom
                 },
                 detail: {},
                 child: [],
@@ -333,12 +352,16 @@ export const viewTreeSlice = createSlice({
                     break;
             }
 
-            console.log("change width , height", newWidth, newHeight);
-
             state.viewTrees.forEach((viewTree) => {
                 viewTree.size = {
-                    width: (newWidth + 16) * state.zoom,
-                    height: (newHeight + 16) * state.zoom
+                    width: (newWidth + 16),
+                    height: (newHeight + 16)
+                }
+
+                viewTree.style = {
+                    ...viewTree.style,
+                    minWidth: viewTree.size.width * state.zoom,
+                    minHeight: viewTree.size.height * state.zoom
                 }
             })
         },
