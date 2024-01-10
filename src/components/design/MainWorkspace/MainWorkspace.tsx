@@ -26,7 +26,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const dispatch = useDispatch();
   const { ref: newItemRef, x, y, reset } = useMouse();
   const { viewTrees, currentElement } = useSelector((state: RootState) => state.viewTree);
-  const { newToolSelected, ToolComponentID } = useSelector((state: RootState) => state.toolbar);
+  const { toolbarDragFlagOn, newToolSelected, ToolComponentID } = useSelector((state: RootState) => state.toolbar);
 
   const [isOpenAddScreenModal, setIsOpenAddScreenModal] = useState(false);
   const [mouseOut, setMouseOut] = useState(true);
@@ -57,6 +57,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const getCurrentComponent = () => {
     return (
       <div
+        className='draggable'
         style={getDynamicComponentStyle()}
       >
         {getToolComponent()}
@@ -70,12 +71,12 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       case 1: return <TextComponent />;
       case 2: return <LabelComponent text="label" />;
       case 3: return <ImageComponent />;
-      default: return <div />;
+      default: return <LabelComponent text=""/>;
     }
   }
 
   const getDynamicComponentStyle = (): CSSProperties => {
-    const positionStyle: CSSProperties = {
+    let positionStyle: CSSProperties = {
       position: 'absolute',
       left: `${x}px`,
       top: `${y + 100}px`,
@@ -84,21 +85,25 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
       border: 1,
       opacity: 0.7,
     }
+    if(ToolComponentID === 4 || ToolComponentID === 5) positionStyle =  {
+      ...positionStyle,
+      backgroundColor: "gray"
+    }
     return positionStyle;
   };
 
   return (
     <div
       ref={newItemRef as LegacyRef<HTMLDivElement>}
-      className="workspace-body"
+      className={`workspace-body ${newToolSelected || toolbarDragFlagOn?'draggable':''}`}
       onClick={selectionCheck}
       onMouseUp={()=>{dispatch(unselectToolBarComponent())}}
     >
-      {newToolSelected && getCurrentComponent()}
       <div className="screen-view">
         <Button icon="pi pi-plus" raised text onClick={AddNewScreenBtnClick} />
         <Toolbar items={toolBarItems} onClicked={toolSelected} />
       </div>
+      {newToolSelected && getCurrentComponent()}
       <div className="main-workspace">
         {viewTrees.map((view: IElement, index) => (
           <SubScreen

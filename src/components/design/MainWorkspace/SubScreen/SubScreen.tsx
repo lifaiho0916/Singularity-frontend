@@ -3,7 +3,8 @@ import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { useDispatch, useSelector } from 'react-redux';
 import { Element } from 'components';
-import { deleteSelectedViewInViewTree, setViewTree } from 'store/slices/viewTreeSlice';
+import { deleteSelectedViewInViewTree, setViewTree, replaceViewTree } from 'store/slices/viewTreeSlice';
+import { toolbarDragStarted, toolbarDragEnded } from 'store/slices/toolbarSlice';
 import { SubScreenProps } from './SubScreen.types';
 import type { RootState } from 'store';
 import './SubScreen.scss';
@@ -12,6 +13,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
   const { view, setMouseOut } = props;
   const dispatch = useDispatch();
   const { zoom } = useSelector((state: RootState) => state.viewTree);
+  const { toolbarDragFlagOn, toolbarDragStartElementID } = useSelector((state: RootState) => state.toolbar);
   const [ showDeleteModal, setShowDeleteModal ] = useState(false)
   
   const onDelete = () => {
@@ -28,9 +30,22 @@ const SubScreen: FC<SubScreenProps> = (props) => {
     setShowDeleteModal(false);
   }
 
+  const onReplaceSubScreen = () => {
+    let payload = {
+      startElementID: toolbarDragStartElementID,
+      endElementID: parseInt(view.parent.replace('root', ''), 10) - 1
+    }
+    toolbarDragFlagOn && payload.startElementID !== payload.endElementID && dispatch(replaceViewTree(payload));
+    dispatch(toolbarDragEnded())
+  }
+
   return (
     <div className="view-section" style={{ width: (view.size.width+16) * zoom, height: (view.size.height + 16) * zoom }}>
-      <div className="view-header">
+      <div 
+        className="view-header"
+        onMouseDown={()=>dispatch(toolbarDragStarted(parseInt(view.parent.replace('root', ''), 10)-1))}
+        onMouseUp={()=>{onReplaceSubScreen()}}
+      >
         <h4 className="view-name">{view.name}</h4>
         <Button
           onClick={confirmDelete}

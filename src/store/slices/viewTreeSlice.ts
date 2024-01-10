@@ -2,15 +2,14 @@ import { createSlice } from "@reduxjs/toolkit"
 import type { PayloadAction } from "@reduxjs/toolkit"
 import {
     IComponentType,
-    INewlyInsertedElement,
     ISplitParameterPair,
     IElement,
     IWrapperType,
     IDragDropInfo,
-    IAddNewComponentInfo
+    IAddNewComponentInfo,
+    IReplaceViewTreeInfo
 } from "libs/types";
 import { v4 as uuidv4 } from 'uuid'
-
 interface viewTreeSliceState {
     zoom: number,
     viewTrees: Array<IElement>,
@@ -59,6 +58,63 @@ const initialState: viewTreeSliceState = {
     responsive: 'mobile'
 }
 
+const getDetails = (type: string) => {
+    switch (type) {
+        case IComponentType.ButtonComponent:
+            return {
+            color: 'primary',
+            type: 'contained',
+            size: 'medium',
+            }
+        default:
+            return {}
+    }
+}
+
+const getInitStyles = (type: string, componentID: number) : React.CSSProperties => {
+    const commonStyle : React.CSSProperties = {
+      textAlign: "start",
+      alignItems: "normal",
+      fontSize: 16,
+    }
+    switch (type) {
+      case IComponentType.ButtonComponent:
+        return {
+          ...commonStyle,
+          borderRadius: 5,
+          // boxShadow: "5 5 5 rgba(0,0,0,0.3)" // Dropshadow
+          // boxShadow: "inset 5 5 5 rgba(0,0,0,0.3)" // Dropshadow
+        }
+      case IComponentType.LabelComponent:
+        return {
+          ...commonStyle,
+          backgroundColor: "gray",
+          color: "black"
+        }
+      case IComponentType.TextComponent:
+        return {
+          ...commonStyle,
+          letterSpacing: "0px",
+          lineHeight: "16px",
+          textIndent: "0px",
+        }
+      case IComponentType.ImageComponent:
+        return {}
+      case IComponentType.Wrapper:
+        return {
+          display: "flex",
+          flexDirection: componentID === 4 ? "row" : "column",
+          justifyContent: "flex-start",
+          alignItems: "normal",
+          border: 1,
+          minHeight: 30,
+          color: "#AAA",
+        }
+      default:
+        return {}
+    }
+}
+
 function deleteElement(view: IElement, element: IElement) {
     // if element is root element delete all childs
     if (element.parent.startsWith('root')) element.child.splice(0, element.child.length)
@@ -73,22 +129,26 @@ function deleteElement(view: IElement, element: IElement) {
     }
 }
 
-function insertSubview(view: IElement, parent: IElement, element: INewlyInsertedElement, name: string): void {
+function insertSubview(view: IElement, parent: IElement, element: IComponentType, componentID: number, name: string): void {
+    let style = getInitStyles(element, componentID);
     let insertElement: IElement = {
         id: uuidv4(),
         name: name,
         parent: parent.id,
-        type: element.type,
-        detail: element.detail,
+        type: element,
+        detail: getDetails(element),
         style: {
-            ...element.style,
+            ...style,
         },
         child: [],
         size: {
             width: parent.size.width,
-            height: 30
+            height: 50
         },
-        content: element.content,
+        content: element === IComponentType.ButtonComponent ? 'Button' :
+            element === IComponentType.LabelComponent ? 'Label' :
+            element === IComponentType.TextComponent ? 'Text' :
+            element === IComponentType.ImageComponent ? 'Image' : '',
         link: ''
     };
     let parentElement = findElementInViewById(view, parent.id);
@@ -106,7 +166,6 @@ function findElementInViewById(view: IElement, id: string): IElement | null {
 }
 
 function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
-    console.log("split wrapper parameters : ", view.id, wrapperId);
     let wrapperElement: IElement = findElementInViewById(view, wrapperId)!;
     let sizeInfo = {
         width: wrapperElement.size.width,
@@ -241,10 +300,9 @@ export const viewTreeSlice = createSlice({
             state.viewTree = action.payload;
         },
         addSubViewToViewTree: (state, action: PayloadAction<IAddNewComponentInfo>) => {
-            const { parent, newElement } = action.payload;
-            console.log("new Element", newElement)
+            const { parent, newElement, componentID } = action.payload;
             let name;
-            switch (newElement.type) {
+            switch (newElement) {
                 case IComponentType.ButtonComponent:
                     name = `button ${state.button_count + 1}`
                     state.button_count++;
@@ -266,7 +324,7 @@ export const viewTreeSlice = createSlice({
                     state.wrapper_count++;
                     break;
             }
-            insertSubview(state.viewTree as IElement, parent, newElement, name);
+            insertSubview(state.viewTree as IElement, parent, newElement, componentID, name);
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
         },
@@ -372,6 +430,13 @@ export const viewTreeSlice = createSlice({
             dropElement(state.viewTree as IElement, deliverElement, destinationElement);
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
+        },
+        replaceViewTree: (state, action: PayloadAction<IReplaceViewTreeInfo>) => {
+            let { startElementID, endElementID } = action.payload;
+            console.log("swapElements : ", startElementID, endElementID)
+            let temp: IElement = state.viewTrees[endElementID];
+            state.viewTrees[endElementID] = state.viewTrees[startElementID];
+            state.viewTrees[startElementID] = temp;
         }
     }
 })
@@ -390,7 +455,8 @@ export const {
     applySplitToWrapper,
     initCurrentElement,
     setResponsive,
-    dragDropElement
+    dragDropElement,
+    replaceViewTree
 } = viewTreeSlice.actions;
 
 export default viewTreeSlice.reducer
