@@ -34,6 +34,7 @@ const initialState: viewTreeSliceState = {
             style: {
                 display: "flex",
                 flexDirection: "column",
+                backgroundColor: "lightgray",
                 fontSize: 16,
                 minHeight: 650,
                 minWidth: 320
@@ -88,7 +89,7 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
       case IComponentType.LabelComponent:
         return {
           ...commonStyle,
-          backgroundColor: "gray",
+          backgroundColor: "lightgray",
           color: "black"
         }
       case IComponentType.TextComponent:
@@ -104,6 +105,7 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
         return {
           display: "flex",
           flexDirection: componentID === 4 ? "row" : "column",
+          backgroundColor: "gray",
           justifyContent: "flex-start",
           alignItems: "normal",
           border: 1,
