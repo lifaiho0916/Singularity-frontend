@@ -18,13 +18,13 @@ const DesignHeader: FC<DesignHeaderProps> = () => {
             icon="pi pi-desktop" text
             style={{ margin: '0px 5px' }}
             raised={responsive === 'desktop'}
-            onClick={() => dispatch(setResponsive('desktop'))}
+            // onClick={() => dispatch(setResponsive('desktop'))}
           />
           <Button
             icon="pi pi-tablet" text
             style={{ margin: '0px 5px' }}
             raised={responsive === 'tablet'}
-            onClick={() => dispatch(setResponsive('tablet'))}
+            // onClick={() => dispatch(setResponsive('tablet'))}
           />
           <Button
             icon="pi pi-mobile" text
