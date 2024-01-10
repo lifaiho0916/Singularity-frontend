@@ -65,13 +65,6 @@ export interface IElement {
     action?: () => void
 }
 
-export interface INewlyInsertedElement {
-    type: IComponentType
-    content: string
-    style: React.CSSProperties,
-    detail: any
-}
-
 export interface ISplitParameterPair {
     wrapperId: string,
     kind: IWrapperType
@@ -102,5 +95,11 @@ export interface IDragDropInfo {
 
 export interface IAddNewComponentInfo { 
     parent : IElement,
-    newElement : INewlyInsertedElement
+    newElement : IComponentType,
+    componentID : number
+}
+
+export interface IReplaceViewTreeInfo {
+    startElementID: number,
+    endElementID: number
 }

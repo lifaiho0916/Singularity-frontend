@@ -1,8 +1,8 @@
 import { type FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IComponentType, IDragDropInfo, INewlyInsertedElement } from 'libs/types';
+import { IComponentType, IDragDropInfo } from 'libs/types';
 import { Wrapper, ButtonComponent, TextComponent, LabelComponent, ImageComponent } from 'components';
-import { selectElementInViewTreeById, addSubViewToViewTree, setViewTree, dragDropElement } from "store/slices/viewTreeSlice";
+import { selectElementInViewTreeById, addSubViewToViewTree, dragDropElement } from "store/slices/viewTreeSlice";
 import { dragStarted, dragEnded } from 'store/slices/dragSlice';
 import { unselectToolBarComponent } from 'store/slices/toolbarSlice';
 import type { RootState } from 'store';
@@ -17,58 +17,17 @@ const Element: FC<ElementProps> = ({ item }) => {
   const getCurrentComponentType = () => {
     return ToolComponentID === 0 ? IComponentType.ButtonComponent :
       ToolComponentID === 1 ? IComponentType.TextComponent :
-        ToolComponentID === 2 ? IComponentType.LabelComponent :
-          ToolComponentID === 3 ? IComponentType.ImageComponent :
-            IComponentType.Wrapper;
-
-  }
-
-  const getDetails = (type: string) => {
-    switch (type) {
-      case IComponentType.ButtonComponent:
-        return {
-          color: 'primary',
-          type: 'contained',
-          size: 'medium'
-        }
-      case IComponentType.LabelComponent:
-        return {}
-      case IComponentType.TextComponent:
-        return {}
-      case IComponentType.ImageComponent:
-        return {}
-    }
+      ToolComponentID === 2 ? IComponentType.LabelComponent :
+      ToolComponentID === 3 ? IComponentType.ImageComponent :
+      IComponentType.Wrapper;
   }
 
   const onAddComponent = () => {
     const newItem = getCurrentComponentType();
-    const detail = getDetails(newItem);
-
-    const newElement: INewlyInsertedElement = {
-      type: newItem,
-      content: newItem === IComponentType.ButtonComponent ? 'Button' :
-        newItem === IComponentType.LabelComponent ? 'Label' :
-          newItem === IComponentType.TextComponent ? 'Text' :
-            newItem === IComponentType.ImageComponent ? 'Image' :
-              '',
-      detail: detail,
-      style: {
-        fontSize: 20,
-      }
-    }
-    if (newItem === IComponentType.Wrapper) {
-      newElement.style = {
-        ...newElement.style,
-        display: "flex",
-        flexDirection: ToolComponentID === 4 ? "row" : "column",
-        border: 1,
-        minHeight: 30,
-        color: "#AAA",
-      }
-    }
     let payload = {
       parent: item,
-      newElement: newElement
+      newElement: newItem,
+      componentID: ToolComponentID
     }
     dispatch(addSubViewToViewTree(payload));
     dispatch(unselectToolBarComponent());
@@ -128,8 +87,8 @@ const Element: FC<ElementProps> = ({ item }) => {
             size={item.detail.size}
           /> :
           item.type === IComponentType.TextComponent ? <TextComponent text={item.content} style={item.style} /> :
-            item.type === IComponentType.LabelComponent ? <LabelComponent text={item.content} style={item.style} /> :
-              <ImageComponent imageData={item.detail?.image} />
+          item.type === IComponentType.LabelComponent ? <LabelComponent text={item.content} style={item.style} /> :
+          <ImageComponent imageData={item.detail?.image} />
       }
     </div>
   )
