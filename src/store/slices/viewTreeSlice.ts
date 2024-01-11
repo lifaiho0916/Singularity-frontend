@@ -360,7 +360,13 @@ export const viewTreeSlice = createSlice({
                 parent: 'root1',
                 type: IComponentType.Wrapper,
                 style: {
-                    display: 'flex',
+                    display: "flex",
+                    backgroundColor: "gray",
+                    justifyContent: "flex-start",
+                    alignItems: "normal",
+                    border: 1,
+                    color: "#AAA",
+                    zIndex: -1,
                     flexDirection: "column",
                     minWidth: sizeInfo.width * state.zoom,
                     minHeight: sizeInfo.height * state.zoom
@@ -438,7 +444,6 @@ export const viewTreeSlice = createSlice({
         },
         replaceViewTree: (state, action: PayloadAction<IReplaceViewTreeInfo>) => {
             let { startElementID, endElementID } = action.payload;
-            console.log("swapElements : ", startElementID, endElementID)
             let temp: IElement = state.viewTrees[endElementID];
             state.viewTrees[endElementID] = state.viewTrees[startElementID];
             state.viewTrees[startElementID] = temp;

@@ -78,7 +78,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
   const getDynamicComponentStyle = (): CSSProperties => {
     let positionStyle: CSSProperties = {
       position: 'absolute',
-      left: `${x}px`,
+      left: `${x + 5}px`,
       top: `${y + 100}px`,
       minHeight: 30,
       minWidth: 100,
