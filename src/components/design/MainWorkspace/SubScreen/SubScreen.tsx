@@ -40,7 +40,7 @@ const SubScreen: FC<SubScreenProps> = (props) => {
   }
 
   return (
-    <div className="view-section" style={{ width: (view.size.width+16) * zoom, height: (view.size.height + 16) * zoom }}>
+    <div className="view-section" style={{ width: view.size.width * zoom + 16, height: view.size.height * zoom  + 16}}>
       <div 
         className="view-header"
         onMouseDown={()=>dispatch(toolbarDragStarted(parseInt(view.parent.replace('root', ''), 10)-1))}

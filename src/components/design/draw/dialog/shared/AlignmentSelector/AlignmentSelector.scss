@@ -1,0 +1,28 @@
+.alignment-bar {
+    display: flex;
+    padding: 0;
+
+    .icon-button { 
+        border: 1px solid #AAA;
+        background-color: white;
+        margin: 0px 2px;
+        border-radius: 0;
+        outline: none !important;
+
+        &:hover {
+            background-color: lightgray;
+        }
+
+        &:focus {
+            outline: none; // Remove the focus outline
+        }
+    }
+
+    .selected {
+        border: 1px solid black;
+    }
+
+    .pi {
+        color: gray;
+    }
+}

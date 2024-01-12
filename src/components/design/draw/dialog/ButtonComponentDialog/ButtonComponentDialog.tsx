@@ -11,6 +11,11 @@ import type { RootState } from 'store';
 import { IElement } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './ButtonComponentDialog.scss';
+import SizeStyle from '../shared/SizeStyle/SizeStyle';
+import AlignmentSelector from '../shared/AlignmentSelector/AlignmentSelector';
+import TextAlignmentSelector from '../shared/TextAlignmentSelector/TextAlignmentSelector';
+import BorderRadiusSelector from '../shared/BorderRadiusSelector/BorderRadiusSelector';
+import { current } from '@reduxjs/toolkit';
 
 const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
   const dispatch = useDispatch();
@@ -109,6 +114,9 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
         </div>
         <Divider className="custom-divider" />
 
+        <AlignmentSelector item={currentElement}/>
+        <Divider className="custom-divider" />
+
         <div className="section-header">
           <h4>Link</h4>
         </div>
@@ -172,8 +180,8 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
             </div>
           </div>
         </div>
-        <Divider className="custom-divider" />
 
+        <Divider className="custom-divider" />        
         <div className="section-header">
           <h4>Type</h4>
         </div>
@@ -213,8 +221,15 @@ const ButtonComponentDialog: FC<ButtonComponentDialogProps> = () => {
             onChange={(e) => onButtonSizeChange(e.value)}
           />
         </div>
-        <Divider className="custom-divider" />
+        <SizeStyle item = {currentElement} />
 
+        <Divider className="custom-divider" />
+        <TextAlignmentSelector item = {currentElement} />
+
+        <Divider className="custom-divider" />
+        <BorderRadiusSelector item = {currentElement} />
+
+        <Divider className="custom-divider" />
         <div className="section-footer">
           <div
             style={{

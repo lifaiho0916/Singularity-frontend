@@ -1,6 +1,6 @@
 import { useMemo, type FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { LabelComponentDialogProps } from "./LabelComponentDialog.types";
+import { Button } from 'primereact/button';
 import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
@@ -9,8 +9,11 @@ import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
 import type { IElement } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
+import { LabelComponentDialogProps } from "./LabelComponentDialog.types";
 import './LabelComponentDialog.scss';
-import { Button } from 'primereact/button';
+import AlignmentSelector from '../shared/AlignmentSelector/AlignmentSelector';
+import TextAlignmentSelector from '../shared/TextAlignmentSelector/TextAlignmentSelector';
+import SizeStyle from '../shared/SizeStyle/SizeStyle';
 
 const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
   const dispatch = useDispatch();
@@ -130,6 +133,7 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
       <div className="label-header">
         <label>LABEL PROPERTIES</label>
       </div>
+
       <div className="label-body">
         <div className="section-header">
           <h4>Text</h4>
@@ -142,6 +146,9 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
             onChange={(e) => onTextChange(e.target.value)}
           />
         </div>
+        <Divider className="custom-divider" />
+
+        <AlignmentSelector item={currentElement} />
         <Divider className="custom-divider" />
 
         <div className="section-header">
@@ -241,25 +248,13 @@ const LabelComponentDialog: FC<LabelComponentDialogProps> = () => {
               onChange={(e) => onFontColorChange(e.value as string)}
             />
           </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: 5,
-              alignItems: 'center'
-            }}
-          >
-            <h5 style={{ marginRight: 5 }}>Size:</h5>
-            <InputNumber
-              style={{
-                height: 32
-              }}
-              min={0}
-              value={currentElement.style.fontSize ? Number(currentElement.style.fontSize) : 10}
-              onChange={(e) => onFontSizeChange(Number(e.value))}
-            />
-          </div>
-        </div>
+          <SizeStyle item = {currentElement} />
+        </div>        
+        <Divider className="custom-divider" />
+
+        <TextAlignmentSelector item = {currentElement} />
+        <Divider className="custom-divider" />
+
         <div className="section-footer">
           <div
             style={{

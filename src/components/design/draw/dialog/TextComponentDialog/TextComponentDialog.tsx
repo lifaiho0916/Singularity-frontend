@@ -1,6 +1,6 @@
 import { useMemo, type FC } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { TextComponentDialogProps } from "./TextComponentDialog.types";
+import { Button } from 'primereact/button';
 import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
@@ -9,7 +9,10 @@ import { ColorPicker } from 'primereact/colorpicker';
 import type { RootState } from 'store';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
 import './TextComponentDialog.scss';
-import { Button } from 'primereact/button';
+import { TextComponentDialogProps } from "./TextComponentDialog.types";
+import SizeStyle from '../shared/SizeStyle/SizeStyle';
+import AlignmentSelector from '../shared/AlignmentSelector/AlignmentSelector';
+import TextAlignmentSelector from '../shared/TextAlignmentSelector/TextAlignmentSelector';
 
 const TextComponentDialog: FC<TextComponentDialogProps> = () => {
   const dispatch = useDispatch();
@@ -136,6 +139,9 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
         </div>
         <Divider className="custom-divider" />
 
+        <AlignmentSelector item={currentElement} />
+        <Divider className="custom-divider" />
+
         <div className="section-header">
           <h4>Size</h4>
         </div>
@@ -236,9 +242,14 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
               value={currentElement.style.fontSize ? Number(currentElement.style.fontSize) : 10}
               onChange={(e) => onFontSizeChange(Number(e.value))}
             />
-          </div>
-          
+            <SizeStyle item = {currentElement} />
+          </div>     
         </div>
+
+        <Divider className="custom-divider" />
+
+        <TextAlignmentSelector item = {currentElement} />
+
         <div className="section-footer">
           <div
             style={{

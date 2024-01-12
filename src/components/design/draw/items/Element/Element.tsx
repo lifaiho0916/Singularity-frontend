@@ -76,9 +76,7 @@ const Element: FC<ElementProps> = ({ item }) => {
           <Wrapper
             id={item.id}
             hasWrapper={(item.child && item.child[0]?.type === IComponentType.Wrapper) ? true : false}
-            style={{
-              ...item.style,
-            }}
+            style={item.style}
           >
             {item.child && item.child.map((subView, index) => (
               <Element item={subView} key={index} />

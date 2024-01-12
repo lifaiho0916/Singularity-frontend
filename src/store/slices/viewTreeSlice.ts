@@ -36,7 +36,7 @@ const initialState: viewTreeSliceState = {
                 flexDirection: "column",
                 backgroundColor: "lightgray",
                 fontSize: 16,
-                minHeight: 650,
+                minHeight: 642,
                 minWidth: 320,
                 zIndex: 0
             },
@@ -44,7 +44,7 @@ const initialState: viewTreeSliceState = {
             child: [],
             size: {
                 width: 320,
-                height: 650
+                height: 642
             },
             content: '',
             link: ''
@@ -85,6 +85,8 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
         return {
           ...commonStyle,
           borderRadius: 5,
+          width: "100px",
+          height: "42px",
           // boxShadow: "5 5 5 rgba(0,0,0,0.3)" // Dropshadow
           // boxShadow: "inset 5 5 5 rgba(0,0,0,0.3)" // Dropshadow
         }
@@ -92,6 +94,8 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
         return {
           ...commonStyle,
           backgroundColor: "lightgray",
+          width: "100px",
+          height: "42px",
           color: "black"
         }
       case IComponentType.TextComponent:
@@ -100,6 +104,8 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
           letterSpacing: "0px",
           lineHeight: "16px",
           textIndent: "0px",
+          width: "100px",
+          height: "42px",
         }
       case IComponentType.ImageComponent:
         return {}
@@ -107,13 +113,10 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
         return {
           display: "flex",
           flexDirection: componentID === 4 ? "row" : "column",
-          backgroundColor: "gray",
+          backgroundColor: "lightgray",
           justifyContent: "flex-start",
-          alignItems: "normal",
-          border: 1,
-          minHeight: 30,
+          minHeight: 42,
           color: "#AAA",
-          zIndex: -1
         }
       default:
         return {}
@@ -148,7 +151,7 @@ function insertSubview(view: IElement, parent: IElement, element: IComponentType
         child: [],
         size: {
             width: parent.size.width,
-            height: 50
+            height: 42
         },
         content: element === IComponentType.ButtonComponent ? 'Button' :
             element === IComponentType.LabelComponent ? 'Label' :
@@ -170,7 +173,7 @@ function findElementInViewById(view: IElement, id: string): IElement | null {
     return null;
 }
 
-function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType) {
+function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrapperType, zoom : number) {
     let wrapperElement: IElement = findElementInViewById(view, wrapperId)!;
     let sizeInfo = {
         width: wrapperElement.size.width,
@@ -183,8 +186,8 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         type: IComponentType.Wrapper,
         style: {
             ...wrapperElement.style,
-            minWidth: kind === IWrapperType.Vertical ? sizeInfo.width / 2: sizeInfo.width,
-            minHeight: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
+            minWidth: kind === IWrapperType.Vertical ? sizeInfo.width / 2 * zoom: sizeInfo.width * zoom,
+            minHeight: kind === IWrapperType.Vertical ? sizeInfo.height * zoom : sizeInfo.height / 2 * zoom,
         },
         detail: {},
         size: {
@@ -207,8 +210,8 @@ function splitWrapper(view: IElement, wrapperId: string, id: number, kind: IWrap
         type: IComponentType.Wrapper,
         style: {
             ...wrapperElement.style,
-            minWidth: kind === IWrapperType.Vertical ? sizeInfo.width /2 : sizeInfo.width,
-            minHeight: kind === IWrapperType.Vertical ? sizeInfo.height : sizeInfo.height / 2,
+            minWidth: kind === IWrapperType.Vertical ? sizeInfo.width /2 * zoom : sizeInfo.width * zoom,
+            minHeight: kind === IWrapperType.Vertical ? sizeInfo.height * zoom : sizeInfo.height / 2 * zoom,
         },
         detail: {},
         size: {
@@ -283,6 +286,7 @@ function updateSizeOfAllElements(viewTrees : Array<IElement>,zoom: number)
                 minWidth: viewTree.size.width * zoom,
                 minHeight: viewTree.size.height * zoom
             }
+            console.log(viewTree.name," Element updated.")
         }
     })
 }
@@ -294,6 +298,10 @@ export const viewTreeSlice = createSlice({
         setZoom: (state, action: PayloadAction<number>) => {
             state.zoom = action.payload
             updateSizeOfAllElements(state.viewTrees,state.zoom);
+            state.viewTrees.forEach((item)=> {
+                if(item.id === state.viewTree?.id)
+                    state.viewTree = item;
+            })
         },
         setViewTree: (state, action: PayloadAction<IElement>) => {
             state.viewTree = action.payload
@@ -353,7 +361,7 @@ export const viewTreeSlice = createSlice({
             state.currentElement = null
             let selectedView: IElement = action.payload;
             state.viewTrees = state.viewTrees.filter((view) => view.id !== selectedView.id)
-            let sizeInfo = { width: state.responsive === 'desktop' ? 1024 : state.responsive === 'tablet' ? 600 : 320 , height: 650 }
+            let sizeInfo = { width: state.responsive === 'desktop' ? 1024 : state.responsive === 'tablet' ? 600 : 320 , height: 642 }
             if (state.viewTrees.length === 0) state.viewTrees.push({
                 id: uuidv4(),
                 name: 'Screen1',
@@ -361,7 +369,7 @@ export const viewTreeSlice = createSlice({
                 type: IComponentType.Wrapper,
                 style: {
                     display: "flex",
-                    backgroundColor: "gray",
+                    backgroundColor: "lightgray",
                     justifyContent: "flex-start",
                     alignItems: "normal",
                     border: 1,
@@ -381,7 +389,7 @@ export const viewTreeSlice = createSlice({
         applySplitToWrapper: (state, action: PayloadAction<ISplitParameterPair>) => {
             const { wrapperId, kind } = action.payload;
             // based on wrapperId & kind, need to add two wrappers.
-            splitWrapper(state.viewTree as IElement, wrapperId, state.wrapper_count, kind);
+            splitWrapper(state.viewTree as IElement, wrapperId, state.wrapper_count, kind, state.zoom);
             state.wrapper_count += 2;
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
@@ -405,19 +413,19 @@ export const viewTreeSlice = createSlice({
             switch (action.payload) {
                 case 'desktop':
                     newWidth = 1024;
-                    newHeight = 650;
+                    newHeight = 642;
                     break;
                 case 'tablet':
                     newWidth = 600;
-                    newHeight = 650;
+                    newHeight = 642;
                     break;
                 case 'mobile':
                     newWidth = 320;
-                    newHeight = 650;
+                    newHeight = 642;
                     break;
                 default:
                     newWidth = 320;
-                    newHeight = 650;
+                    newHeight = 642;
                     break;
             }
 

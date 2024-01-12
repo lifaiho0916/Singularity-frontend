@@ -30,7 +30,23 @@
             .p-inputnumber-input {
                 width: 100%;
             }
+
+            .valueInfoText {
+                width: 45px;
+                height: 32px;
+                align-items: center;
+                text-align: center;
+            }
         }
+
+        .sameline {
+            display: flex;
+            width: 100%;
+            justify-content: center;
+            align-items: center;
+            gap: 10px
+        }
+
 
         .custom-divider {
             margin: 5px 0px;
