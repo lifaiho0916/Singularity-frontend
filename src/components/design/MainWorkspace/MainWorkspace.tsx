@@ -39,7 +39,6 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
 
   const getPropertyDialogForCurrentElement = () => {
     if (!currentElement) return;
-    console.log("current component dialog : ", currentElement.type)
     switch (currentElement.type) {
       case IComponentType.ButtonComponent: return <ButtonComponentDialog />
       case IComponentType.TextComponent: return <TextComponentDialog />
@@ -96,6 +95,7 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
     return positionStyle;
   };
 
+  console.log("------------------------------");
   return (
     <div
       ref={newItemRef as LegacyRef<HTMLDivElement>}

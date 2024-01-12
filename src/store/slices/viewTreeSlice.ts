@@ -84,9 +84,9 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
       case IComponentType.ButtonComponent:
         return {
           ...commonStyle,
-          borderRadius: 5,
-          width: "100px",
-          height: "42px",
+        //   borderRadius: 5,
+        //   width: "100px",
+        //   height: "42px",
           // boxShadow: "5 5 5 rgba(0,0,0,0.3)" // Dropshadow
           // boxShadow: "inset 5 5 5 rgba(0,0,0,0.3)" // Dropshadow
         }

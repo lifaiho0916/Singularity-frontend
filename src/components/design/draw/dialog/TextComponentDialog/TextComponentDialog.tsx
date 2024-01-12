@@ -224,26 +224,8 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
               style={{ marginLeft: 5 }}
               onChange={(e) => onFontColorChange(e.value as string)}
             />
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: 5,
-              alignItems: 'center'
-            }}
-          >
-            <h5 style={{ marginRight: 5 }}>Size:</h5>
-            <InputNumber
-              style={{
-                height: 32
-              }}
-              min={0}
-              value={currentElement.style.fontSize ? Number(currentElement.style.fontSize) : 10}
-              onChange={(e) => onFontSizeChange(Number(e.value))}
-            />
-            <SizeStyle item = {currentElement} />
-          </div>     
+          </div>   
+          <SizeStyle item = {currentElement} />
         </div>
 
         <Divider className="custom-divider" />
