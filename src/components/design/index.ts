@@ -6,6 +6,7 @@ export {
   ImageComponentDialog,
   LabelComponentDialog,
   TextComponentDialog,
+  WrapperDialog,
   AddScreenDialog,
   ButtonComponent,
   ImageComponent,

@@ -1,22 +1,25 @@
-import { useMemo, type FC } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { type FC } from 'react';
 import { Button } from 'primereact/button';
+import { useSelector, useDispatch } from 'react-redux';
+import { WrapperDialogProps } from "./WrapperDialog.types";
+import { InputText } from 'primereact/inputtext';
 import { InputNumber } from 'primereact/inputnumber';
 import { Divider } from 'primereact/divider';
 import { CascadeSelect } from 'primereact/cascadeselect';
-import { InputTextarea } from 'primereact/inputtextarea';
-import { ColorPicker } from 'primereact/colorpicker';
+import { COLORS, BUTTON_TYPES, BUTTON_SIZES } from 'constants/';
 import type { RootState } from 'store';
+import { IElement } from 'libs/types';
 import { deleteSelectedElementInViewTree, updateSelectedElementInViewTree } from 'store/slices/viewTreeSlice';
-import './TextComponentDialog.scss';
-import { TextComponentDialogProps } from "./TextComponentDialog.types";
 import SizeStyle from '../shared/SizeStyle/SizeStyle';
 import AlignmentSelector from '../shared/AlignmentSelector/AlignmentSelector';
 import TextAlignmentSelector from '../shared/TextAlignmentSelector/TextAlignmentSelector';
+import BorderRadiusSelector from '../shared/BorderRadiusSelector/BorderRadiusSelector';
+import './WrapperDialog.scss';
 
-const TextComponentDialog: FC<TextComponentDialogProps> = () => {
+const WrapperDialog: FC<WrapperDialogProps> = () => {
+  console.log("Wrapper Dialog");
   const dispatch = useDispatch();
-  const { currentElement } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
 
   const onDelete = () => {
     if (!currentElement || !currentElement.content) return
@@ -27,16 +30,15 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      content: newText
+      name: newText
     }));
   }
-
   const onWidthChange = (newWidth: number) => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      size: {
-        ...currentElement.size,
+      style: {
+        ...currentElement.style,
         width: newWidth
       }
     }));
@@ -46,100 +48,87 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
     if (!currentElement || !currentElement.content) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      size: {
-        ...currentElement.size,
+      style: {
+        ...currentElement.style,
         height: newHeight
       }
     }));
   }
 
-  const onFontSizeChange = (newFontSize: number) => {
-    if (!currentElement || !currentElement.content) return
+  const onColorChange = (newColor: string) => {
+    if (!currentElement || !currentElement.detail) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      style: {
-        ...currentElement.style,
-        fontSize: newFontSize
+      detail: {
+        ...currentElement.detail,
+        color: newColor
       }
     }));
   }
 
-  const onFontFamilyChange = (newFontFamily: string) => {
-    if (!currentElement || !currentElement.content) return
+  const onButtonSizeChange = (newSize: string) => {
+    if (!currentElement || !currentElement.detail) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-        style: {
-          ...currentElement.style,
-          fontFamily: newFontFamily
-        }
-    }));
-  }
-
-  const onFontWeightChange = (newFontWeight: string) => {
-    if (!currentElement || !currentElement.content) return
-    dispatch(updateSelectedElementInViewTree({
-      ...currentElement,
-      style: {
-        ...currentElement.style,
-        fontWeight: fontWeightNumber(newFontWeight)
+      detail: {
+        ...currentElement.detail,
+        size: newSize
       }
     }));
   }
 
-  const onFontColorChange = (newFontColor: string) => {
-    if (!currentElement || !currentElement.content) return
+  const onButtonTypeChange = (newType: string) => {
+    if (!currentElement || !currentElement.detail) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
-      style: {
-        ...currentElement.style,
-        color: '#' + newFontColor
+      detail: {
+        ...currentElement.detail,
+        type: newType
       }
     }));
   }
 
-  const fontWeight = useMemo(() => {
-    if (currentElement) {
-      if (currentElement.style.fontWeight) {
-        switch (currentElement.style.fontWeight) {
-          case 200: return 'Light';
-          case 400: return 'Normal';
-          case 600: return 'Semi-Bold';
-          case 700: return 'Bold';
-        }
-      } return 'Normal'
-    }
-  }, [currentElement])
-
-  const fontWeightNumber = (fontWeight: string) => {
-    switch (fontWeight) {
-      case 'Light': return 200;
-      case 'Normal': return 400;
-      case 'Semi-Bold': return 600;
-      case 'Bold': return 700;
-    }
+  const onLinkChange = (newLink: string) => {
+    if (!currentElement || !currentElement.content) return
+    dispatch(updateSelectedElementInViewTree({
+      ...currentElement,
+      link: newLink
+    }));
   }
-
   return currentElement ? (
-    <div className="text-component-dialog">
-      <div className="text-header">
-        <label>TEXT PROPERTIES</label>
+    <div className="wrapper-dialog">
+      <div className="wrapper-header">
+        <label>BUTTON PROPERTIES</label>
       </div>
-      <div className="text-body">
+      <div className="wrapper-body">
         <div className="section-header">
-          <h4>Text</h4>
+          <h4>Name</h4>
         </div>
         <div className="section-body">
-          <InputTextarea
-            style={{ width: '100%' }}
-            rows={1}
+          <InputText
+            type='text'
+            className='input-text'
             value={currentElement.content}
             onChange={(e) => onTextChange(e.target.value)}
-          // autoResize={true}
           />
         </div>
         <Divider className="custom-divider" />
 
-        <AlignmentSelector item={currentElement} />
+        <AlignmentSelector item={currentElement}/>
+        <Divider className="custom-divider" />
+
+        <div className="section-header">
+          <h4>Link</h4>
+        </div>
+        <div className="section-body">
+          <CascadeSelect
+            value={currentElement.link}
+            options={viewTrees.map((view: IElement) => view?.id)}
+            optionGroupChildren={[]}
+            onChange={(e) => onLinkChange(e.value)}
+            className='input-text'
+          />
+        </div>
         <Divider className="custom-divider" />
 
         <div className="section-header">
@@ -165,7 +154,7 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
                 style={{
                   height: 32
                 }}
-                suffix="px"
+                suffix='px'
                 value={currentElement.size.width}
                 onChange={(e) => onWidthChange(Number(e.value))}
                 min={0}
@@ -191,66 +180,56 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
             </div>
           </div>
         </div>
+
+        <Divider className="custom-divider" />        
+        <div className="section-header">
+          <h4>Type</h4>
+        </div>
+        <div className='section-body'>
+          <CascadeSelect
+            value={currentElement.detail?.type}
+            options={BUTTON_TYPES}
+            optionGroupChildren={[]}
+            className='input-text'
+            onChange={(e) => onButtonTypeChange(e.value)}
+          />
+        </div>
         <Divider className="custom-divider" />
 
         <div className="section-header">
-          <h4>Font</h4>
+          <h4>Color</h4>
         </div>
         <div className="section-body">
           <CascadeSelect
-            value={currentElement.style.fontFamily ? currentElement.style.fontFamily : 'Default'}
-            options={['Default', 'Arial', 'Times New Roman', 'Calibri']}
+            value={currentElement.detail?.color}
+            options={COLORS}
             optionGroupChildren={[]}
             className='input-text'
-            onChange={(e) => onFontFamilyChange(e.value)}
+            onChange={(e) => onColorChange(e.value)}
           />
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: 5
-            }}
-          >
-            <CascadeSelect
-              value={fontWeight}
-              options={['Light', 'Normal', 'Semi-Bold', 'Bold']}
-              optionGroupChildren={[]}
-              className='input-text'
-              onChange={(e) => onFontWeightChange(e.value)}
-            />
-            <ColorPicker
-              format="hex"
-              value={currentElement.style.color ? currentElement.style.color.substring(1) : '000000'}
-              style={{ marginLeft: 5 }}
-              onChange={(e) => onFontColorChange(e.value as string)}
-            />
-          </div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              marginTop: 5,
-              alignItems: 'center'
-            }}
-          >
-            <h5 style={{ marginRight: 5 }}>Size:</h5>
-            <InputNumber
-              style={{
-                height: 32
-              }}
-              min={0}
-              value={currentElement.style.fontSize ? Number(currentElement.style.fontSize) : 10}
-              onChange={(e) => onFontSizeChange(Number(e.value))}
-            />
-            <SizeStyle item = {currentElement} />
-          </div>     
         </div>
 
-        <Divider className="custom-divider" />
+        <div className="section-header">
+          <h4>Button Size</h4>
+        </div>
+        <div className='section-body'>
+          <CascadeSelect
+            value={currentElement.detail?.size}
+            options={BUTTON_SIZES}
+            optionGroupChildren={[]}
+            className='input-text'
+            onChange={(e) => onButtonSizeChange(e.value)}
+          />
+        </div>
+        <SizeStyle item = {currentElement} />
 
+        <Divider className="custom-divider" />
         <TextAlignmentSelector item = {currentElement} />
-        <Divider className="custom-divider" />
 
+        <Divider className="custom-divider" />
+        <BorderRadiusSelector item = {currentElement} />
+
+        <Divider className="custom-divider" />
         <div className="section-footer">
           <div
             style={{
@@ -268,4 +247,4 @@ const TextComponentDialog: FC<TextComponentDialogProps> = () => {
   ) : null
 }
 
-export default TextComponentDialog;
+export default WrapperDialog;

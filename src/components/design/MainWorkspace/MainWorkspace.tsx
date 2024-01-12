@@ -9,6 +9,7 @@ import {
   TextComponentDialog,
   ButtonComponentDialog,
   ImageComponentDialog,
+  WrapperDialog,
   AddScreenDialog,
   ButtonComponent,
   TextComponent,
@@ -38,11 +39,13 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
 
   const getPropertyDialogForCurrentElement = () => {
     if (!currentElement) return;
+    console.log("current component dialog : ", currentElement.type)
     switch (currentElement.type) {
       case IComponentType.ButtonComponent: return <ButtonComponentDialog />
       case IComponentType.TextComponent: return <TextComponentDialog />
       case IComponentType.LabelComponent: return <LabelComponentDialog />
       case IComponentType.ImageComponent: return <ImageComponentDialog />
+      case IComponentType.Wrapper: return <WrapperDialog />
     }
   }
 

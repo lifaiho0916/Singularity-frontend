@@ -1,3 +1,4 @@
+import Wrapper from './design/draw/layout/Wrapper/Wrapper';
 export { ProjectTemplate } from './ProjectTemplate'
 export { ToastContainer } from './ToastContainer'
 export { 
@@ -11,6 +12,7 @@ export {
   LabelComponentDialog, 
   TextComponentDialog,
   AddScreenDialog,
+  WrapperDialog,
   ButtonComponent, 
   ImageComponent, 
   LabelComponent, 

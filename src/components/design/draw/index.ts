@@ -3,6 +3,7 @@ export {
   ImageComponentDialog, 
   LabelComponentDialog, 
   TextComponentDialog,
+  WrapperDialog,
   AddScreenDialog
 } from './dialog'
 
