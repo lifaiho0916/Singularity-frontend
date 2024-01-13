@@ -17,9 +17,8 @@ import BorderRadiusSelector from '../shared/BorderRadiusSelector/BorderRadiusSel
 import './WrapperDialog.scss';
 
 const WrapperDialog: FC<WrapperDialogProps> = () => {
-  console.log("Wrapper Dialog");
   const dispatch = useDispatch();
-  const { currentElement, viewTrees } = useSelector((state: RootState) => state.viewTree)
+  const { currentElement } = useSelector((state: RootState) => state.viewTree)
 
   const onDelete = () => {
     if (!currentElement || !currentElement.content) return
@@ -27,14 +26,14 @@ const WrapperDialog: FC<WrapperDialogProps> = () => {
   }
 
   const onTextChange = (newText: string) => {
-    if (!currentElement || !currentElement.content) return
+    if (!currentElement) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
       name: newText
     }));
   }
   const onWidthChange = (newWidth: number) => {
-    if (!currentElement || !currentElement.content) return
+    if (!currentElement) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
       style: {
@@ -45,7 +44,7 @@ const WrapperDialog: FC<WrapperDialogProps> = () => {
   }
 
   const onHeightChange = (newHeight: number) => {
-    if (!currentElement || !currentElement.content) return
+    if (!currentElement) return
     dispatch(updateSelectedElementInViewTree({
       ...currentElement,
       style: {
@@ -66,39 +65,10 @@ const WrapperDialog: FC<WrapperDialogProps> = () => {
     }));
   }
 
-  const onButtonSizeChange = (newSize: string) => {
-    if (!currentElement || !currentElement.detail) return
-    dispatch(updateSelectedElementInViewTree({
-      ...currentElement,
-      detail: {
-        ...currentElement.detail,
-        size: newSize
-      }
-    }));
-  }
-
-  const onButtonTypeChange = (newType: string) => {
-    if (!currentElement || !currentElement.detail) return
-    dispatch(updateSelectedElementInViewTree({
-      ...currentElement,
-      detail: {
-        ...currentElement.detail,
-        type: newType
-      }
-    }));
-  }
-
-  const onLinkChange = (newLink: string) => {
-    if (!currentElement || !currentElement.content) return
-    dispatch(updateSelectedElementInViewTree({
-      ...currentElement,
-      link: newLink
-    }));
-  }
   return currentElement ? (
     <div className="wrapper-dialog">
       <div className="wrapper-header">
-        <label>BUTTON PROPERTIES</label>
+        <label>WRAPPER PROPERTIES</label>
       </div>
       <div className="wrapper-body">
         <div className="section-header">
@@ -108,27 +78,12 @@ const WrapperDialog: FC<WrapperDialogProps> = () => {
           <InputText
             type='text'
             className='input-text'
-            value={currentElement.content}
+            value={currentElement.name}
             onChange={(e) => onTextChange(e.target.value)}
           />
         </div>
-        <Divider className="custom-divider" />
 
         <AlignmentSelector item={currentElement}/>
-        <Divider className="custom-divider" />
-
-        <div className="section-header">
-          <h4>Link</h4>
-        </div>
-        <div className="section-body">
-          <CascadeSelect
-            value={currentElement.link}
-            options={viewTrees.map((view: IElement) => view?.id)}
-            optionGroupChildren={[]}
-            onChange={(e) => onLinkChange(e.value)}
-            className='input-text'
-          />
-        </div>
         <Divider className="custom-divider" />
 
         <div className="section-header">
@@ -180,56 +135,14 @@ const WrapperDialog: FC<WrapperDialogProps> = () => {
             </div>
           </div>
         </div>
-
         <Divider className="custom-divider" />        
-        <div className="section-header">
-          <h4>Type</h4>
-        </div>
-        <div className='section-body'>
-          <CascadeSelect
-            value={currentElement.detail?.type}
-            options={BUTTON_TYPES}
-            optionGroupChildren={[]}
-            className='input-text'
-            onChange={(e) => onButtonTypeChange(e.value)}
-          />
-        </div>
-        <Divider className="custom-divider" />
 
-        <div className="section-header">
-          <h4>Color</h4>
-        </div>
-        <div className="section-body">
-          <CascadeSelect
-            value={currentElement.detail?.color}
-            options={COLORS}
-            optionGroupChildren={[]}
-            className='input-text'
-            onChange={(e) => onColorChange(e.value)}
-          />
-        </div>
-
-        <div className="section-header">
-          <h4>Button Size</h4>
-        </div>
-        <div className='section-body'>
-          <CascadeSelect
-            value={currentElement.detail?.size}
-            options={BUTTON_SIZES}
-            optionGroupChildren={[]}
-            className='input-text'
-            onChange={(e) => onButtonSizeChange(e.value)}
-          />
-        </div>
         <SizeStyle item = {currentElement} />
-
         <Divider className="custom-divider" />
+
         <TextAlignmentSelector item = {currentElement} />
-
         <Divider className="custom-divider" />
-        <BorderRadiusSelector item = {currentElement} />
 
-        <Divider className="custom-divider" />
         <div className="section-footer">
           <div
             style={{

@@ -111,12 +111,14 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
         return {}
       case IComponentType.Wrapper:
         return {
-          display: "flex",
-          flexDirection: componentID === 4 ? "row" : "column",
-          backgroundColor: "lightgray",
-          justifyContent: "flex-start",
-          minHeight: 42,
-          color: "#AAA",
+            ...commonStyle,
+            display: "flex",
+            flexDirection: componentID === 4 ? "row" : "column",
+            backgroundColor: "lightgray",
+            justifyContent: "flex-start",
+            minHeight: 42,
+            color: "#AAA",
+            zIndex: 0
         }
       default:
         return {}
@@ -235,7 +237,18 @@ function replaceSubview(view: IElement, updatedComponent: IElement | null): IEle
     if (!updatedComponent)
         return null
     if (view.id === updatedComponent.id) {
-        return updatedComponent
+        view.id = updatedComponent.id;
+        view.name = updatedComponent.name;
+        view.parent = updatedComponent.parent;
+        view.style = updatedComponent.style;
+        view.child = updatedComponent.child;
+        view.type = updatedComponent.type;
+        view.size = updatedComponent.size;
+        view.detail = updatedComponent.detail;
+        view.content = updatedComponent.content;
+        view.link = updatedComponent.link;
+        view.action = updatedComponent.action;
+        return view
     }
     if (view.child && view.child.length > 0) {
         for (let i = 0; i < view.child.length; i++) {

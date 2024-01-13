@@ -57,40 +57,40 @@ const AlignmentSelector: FC<AlignmentSelectorProps> = ({ item }) => {
       {/* <h4>Item Align</h4> */}
       <Button
         severity='secondary'
-        className={`icon-button ${selectedJustifyContent === 'start' ? 'selected' : ''}`}
-        onClick={() => handleJustifyContentClick('start')}
+        className={`icon-button ${selectedItemAlign === 'start' ? 'selected' : ''}`}
+        onClick={() => handleItemAlignClick('start')}
         style={{ backgroundImage: `url(${AlignLeftIcon})` }}
       />
       <Button
         severity='secondary'
-        className={`icon-button ${selectedJustifyContent === 'center' ? 'selected' : ''}`}
-        onClick={() => handleJustifyContentClick('center')}
+        className={`icon-button ${selectedItemAlign === 'center' ? 'selected' : ''}`}
+        onClick={() => handleItemAlignClick('center')}
         style={{ backgroundImage: `url(${AlignCenterIcon})` }}
       />
       <Button
         severity='secondary'
-        className={`icon-button ${selectedJustifyContent === 'end' ? 'selected' : ''}`}
-        onClick={() => handleJustifyContentClick('end')}
+        className={`icon-button ${selectedItemAlign === 'end' ? 'selected' : ''}`}
+        onClick={() => handleItemAlignClick('end')}
         style={{ backgroundImage: `url(${AlignRightIcon})` }}
       />
 
       {/* <h4>Justify Content</h4> */}
       <Button
         severity='secondary'
-        className={`icon-button ${selectedItemAlign === 'start' ? 'selected' : ''}`}
-        onClick={() => handleItemAlignClick('start')}
+        className={`icon-button ${selectedJustifyContent === 'start' ? 'selected' : ''}`}
+        onClick={() => handleJustifyContentClick('start')}
         style={{ backgroundImage: `url(${AlignStartIcon})` }}
       />
       <Button
         severity='secondary'
-        className={`icon-button ${selectedItemAlign === 'center' ? 'selected' : ''}`}
-        onClick={() => handleItemAlignClick('center')}
+        className={`icon-button ${selectedJustifyContent === 'center' ? 'selected' : ''}`}
+        onClick={() => handleJustifyContentClick('center')}
         style={{ backgroundImage: `url(${AlignMiddleIcon})` }}
       />
       <Button
         severity='secondary'
-        className={`icon-button ${selectedItemAlign === 'end' ? 'selected' : ''}`}
-        onClick={() => handleItemAlignClick('end')}
+        className={`icon-button ${selectedJustifyContent === 'end' ? 'selected' : ''}`}
+        onClick={() => handleJustifyContentClick('end')}
         style={{ backgroundImage: `url(${AlignEndIcon})` }}
       />
     </div>

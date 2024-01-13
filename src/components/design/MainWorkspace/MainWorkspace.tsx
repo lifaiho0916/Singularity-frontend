@@ -95,7 +95,6 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
     return positionStyle;
   };
 
-  console.log("------------------------------");
   return (
     <div
       ref={newItemRef as LegacyRef<HTMLDivElement>}
