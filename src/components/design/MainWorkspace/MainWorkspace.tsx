@@ -69,11 +69,17 @@ const MainWorkspace: FC<MainWorkspaceProps> = () => {
 
   const getToolComponent = () => {
     switch (ToolComponentID) {
-      case 0: return <ButtonComponent text="button" type={'contained'} color={'primary'} size={'medium'} />;
+      case 0: return <ButtonComponent />;
       case 1: return <TextComponent />;
-      case 2: return <LabelComponent text="label" />;
+      case 2: return <LabelComponent />;
       case 3: return <ImageComponent />;
-      default: return <LabelComponent text=""/>;
+      default: return <div style={{
+        width : "100px",
+        height : "42px",
+        backgroundColor : "lightgray",
+        border: "1px solid black",
+        zIndex: 1
+      }} />;
     }
   }
 

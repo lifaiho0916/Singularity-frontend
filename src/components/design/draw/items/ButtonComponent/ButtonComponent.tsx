@@ -3,18 +3,17 @@ import { ButtonComponentProps } from "./ButtonComponent.types";
 import Button from '@mui/material/Button';
 import './ButtonComponent.scss';
 
-const ButtonComponent: FC<ButtonComponentProps> = ({ text, style,  color, type, size }) => {
-
-
+const ButtonComponent: FC<ButtonComponentProps> = ({ item }) => {
   return (
     <Button
       className="button-component"
-      color={color}
-      variant={type}
-      size={size}
-      style={style}
+      id={item?.id}
+      style={item?.style}
+      color={item ? item.detail.color : "primary"}
+      variant={item ? item.detail.type : "contained"}
+      size={item ? item.detail.size : "medium"}    
     >
-      {text}
+      {item ? item.content : "Button"}
     </Button>
   )
 }

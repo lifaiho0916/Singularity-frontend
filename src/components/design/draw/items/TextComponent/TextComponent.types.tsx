@@ -1,4 +1,4 @@
+import { IElement } from 'libs/types';
 export interface TextComponentProps {
-    text?: string,
-    style?: {}
+    item?: IElement
 }

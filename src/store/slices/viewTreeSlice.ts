@@ -36,6 +36,7 @@ const initialState: viewTreeSliceState = {
                 flexWrap: "wrap",
                 flexDirection: "column",
                 backgroundColor: "lightgray",
+                position: "relative",
                 fontSize: 16,
                 minHeight: 642,
                 minWidth: 320,
@@ -141,7 +142,7 @@ function deleteElement(view: IElement, element: IElement) {
     }
 }
 
-function insertSubview(view: IElement, parent: IElement, element: IComponentType, componentID: number, name: string): void {
+function insertSubview(view: IElement, parent: IElement, element: IComponentType, componentID: number, name: string, zoom: number): void {
     let style = getInitStyles(element, componentID);
     let insertElement: IElement = {
         id: uuidv4(),
@@ -165,6 +166,10 @@ function insertSubview(view: IElement, parent: IElement, element: IComponentType
     };
     let parentElement = findElementInViewById(view, parent.id);
     parentElement?.child.push(insertElement);
+    if(parentElement) parentElement.style = {
+        ...parentElement.style,
+        position: "relative"
+    }
 }
 
 function findElementInViewById(view: IElement, id: string): IElement | null {
@@ -353,7 +358,7 @@ export const viewTreeSlice = createSlice({
                     break;
             }
             let parentElement : IElement = findElementInViewById(state.viewTree as IElement, parent)!;
-            insertSubview(state.viewTree as IElement, parentElement, newElement, componentID, name);
+            insertSubview(state.viewTree as IElement, parentElement, newElement, componentID, name, state.zoom);
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
         },
@@ -385,13 +390,12 @@ export const viewTreeSlice = createSlice({
                 type: IComponentType.Wrapper,
                 style: {
                     display: "flex",
-                    backgroundColor: "lightgray",
-                    justifyContent: "flex-start",
-                    alignItems: "normal",
-                    border: 1,
-                    color: "#AAA",
-                    zIndex: -1,
+                    flexWrap: "wrap",
                     flexDirection: "column",
+                    backgroundColor: "lightgray",
+                    position: "relative",
+                    fontSize: 16,
+                    zIndex: 0,
                     minWidth: sizeInfo.width * state.zoom,
                     minHeight: sizeInfo.height * state.zoom
                 },

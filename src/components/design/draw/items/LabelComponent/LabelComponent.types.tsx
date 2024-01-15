@@ -1,4 +1,5 @@
+import { IElement } from "libs/types";
+
 export interface LabelComponentProps {
-    text?: string,
-    style?: {}
+    item?: IElement
 }

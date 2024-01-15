@@ -5,14 +5,15 @@ import { useSelector } from 'react-redux';
 import type { RootState } from 'store';
 import './TextComponent.scss';
 
-const TextComponent: FC<TextComponentProps> = ({ text, style }) => {
+const TextComponent: FC<TextComponentProps> = ({ item }) => {
   const { zoom } = useSelector((state: RootState) => state.viewTree)
 
   return (
     <InputTextarea
+      id={item?.id}
       className="text-component"
-      style={style}
-      value={text}
+      style={item?.style}
+      value={item?.content}
     />
   )
 }
