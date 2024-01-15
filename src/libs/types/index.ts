@@ -94,7 +94,7 @@ export interface IDragDropInfo {
 }
 
 export interface IAddNewComponentInfo { 
-    parent : IElement,
+    parent : string,
     newElement : IComponentType,
     componentID : number
 }

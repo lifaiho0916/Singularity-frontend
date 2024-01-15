@@ -33,6 +33,7 @@ const initialState: viewTreeSliceState = {
             type: IComponentType.Wrapper,
             style: {
                 display: "flex",
+                flexWrap: "wrap",
                 flexDirection: "column",
                 backgroundColor: "lightgray",
                 fontSize: 16,
@@ -113,6 +114,7 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
         return {
             ...commonStyle,
             display: "flex",
+            flexWrap: "wrap",
             flexDirection: componentID === 4 ? "row" : "column",
             backgroundColor: "lightgray",
             justifyContent: "flex-start",
@@ -350,7 +352,8 @@ export const viewTreeSlice = createSlice({
                     state.wrapper_count++;
                     break;
             }
-            insertSubview(state.viewTree as IElement, parent, newElement, componentID, name);
+            let parentElement : IElement = findElementInViewById(state.viewTree as IElement, parent)!;
+            insertSubview(state.viewTree as IElement, parentElement, newElement, componentID, name);
             const index = state.viewTrees.findIndex((view: IElement) => view.id === state.viewTree?.id);
             state.viewTrees[index] = state.viewTree as IElement;
         },

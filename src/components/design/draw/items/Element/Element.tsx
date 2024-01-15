@@ -26,9 +26,13 @@ const Element: FC<ElementProps> = ({ item }) => {
   const onAddComponent = () => {
     const newItem = getCurrentComponentType();
     let payload = {
-      parent: item,
+      parent: item.id,
       newElement: newItem,
       componentID: ToolComponentID
+    }
+    if(item.type != IComponentType.Wrapper) payload = {
+      ...payload,
+      parent: item.parent
     }
     dispatch(addSubViewToViewTree(payload));
     dispatch(unselectToolBarComponent());

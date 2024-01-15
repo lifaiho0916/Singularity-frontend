@@ -141,7 +141,7 @@ const WrapperDialog: FC<WrapperDialogProps> = () => {
         <Divider className="custom-divider" />
 
         <TextAlignmentSelector item = {currentElement} />
-        <Divider className="custom-divider" />
+        <Divider className="final-divider" />
 
         <div className="section-footer">
           <div
