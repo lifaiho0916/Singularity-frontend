@@ -119,8 +119,11 @@ const getInitStyles = (type: string, componentID: number) : React.CSSProperties 
             flexDirection: componentID === 4 ? "row" : "column",
             backgroundColor: "lightgray",
             justifyContent: "flex-start",
-            minHeight: 42,
+            minHeight: "42px",
+            minWidth: "100px",
+            width: "100px",
             color: "#AAA",
+            padding: "20px",
             zIndex: 0
         }
       default:
