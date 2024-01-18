@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
+    "@minoru/react-dnd-treeview": "^3.4.4",
     "@mui/material": "^5.15.3",
     "@reduxjs/toolkit": "^1.9.7",
     "@testing-library/jest-dom": "^5.17.0",
@@ -20,6 +21,7 @@
     "primereact": "^10.1.1",
     "react": "^18.2.0",
     "react-beautiful-dnd": "^13.1.1",
+    "react-dnd": "^16.0.1",
     "react-dom": "^18.2.0",
     "react-modal": "^3.16.1",
     "react-redux": "^8.1.3",

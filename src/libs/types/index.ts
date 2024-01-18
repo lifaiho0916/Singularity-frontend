@@ -51,6 +51,13 @@ export interface IStructure {
     project: IProjectStructure
 }
 
+export interface ITreeStructure {
+    id : string
+    parent : string
+    droppable : boolean
+    text : string
+}
+
 export interface IElement {
     id: string
     name: string
